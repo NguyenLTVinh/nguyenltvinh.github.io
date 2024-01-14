@@ -1,0 +1,217 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    color: #333;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #333;
+    color: #fff;
+}
+
+a {
+    color: #333;
+}
+
+a:hover {
+    color: #007bff;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#about-me img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}
+
+#about-me, #hobbies {
+    text-align: justify;
+    padding: 0 15px;
+}
+
+#skills {
+    width: 25vw;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 20px auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#skills:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+#skills h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#skills ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#skills li {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Projects Section Styling */
+#projects {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+#projects h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.project {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.project h2 {
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.project p {
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.project a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.project a:hover {
+    color: #ff6600;
+}
+
+#contact {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    text-align: left;
+}
+
+#contact h1, #contact h2 {
+    margin-bottom: 20px;
+}
+
+#contact-form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+}
+
+#contact-form form {
+    display: inline-block;
+    text-align: left;
+}
+
+#contact-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#contact-form input[type="text"], 
+#contact-form input[type="email"], 
+#contact-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+#contact-form input[type="submit"] {
+    background-color: #333333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#contact-form input[type="submit"] {
+    background-color: #333333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+#contact-form input[type="submit"]:hover {
+    background-color: #0066cc;
+}
