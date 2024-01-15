@@ -17,6 +17,7 @@ header {
 nav ul {
     list-style: none;
     padding: 0;
+    text-align: center;
 }
 
 nav ul li {
@@ -103,7 +104,7 @@ a:hover {
 }
 
 #skills {
-    width: 25vw;
+    max-width: 500px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -267,3 +268,55 @@ a:hover {
     vertical-align: middle;
     transform: translateY(-1px);
 }   
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    main, #projects, #contact {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    nav ul li {
+        display: block;
+        margin-right: 0;
+    }
+
+    #skills, #contact-form {
+        max-width: 100%;
+    }
+
+    .page-container {
+        padding: 0;
+    }
+
+    footer {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    footer a {
+        margin: 5px;
+    }
+
+    #about-me img, .project img {
+        width: 100%;
+        height: auto;
+    }
+
+    h1, h2, p {
+        font-size: smaller;
+    }
+
+    #contact-form input[type="text"], 
+    #contact-form input[type="email"], 
+    #contact-form textarea {
+        padding: 10px;
+    }
+
+    #contact-form input[type="submit"] {
+        padding: 15px 30px;
+    }
+}
