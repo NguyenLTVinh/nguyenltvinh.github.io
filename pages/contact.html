@@ -32,21 +32,31 @@
 
         <section id = "contact-form">
             <h2>Contact Form</h2>
-            <form action="mailto:vinhnguyenlethanh@gmail.com" method="post" enctype="text/plain">
+            <form action="https://formspree.io/f/xgegvzdv" method="post" enctype="text/plain">
                 <label for="name">Name:</label><br>
-                <input type="text" id="name" name="name"><br>
+                <input type="text" id="name" name="name" required><br>
                 <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email"><br>
+                <input type="email" id="email" name="email" required><br>
                 <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="4" cols="50"></textarea><br>
+                <textarea id="message" name="message" rows="4" cols="50" required></textarea><br>
                 <input type="submit" value="Send">
+                <div id="form-feedback"> JAJAJAJAJA </div>
             </form>
         </section>
     </main>
 
     <footer>
-        <p>Connect with me: <a href="https://www.linkedin.com/in/vinh-nguyen-a42943238/" target="_blank">LinkedIn</a> | <a href="https://www.github.com/VinhNguyen2003" target="_blank">GitHub</a></p>
+        <p>Connect with me: 
+            <a href="https://www.linkedin.com/in/vinh-nguyen-a42943238/" target="_blank">
+                <img src="../icons/linkedin-in.svg" alt="LinkedIn">
+            </a> 
+            <a href="https://www.github.com/VinhNguyen2003" target="_blank">
+                <img src="../icons/github.svg" alt="GitHub">
+            </a>
+        </p>
     </footer>
+
     </div>
+    <script src="../js/contact.js"></script>
 </body>
 </html>
