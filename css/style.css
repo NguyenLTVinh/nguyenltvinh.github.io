@@ -301,7 +301,7 @@ a:hover {
         margin: 5px;
     }
 
-    #about-me img, .project img {
+    #about-me img {
         width: 100%;
         height: auto;
     }
