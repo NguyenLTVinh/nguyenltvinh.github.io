@@ -23,20 +23,25 @@
         <main>
             <section id="about-me">
                 <h2>About Me</h2>
-                <img src="../images/profile.jpg" alt="Vinh Nguyen">
-                <p>
-                    Hello, I'm Vinh Nguyen, a Computer Science student at the University of Minnesota - Twin Cities. I'm pursuing a Bachelor of Science and a Master of Science degree at this institution.
-                </p>
-                <p>
-                    My interests are in the area of Computer Systems, where I shoot myself in the foot while programming in C. I enjoy C's simplicity (lol) and how closely I can interact with the hardware
-                    compared to other languages. I am also decently skilled at C++, and recently I have started to program in Rust. With these tools, I make computer programs for myself to use. While I write
-                    these programs to learn new things and to hone my skills, I end up using them quite a lot due to how minimal their interfaces are. You can say I'm quite a digital minimalist.
-                </p>
-                <p>
-                    Despite being a "digital minimalist", I am extremely passionate about a wide array of topics within Computer Science.
-                    While my main focus is on Computer Systems and low-level programming, I also enjoy learning and taking on other interesting projects
-                    such as creating web pages like this one, training a specialized Machine Learning model, and studying the best practices of Software Engineering.
-                </p>
+                <div class="content-wrapper">
+                    <div class="bio-content">
+                        <p>
+                            Hello, I'm <span class="code-keyword">Vinh Nguyen</span>, a Computer Science student at the University of Minnesota - Twin Cities. I'm pursuing a Bachelor of Science and a Master of Science degree at this institution.
+                        </p>
+                        <p>
+                            My interests are in the area of Computer Systems, where I shoot myself in the foot while programming in C. I enjoy C's simplicity (lol) and how closely I can interact with the hardware
+                            compared to other languages. I am also decently skilled at C++, and recently I have started to program in Rust. With these tools, I make computer programs for myself to use. While I write
+                            these programs to learn new things and to hone my skills, I end up using them quite a lot due to how minimal their interfaces are. You can say I'm quite a digital minimalist.
+                        </p>
+                        <p>
+                            Despite being a "digital minimalist", I am extremely passionate about a wide array of topics within Computer Science.
+                            While my main focus is on Computer Systems and low-level programming, I also enjoy learning and taking on other interesting projects
+                            such as creating web pages like this one, training a specialized Machine Learning model, and studying the best practices of Software Engineering.
+                        </p>
+                    </div>
+    
+                    <img src="../images/profile.jpg" class="profile-photo" alt="Vinh Nguyen">
+                </div>
             </section>
     
             <section id="hobbies">
@@ -45,12 +50,27 @@
                     In my free times, I enjoy creating and developing simple CLI programs or taking on a project outside of my main area of Computer Systems. I also partake
                     in nerd activities such as participating in Hackathons, daily driving with Linux, distro hopping, and customizing my desktop environment while disregarding its ease of use.
                 </p>
+            </section>
 
+            <section id="other-hobbies">
                 <h2>Other Hobbies</h2>
-                <h3>Photography</h3>
-                <p>Below are some of the pictures that I took!</p>
-                <h3>Kendo</h3>
-                <p>I also practice kendo, a Japanese sword art. Recently, I won a gold medal in a team tournament!</p>
+                <div class="hobby">
+                    <h3>Photography</h3>
+                    <p>Below are some of the pictures that I took!</p>
+                    <div class="photo-gallery">
+                        <img src="../images/landscape.jpg" alt="Landscape of Minneapolis" class="hobby-photo">
+                        <img src="../images/temple.JPG" alt="A Temple" class="hobby-photo">
+                    </div>
+                </div>
+                <div class="hobby">
+                    <h3>Kendo</h3>
+                    <p>I also practice kendo, a Japanese sword art. Recently, I won a gold medal in a team tournament!</p>
+                    <div class="photo-gallery">
+                        <img src="../images/kendo.jpg" alt="Kendo Tournament" class="hobby-photo">
+                        <img src="../images/kendo1.jpg" alt="Kendo Sparring" class="hobby-photo">
+                        <img src="../images/kendo2.jpeg" alt="Kendo Team" class="hobby-photo">
+                    </div>
+                </div>
             </section>
     
         </main>

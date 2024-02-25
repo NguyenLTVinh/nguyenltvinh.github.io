@@ -129,13 +129,6 @@ a:hover {
     min-height: 100vh;
 }
 
-#about-me img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 10px auto;
-}
-
 #about-me, #hobbies {
     text-align: left;
     padding: 0 15px;
@@ -371,6 +364,72 @@ a:hover {
     margin-bottom: 0;
 }
 
+.content-wrapper {
+    display: flex;
+    align-items: flex-start; 
+}
+
+.profile-photo {
+    flex-basis: 33%;
+    max-width: 33%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+    overflow: hidden;
+    display: block;
+    margin: 0 auto;
+}
+
+.bio-content {
+    flex-basis: 66%;
+    padding-right: 20px;
+}
+
+
+#other-hobbies {
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.hobby {
+    margin-bottom: 2rem;
+}
+
+.hobby .photo-gallery {
+    width: 75%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hobby .photo-gallery .hobby-photo {
+    height: 400px;
+    width: auto;
+    object-fit: cover;
+    margin: 10px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: calc(33% - 20px);
+}
+
+.code-keyword {
+    color: #0000ff;
+}
+
+.code-string { 
+    color: #a31515;
+}
+
+.code-comment {
+    color: #008000;
+}
+
+.code-function {
+    color: #795e26; 
+}
+
 @media screen and (max-width: 768px) {
     body {
         padding: 10px;
@@ -401,11 +460,6 @@ a:hover {
 
     footer a {
         margin: 5px;
-    }
-
-    #about-me img {
-        width: 100%;
-        height: auto;
     }
 
     h1, h2, p {
