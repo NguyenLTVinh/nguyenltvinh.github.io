@@ -475,4 +475,33 @@ a:hover {
     #contact-form input[type="submit"] {
         padding: 15px 30px;
     }
+
+    .hobby .photo-gallery .hobby-photo {
+        height: 200px;
+        flex-basis: calc(50% - 20px);
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-photo {
+        order: -1;
+        flex-basis: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .bio-content {
+        flex-basis: 100%;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 479px) {
+    .hobby .photo-gallery .hobby-photo {
+        height: 150px;
+        flex-basis: 100%;
+    }
 }
