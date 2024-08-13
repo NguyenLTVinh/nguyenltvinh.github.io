@@ -1,14 +1,14 @@
 body {
     font-family: 'Courier New', Courier, monospace;
     color: #333;
-    background-color: #FEFBEA;;
+    background-color: #fefefe;;
     line-height: 1.6;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background: #f8d3fb;
+    background: #e2e2e4;
     padding: 1rem 0;
     text-align: center;
 }
@@ -33,7 +33,7 @@ p {
     margin: 10px 0;
     border: none;
     border-radius: 5px;
-    background-color: #c7b8ec;
+    background-color: #d1d1d3;
     color: #001909;
     text-decoration: none;
     font-family: 'Courier New', Courier, monospace;
@@ -43,7 +43,7 @@ p {
 }
 
 .btn:hover {
-    background-color: #dec6f0;
+    background-color: #e1dbd6;
     color: #001909;
 }
 
@@ -81,7 +81,7 @@ section {
 footer {
     text-align: center;
     padding: 20px;
-    background: #f8d3fb;
+    background: #e2e2e4;
     color: #001909;
     display: flex;
     justify-content: center;
@@ -134,7 +134,7 @@ a:hover {
 }
 
 #skills {
-    background-color: #ffe6f6;
+    background-color: #f9f6f2;
     max-width: 75%;
     display: flex;
     flex-direction: column;
@@ -179,7 +179,7 @@ a:hover {
 }
 
 .project {
-    background-color: #ffe6f6;
+    background-color: #f9f6f2;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     margin-bottom: 20px;
@@ -220,7 +220,7 @@ a:hover {
 }
 
 #contact-form {
-    background-color: #ffe6f6;
+    background-color: #f9f6f2;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 20px;
@@ -251,7 +251,7 @@ a:hover {
 }
 
 #contact-form input[type="submit"] {
-    background-color: #c7b8ec;
+    background-color: #d1d1d3;
     color: 001909;
     padding: 10px 20px;
     border: none;
@@ -264,7 +264,7 @@ a:hover {
 }
 
 #contact-form input[type="submit"]:hover {
-    background-color: #dec6f0;
+    background-color: #e1dbd6;
     color: #001909;
 }
 
