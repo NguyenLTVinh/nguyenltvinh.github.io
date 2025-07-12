@@ -418,7 +418,6 @@ footer a:hover img {
     transform: translateY(-2px);
 }
 
-
 /* Responsive */
 @media screen and (max-width: 768px) {
     body {
@@ -472,5 +471,37 @@ footer a:hover img {
     .bio-content {
         padding-right: 0;
         width: 100%;
+    }
+
+    .nav-container {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: 1fr;
+        padding: 0.5rem 1rem;
+        column-gap: 1rem;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        gap: 0.75rem;
+        justify-content: flex-start;
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .nav-menu li a {
+        text-align: left;
+        display: block;
+    }
+    
+    .nav-left {
+        display: none;
+    }
+    
+    #translate-btn {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        align-self: center;
+        padding: 0.5rem 0.75rem;
     }
 }
