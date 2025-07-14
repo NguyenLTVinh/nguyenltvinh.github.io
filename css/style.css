@@ -465,6 +465,14 @@ footer a:hover img {
   font-size: 0.8rem;
 }
 
+.post {
+  margin-bottom: 2em;
+}
+
+a {
+  color: #0077cc;
+}
+
 /* Responsive */
 @media screen and (max-width: 768px) {
   body {

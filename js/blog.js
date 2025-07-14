@@ -40,7 +40,7 @@ function loadPosts(lang) {
 
             // Build DOM elements for post preview
             let postDiv = document.createElement("div");
-
+            postDiv.className = "post";
             let dateDiv = document.createElement("div");
             dateDiv.textContent = post.date;
 

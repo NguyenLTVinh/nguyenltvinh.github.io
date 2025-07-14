@@ -1,16 +1,26 @@
 {
   "en": [
     {
+      "filename": "2025-07-25.html",
+      "date": "2025-07-25",
+      "title": "Paper Review: Your Brain on ChatGPT"
+    },
+    {
       "filename": "2025-07-13-rust.html",
       "date": "2025-07-13",
-      "title": "Rust Made Me Fall in Love with Programming Again"
+      "title": "Relearning Systems Programming Through Rust"
     }
   ],
   "vi": [
     {
+      "filename": "2025-07-25.html",
+      "date": "2025-07-25",
+      "title": "Phân Tích Bài Báo: Bộ Não Của Bạn Khi Dùng ChatGPT"
+    },
+    {
       "filename": "2025-07-13-rust.html",
       "date": "2025-07-13",
-      "title": "Rust Khiến Tôi Yêu Lập Trình Trở Lại"
+      "title": "Học Lại Lập Trình Hệ Thống Qua Rust"
     }
   ]
 }
