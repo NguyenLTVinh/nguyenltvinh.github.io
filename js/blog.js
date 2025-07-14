@@ -16,17 +16,29 @@ function loadPosts(lang) {
           .then((html) => {
             let parser = new DOMParser();
             let doc = parser.parseFromString(html, "text/html");
-            let titleElement = doc.querySelector("h2");
-            let excerptElement = titleElement
-              ? titleElement.nextElementSibling
-              : null;
+
+            let titleElement = doc.querySelector(".post-header h2");
+            let titleText = titleElement
+              ? titleElement.textContent.trim()
+              : post.title;
+
+            let postHeader = doc.querySelector(".post-header");
+            let excerptElement = null;
+            if (postHeader) {
+              let next = postHeader.nextElementSibling;
+              while (next) {
+                if (next.tagName.toLowerCase() === "p") {
+                  excerptElement = next;
+                  break;
+                }
+                next = next.nextElementSibling;
+              }
+            }
             let excerpt = excerptElement
               ? excerptElement.textContent.trim()
               : "";
-            if (excerpt.indexOf(".") !== -1) {
-              excerpt = excerpt.split(".")[0] + ".";
-            }
 
+            // Build DOM elements for post preview
             let postDiv = document.createElement("div");
 
             let dateDiv = document.createElement("div");
@@ -36,7 +48,7 @@ function loadPosts(lang) {
             let titleLink = document.createElement("a");
             titleLink.className = "code-keyword";
             titleLink.href = `/posts/${lang}/${post.filename}`;
-            titleLink.textContent = post.title;
+            titleLink.textContent = titleText;
 
             let excerptDiv = document.createElement("div");
             excerptDiv.textContent = excerpt;

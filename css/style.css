@@ -94,6 +94,10 @@ main {
   display: block;
 }
 
+main img {
+  max-width: 100%;
+}
+
 section {
   margin-bottom: 3rem;
 }
@@ -451,6 +455,14 @@ footer a:hover img {
   width: 55px;
   height: 55px;
   object-fit: contain;
+}
+
+.post-header h2 {
+  margin-bottom: 0;
+}
+
+.post-header span {
+  font-size: 0.8rem;
 }
 
 /* Responsive */

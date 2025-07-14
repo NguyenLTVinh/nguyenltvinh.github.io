@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rust Khiến Tôi Yêu Lập Trình Trở Lại</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/script.js" defer></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-c.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-rust.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="page-container">
+      <header></header>
+      <main>
+        <div class="post-header">
+          <h2>Rust Khiến Tôi Yêu Lập Trình Trở Lại</h2>
+          <span>Ngày 13 tháng 7 năm 2025</span>
+        </div>
+
+        <h3>Giới thiệu: Tình Cờ Trở Thành "Rustacean"</h3>
+        <p>
+          Tôi bắt đầu viết code với Rust vì… tôi phải làm vậy. Cơ hội đến từ dự
+          án Aurora DSQL tại AWS, nơi yêu cầu hiệu năng cấp thấp và đảm bảo an
+          toàn nghiêm ngặt. Ngôn ngữ đã được chọn sẵn. Lúc đó, tôi chưa có nhiều
+          kinh nghiệm với Rust. Tôi chỉ biết rằng Rust hứa hẹn mang lại an toàn
+          bộ nhớ mà không cần bộ gom rác (garbage collector) và đang được ưa
+          chuộng trong giới kỹ sư hệ thống. Tôi nghĩ mình sẽ phải vật lộn khá
+          nhiều vì nhiều thói quen lập trình từ thời viết C sẽ phải bỏ. Nhưng
+          điều tôi không ngờ tới là tôi lại bắt đầu thích nó hơn bất kỳ ngôn ngữ
+          nào tôi từng dùng trước đây.
+        </p>
+        <p>
+          Rust không chỉ giải quyết những vấn đề về an toàn bộ nhớ mà tôi từng
+          gặp với C và C++. Nó còn giúp tôi tư duy rõ ràng hơn về quyền sở hữu
+          (ownership), vòng đời (lifetimes), và cấu trúc của mã. Nó nghiêm khắc,
+          nhưng công bằng. Và những đánh đổi mà Rust đặt ra dẫn đến ít lỗi hơn,
+          cảm giác chắc chắn hơn về tính đúng đắn, và khả năng bảo trì lâu dài
+          tốt hơn.
+        </p>
+
+        <h3>Ngôn Ngữ Biên Dịch và Thông Dịch</h3>
+        <p>
+          Phần lớn người ngoài ngành phần mềm không nghĩ nhiều về cách mà mã
+          nguồn được biến thành thứ mà máy tính có thể thực thi. Có hai nhóm
+          lớn: ngôn ngữ thông dịch và biên dịch. Ngôn ngữ thông dịch như Python
+          và JavaScript được thực thi từng dòng bởi trình thông dịch khi chạy.
+          Điều này giúp việc thử nghiệm và gỡ lỗi dễ dàng, nhưng cũng khiến
+          chương trình chạy chậm hơn.
+        </p>
+        <p>
+          Ngược lại, các ngôn ngữ biên dịch như C, C++, Go và Rust được chuyển
+          đổi thành mã máy trước khi chạy. Kết quả là một tệp nhị phân, một tệp
+          thực thi gồm các lệnh mà bộ xử lý hiểu trực tiếp.
+        </p>
+        <p>
+          Tệp nhị phân sau biên dịch có thể được triển khai mà không cần mã
+          nguồn hoặc trình thông dịch. Nó nhanh, ổn định và hiệu quả, đó là lý
+          do ngôn ngữ biên dịch vẫn là lựa chọn cho lập trình hệ thống. Điều làm
+          Rust khác biệt so với các ngôn ngữ biên dịch khác không phải là hiệu
+          năng mà là tính an toàn. Trình biên dịch của Rust thực hiện nhiều kiểm
+          tra trong quá trình biên dịch để loại bỏ hẳn các lỗi thường chỉ xuất
+          hiện khi chạy. Việc kiểm tra này đôi khi khiến việc phát triển hơi khó
+          chịu, nhưng kết quả là một chương trình bạn có thể hoàn toàn tin
+          tưởng.
+        </p>
+
+        <h3>Vì Sao Chúng Ta Dùng C cho Lập Trình Hệ Thống</h3>
+        <p>
+          C là lựa chọn mặc định cho phần mềm yêu cầu hiệu năng cao. Nó được
+          dùng trong hệ điều hành, cơ sở dữ liệu, firmware cho thiết bị, và các
+          công cụ hạ tầng. Các lập trình viên tiếp tục chọn C vì nó cung cấp
+          quyền truy cập trực tiếp đến bộ nhớ và hành vi có thể dự đoán, với rất
+          ít tầng trừu tượng.
+        </p>
+        <p>
+          Cái giá phải trả là bạn phải quản lý bộ nhớ bằng tay, tự cấp phát
+          (allocate) và giải phóng (free) bộ nhớ. Sức mạnh này cũng đi kèm rủi
+          ro: các lỗi bộ nhớ thường không xuất hiện ngay mà âm thầm phá hoại
+          chương trình. Dưới đây là một ví dụ kinh điển về lỗi "sử dụng sau khi
+          giải phóng bộ nhớ" (use-after-free):
+        </p>
+        <pre><code class="language-c">char* message = malloc(100);  // cấp phát 100 byte
+strcpy(message, "Hello, world!");
+free(message);               // giải phóng bộ nhớ
+printf("%s\n", message);     // ❌ lỗi use-after-free</code></pre>
+        <p>
+          Lỗi use-after-free là một ví dụ điển hình. Trong C, nếu bạn cấp phát
+          bộ nhớ, giải phóng nó, rồi vô tình sử dụng lại, chương trình có thể
+          hành xử không xác định: có thể treo, có thể lộ dữ liệu nhạy cảm, hoặc
+          có thể chạy "bình thường" nhưng âm thầm sai lệch. Ngoài ra còn nhiều
+          lỗi bộ nhớ khác như tràn bộ đệm (buffer overflow), giải phóng bộ nhớ
+          hai lần (double free), rò rỉ bộ nhớ (memory leak)... Những lỗi này rất
+          khó phát hiện và tái tạo. Và chúng là nguyên nhân chính của nhiều lỗ
+          hổng bảo mật trong thế giới thực.
+        </p>
+
+        <h3>Mô Hình Sở Hữu Của Rust: An Toàn Mà Không Cần Bộ Gom Rác</h3>
+        <p>
+          Các ngôn ngữ biên dịch khác như Go sử dụng bộ gom rác (garbage
+          collector) để quản lý bộ nhớ. GC chạy ngầm và tự động giải phóng bộ
+          nhớ không còn sử dụng. Điều này giúp việc phát triển đơn giản hơn vì
+          bạn không cần lo khi nào nên gọi free(). Nhưng đánh đổi là hiệu năng
+          bị ảnh hưởng. GC gây ra độ trễ và thời gian xử lý không ổn định, điều
+          này là vấn đề trong lập trình hệ thống, nơi yêu cầu độ trễ thấp và
+          tính quyết định cao.
+        </p>
+        <p>
+          Rust tránh hoàn toàn những vấn đề này nhờ mô hình sở hữu (ownership
+          model). Mỗi giá trị chỉ có một chủ sở hữu. Khi chủ sở hữu ra khỏi phạm
+          vi, giá trị tự động bị hủy và bộ nhớ được giải phóng. Bạn không cần
+          gọi free(). Bạn cũng không thể truy cập vùng nhớ đã bị giải phóng, vì
+          trình biên dịch sẽ chặn việc đó ngay từ lúc biên dịch.
+        </p>
+        <pre><code class="language-rust">fn main() {
+    let message = String::from("Hello, world!");
+    println!("{}", message);
+} // `message` tự động được giải phóng tại đây</code></pre>
+        <p>
+          Đây không phải là kiểm tra lúc chạy. Rust không có garbage collector.
+          Tất cả kiểm tra xảy ra tĩnh tại thời điểm biên dịch, nên không ảnh
+          hưởng đến hiệu năng. Tính an toàn đến từ các quy tắc của ngôn ngữ và
+          sự kiểm tra nghiêm ngặt của trình biên dịch. Nhờ đó, Rust cung cấp an
+          toàn bộ nhớ mà vẫn giữ được quyền kiểm soát thấp như C.
+        </p>
+
+        <h3>Liệu Rust Có Thay Thế Được C?</h3>
+        <p>
+          Ở một số nơi thì có. Ở nhiều nơi khác thì chưa. Có một vài hạn chế:
+          các tệp nhị phân của Rust thường lớn hơn của C. Điều này quan trọng
+          trong các hệ thống nhúng, nơi bạn chỉ có vài trăm kilobyte bộ nhớ
+          flash. Trong trường hợp đó, phần dung lượng từ liên kết tĩnh (static
+          linking) và thư viện runtime của Rust có thể là rào cản. Ngoài ra, C
+          đã ăn sâu trong nhiều bộ code cũ, công cụ biên dịch, và hệ sinh thái
+          phát triển đã tồn tại hàng chục năm. Việc viết lại tất cả bằng Rust là
+          điều không thực tế, và cũng không cần thiết.
+        </p>
+        <p>
+          Rust mang lại một điểm xuất phát tốt hơn cho phần mềm mới. Nếu bạn
+          đang xây dựng thứ gì đó ngày hôm nay và quan tâm đến tính đúng đắn, độ
+          tin cậy, và hiệu năng, thì Rust đáng để bạn cân nhắc nghiêm túc. Rust
+          đang dần chiếm lĩnh các lĩnh vực mà tính an toàn quan trọng như mật mã
+          học, mạng máy tính, và hạ tầng hệ thống. AWS, Google, Microsoft, và
+          thậm chí cả nhân Linux đã và đang viết các thành phần mới bằng Rust.
+          Động lực đó không phải tình cờ.
+        </p>
+
+        <h3>Kết Luận: Công Cụ Phù Hợp Cho Đúng Trường Hợp</h3>
+        <p>
+          Rust sẽ không loại bỏ C, và cũng không cần phải làm vậy. Nhưng Rust
+          nâng chuẩn chung lên cao hơn. Nó chứng minh rằng chúng ta không còn
+          phải chọn giữa an toàn và hiệu năng. Chúng ta có thể viết mã nhanh, và
+          đúng, mà không cần bộ gom rác trong runtime hay phải quản lý bộ nhớ
+          bằng tay. Đó không phải là điều nhỏ nhặt.
+        </p>
+        <p>
+          Với tôi, Rust không chỉ giải quyết các vấn đề kỹ thuật, mà nó còn thay
+          đổi cách tôi tư duy về việc viết mã. Những thứ từng phức tạp giờ đây
+          trở nên rõ ràng và đáng tin cậy. Đây là ngôn ngữ đầu tiên tôi dùng mà
+          tôi cảm thấy vừa mạnh mẽ, vừa nguyên tắc.
+        </p>
+        <p>
+          Tôi không nghĩ mình sẽ thích nó. Nhưng tôi đã thích. Và tôi không phải
+          người duy nhất.
+        </p>
+      </main>
+      <footer></footer>
+    </div>
+  </body>
+</html>
