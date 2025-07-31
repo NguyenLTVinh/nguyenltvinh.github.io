@@ -6,42 +6,9 @@ function getPageName() {
   return file === "" ? "index" : file.replace(".html", "");
 }
 
-function handlePostsRedirection(lang) {
-  if (window.location.pathname.startsWith("/posts/")) {
-    const match = window.location.pathname.match(/^\/posts\/(en|vi)\//);
-    if (match && match[1] !== lang) {
-      window.location.href = window.location.pathname.replace(
-        /^\/posts\/(en|vi)/,
-        "/posts/" + lang,
-      );
-      return true;
-    } else {
-      fetch(`/components/header-${lang}.html`)
-        .then((res) => res.text())
-        .then((html) => {
-          document.querySelector("header").innerHTML = html;
-          document
-            .getElementById("translate-btn")
-            ?.addEventListener("click", toggleLanguage);
-        });
-      fetch(`/components/footer-${lang}.html`)
-        .then((res) => res.text())
-        .then((html) => {
-          document.querySelector("footer").innerHTML = html;
-        });
-      return true;
-    }
-  }
-  return false;
-}
-
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem("lang", lang);
-
-  if (handlePostsRedirection(lang)) {
-    return;
-  }
 
   const page = getPageName();
 
@@ -60,14 +27,24 @@ function setLang(lang) {
       document.querySelector("footer").innerHTML = html;
     });
 
-  fetch(`/translation/${lang}/${page}-main.html`)
-    .then((res) => res.text())
-    .then((html) => {
-      document.querySelector("main").innerHTML = html;
-      if (page === "blog" && typeof loadPosts === "function") {
-        loadPosts(lang);
-      }
-    });
+  if (window.location.pathname.startsWith("/posts/")) {
+    if (currentPostFilename) {
+      loadPostContent(currentPostFilename, lang);
+      setPageTitle(currentPostFilename, lang);
+    } else {
+      document.querySelector("main").innerHTML =
+        "<p>Missing post filename.</p>";
+    }
+  } else {
+    fetch(`/pages/${lang}/${page}-main.html`)
+      .then((res) => res.text())
+      .then((html) => {
+        document.querySelector("main").innerHTML = html;
+        if (page === "blog" && typeof loadPosts === "function") {
+          loadPosts(lang);
+        }
+      });
+  }
 }
 
 function toggleLanguage() {

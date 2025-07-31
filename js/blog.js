@@ -3,22 +3,22 @@ function loadPosts(lang) {
     .then((response) => response.json())
     .then((data) => {
       let posts = data[lang] || [];
-      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
       let container = document.getElementById("blog-list");
       if (!container) {
         console.error("Blog-list container not found when loading posts.");
         return;
       }
       container.innerHTML = "";
-      posts.forEach((post) => {
+
+      const postPromises = posts.map((post) =>
         fetch(`/posts/${lang}/${post.filename}`)
           .then((resp) => resp.text())
           .then((html) => {
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, "text/html");
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
 
-            let titleElement = doc.querySelector(".post-header h2");
-            let titleText = titleElement
+            const titleElement = doc.querySelector(".post-header h2");
+            const titleText = titleElement
               ? titleElement.textContent.trim()
               : post.title;
 
@@ -34,35 +34,49 @@ function loadPosts(lang) {
                 next = next.nextElementSibling;
               }
             }
-            let excerpt = excerptElement
+            const excerpt = excerptElement
               ? excerptElement.textContent.trim()
               : "";
 
-            // Build DOM elements for post preview
-            let postDiv = document.createElement("div");
-            postDiv.className = "post";
-            let dateDiv = document.createElement("div");
-            dateDiv.textContent = post.date;
-
-            let titleHeading = document.createElement("h3");
-            let titleLink = document.createElement("a");
-            titleLink.className = "code-keyword";
-            titleLink.href = `/posts/${lang}/${post.filename}`;
-            titleLink.textContent = titleText;
-
-            let excerptDiv = document.createElement("div");
-            excerptDiv.textContent = excerpt;
-
-            titleHeading.appendChild(titleLink);
-            postDiv.appendChild(dateDiv);
-            postDiv.appendChild(titleHeading);
-            postDiv.appendChild(excerptDiv);
-
-            container.appendChild(postDiv);
+            return {
+              ...post,
+              titleText,
+              excerpt,
+            };
           })
           .catch((error) => {
             console.error("Error fetching post:", post.filename, error);
-          });
+            return null;
+          }),
+      );
+
+      Promise.all(postPromises).then((fullPosts) => {
+        const validPosts = fullPosts.filter(Boolean);
+        validPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        validPosts.forEach((post) => {
+          const postDiv = document.createElement("div");
+          postDiv.className = "post";
+
+          const dateDiv = document.createElement("div");
+          dateDiv.textContent = post.date;
+
+          const titleHeading = document.createElement("h3");
+          const titleLink = document.createElement("a");
+          titleLink.className = "code-keyword";
+          titleLink.href = `/posts/post.html?post=${post.filename}`;
+          titleLink.textContent = post.titleText;
+
+          const excerptDiv = document.createElement("div");
+          excerptDiv.textContent = post.excerpt;
+
+          titleHeading.appendChild(titleLink);
+          postDiv.appendChild(dateDiv);
+          postDiv.appendChild(titleHeading);
+          postDiv.appendChild(excerptDiv);
+
+          container.appendChild(postDiv);
+        });
       });
     })
     .catch((error) => {
