@@ -1,0 +1,138 @@
+<div class="post-header">
+  <h2>GrapheneOS: Riêng Tư Số Kết Hợp Bảo Mật</h2>
+  <span>31 tháng 7, 2025</span>
+</div>
+<h3>Giới thiệu</h3>
+<p>
+  Điện thoại của bạn chính là một thiết bị theo dõi. Đó là sự thật,
+  <a href="https://arxiv.org/abs/2409.07444" target="_blank"
+    >nó thu thập và gửi dữ liệu của bạn</a
+  >, bao gồm cả những gì bạn nói, vị trí của bạn, dữ liệu sử dụng và rất nhiều
+  thông tin cá nhân khác đến các hãng Công nghệ Lớn (Big Tech).
+  <a href="https://policies.google.com/privacy" target="_blank"
+    >Google là công ty tiêu biểu nhất</a
+  >, và bởi vì Android là hệ điều hành thiết bị di động phổ biến nhất, rất nhiều
+  người đang để dữ liệu của mình bị thu thập và sử dụng bởi Google. Và nếu bạn
+  định chuyển sang thiết bị Apple và iOS,
+  <a
+    href="https://www.apple.com/legal/privacy/data/en/ask-siri-dictation/"
+    target="_blank"
+    >Apple cũng gần như tệ không kém</a
+  >.
+</p>
+<p>
+  Trong một thế giới mà smartphone gần như là thiết yếu, dường như không thể
+  tránh khỏi việc bị Big Tech thu thập dữ liệu. Nhưng khoan, vẫn còn giải pháp!
+</p>
+<p>
+  Tôi đã sử dụng GrapheneOS được khoảng 2 tháng. Sau 5 năm trung thành với chiếc
+  Samsung, tôi đã "nghỉ hưu" nó, mua một chiếc Google Pixel và cài đặt
+  GrapheneOS lên. Tôi biết, mua một chiếc điện thoại mang thương hiệu Google sau
+  khi vừa chỉ trích công ty này thì thật mâu thuẫn, nhưng tôi có lý do rất cụ
+  thể, hãy kiên nhẫn đọc tiếp nhé.
+</p>
+<img src="/images/GrapheneOS-Logo.png" alt="GrapheneOS Logo" />
+<h3>GrapheneOS là gì? Khác gì so với Android?</h3>
+<p>
+  GrapheneOS là một hệ điều hành di động chú trọng bảo mật. Nó được xây dựng dựa
+  trên
+  <a href="https://source.android.com/" target="_blank"
+    >Android Open Source Project (AOSP)</a
+  >, tức là mã nguồn Android thuần khiết không có các ứng dụng hay dịch vụ độc
+  quyền từ Google, và nó hoàn toàn mã nguồn mở.
+</p>
+<p>
+  Bạn có bao giờ để ý khi mua điện thoại mới, một số ứng dụng độc quyền như
+  Chrome, Gmail và YouTube đã được cài đặt sẵn chưa? Nếu bạn dùng iOS thì các ví
+  dụ tương tự là Safari, Mail và Apple TV. Những ứng dụng này không thể gỡ cài
+  đặt, lại còn có quyền truy cập cao hơn vào dữ liệu và phần cứng như microphone
+  và camera.
+</p>
+<p>
+  GrapheneOS không đi kèm các ứng dụng độc quyền được cài đặt sẵn này. Tuy
+  nhiên, bạn vẫn có thể cài đặt nếu muốn qua Sandboxed Google Play. Về cơ bản,
+  nó đối xử với các ứng dụng và dịch vụ Google giống như các ứng dụng bên thứ ba
+  khác: chạy trong môi trường sandbox (cô lập) bị giới hạn quyền truy cập dữ
+  liệu và phần cứng, trừ khi bạn cho phép rõ ràng.
+</p>
+
+<h3>Tăng cường bảo mật</h3>
+<p>
+  Ngoài việc loại bỏ các yếu tố của Google, GrapheneOS còn bổ sung nhiều tính
+  năng bảo mật nâng cao khác, ví dụ như các kỹ thuật tăng cường an toàn bộ nhớ
+  để ngăn chặn các lỗi phổ biến như tràn bộ đệm (buffer overflow) và lỗi
+  use-after-free.
+</p>
+<p>
+  Nó cũng cung cấp khả năng sandbox ứng dụng nghiêm ngặt với các quyền kiểm soát
+  nâng cao, chẳng hạn như hạn chế quyền truy cập mạng và cảm biến cho từng ứng
+  dụng. Những biện pháp này tạo ra một môi trường cực kỳ vững chắc, bảo vệ dữ
+  liệu người dùng, ngăn truy cập trái phép và giảm tối đa nguy cơ bị tấn công từ
+  phần mềm độc hại.
+</p>
+
+<h3>Tại sao lại dùng điện thoại Google?</h3>
+<p>
+  GrapheneOS hiện chỉ có thể cài trên điện thoại Google Pixel vì các thiết bị
+  này có sẵn những tính năng phần cứng hỗ trợ bảo mật, như chip Titan M và cơ
+  chế kiểm tra khởi động (verified boot). Pixel cũng nhận được các bản cập nhật
+  bảo mật kịp thời và có firmware nguồn mở, minh bạch.
+</p>
+<p>
+  Nghe thì có vẻ mâu thuẫn khi cần máy Google để thoát khỏi phần mềm, dịch vụ
+  theo dõi của họ, nhưng thực ra phần cứng không phải là thành phần thu thập dữ
+  liệu.
+</p>
+
+<h3>Cài đặt</h3>
+<p>
+  Nếu bạn vẫn còn đọc đến đây thì chắc hẳn tôi đã lôi cuốn được bạn rồi. Bạn có
+  thể xem hướng dẫn cài đặt GrapheneOS trên điện thoại Pixel của mình
+  <a href="https://grapheneos.org/install/web" target="_blank">tại đây</a> bằng
+  trình cài đặt web. Thực ra rất đơn giản, không đến 10 phút là xong!
+</p>
+
+<h3>Cài đặt ứng dụng trên GrapheneOS</h3>
+<p>
+  GrapheneOS hỗ trợ phần lớn các ứng dụng bạn thấy trên Google Play Store. Như
+  đã đề cập ở trên, bạn vẫn có thể cài đặt ứng dụng thông qua Google Play trong
+  chế độ sandbox. Tôi dùng Firefox làm trình duyệt chính, Thunderbird làm email,
+  Here We Go cho bản đồ, cộng với một số ứng dụng nhắn tin và ngân hàng.
+</p>
+<p>
+  Có thể bạn nhận ra xu hướng tôi đang theo: không dùng luôn cả ứng dụng của
+  Google, kể cả trình duyệt, bản đồ, email... Tất nhiên bạn không nhất thiết
+  phải giống tôi, chỉ cần cài các ứng dụng của Google ở chế độ sandbox tiêu
+  chuẩn cũng đã khá đủ để ngăn chúng truy cập phần còn lại của dữ liệu. Lưu ý
+  rằng thanh toán NFC với Google Wallet sẽ không hoạt động, không phải do
+  GrapheneOS mà là giới hạn tùy ý của Google. Nếu app ngân hàng của bạn hỗ trợ
+  thanh toán NFC thì vẫn dùng ngon lành.
+</p>
+
+<p>
+  Cuối cùng, GrapheneOS chỉ cung cấp bảo mật ở mức hệ điều hành. Nếu bạn cài các
+  ứng dụng xâm phạm quyền riêng tư như Spotify hay TikTok, dữ liệu của bạn vẫn
+  bị gửi cho các công ty đó. Tôi không khuyên bạn chỉ nên dùng app nào hoặc
+  không nên dùng app nào, nhưng giảm lượng dữ liệu cá nhân bị thu thập thì luôn
+  là điều nên làm. Quan trọng là Google sẽ mất quyền tiếp cận lớn vào dữ liệu
+  của bạn, đó mới là điều chúng ta hướng tới.
+</p>
+
+<h3>Kết luận</h3>
+<p>
+  Tôi có khuyên mọi người đều dùng GrapheneOS không? Có, chắc chắn rồi. Bạn gần
+  như không gặp bất tiện gì khi dùng GrapheneOS hằng ngày vì hỗ trợ ứng dụng rất
+  rộng, trừ khi bạn thực sự cần thanh toán NFC bằng Google Wallet.
+</p>
+<p>
+  Trong một thế giới mà quyền riêng tư số ngày càng khó được bảo vệ, GrapheneOS
+  là cơ hội hiếm có để bạn lấy lại kiểm soát. Nó không ép bạn bỏ smartphone hoặc
+  chỉ dùng vài app cơ bản, mà cho phép bạn sử dụng mọi công cụ phù hợp với bản
+  thân, đồng thời cắt giảm sự giám sát và tối thiểu hóa lượng dữ liệu bị lộ ra
+  ngoài.
+</p>
+<p>
+  Nếu bạn quan tâm dù chỉ một chút đến việc ai đang truy cập thông tin cá nhân
+  của bạn, thì GrapheneOS là một trong những lựa chọn tốt nhất bạn có thể làm
+  ngay hôm nay.
+</p>
