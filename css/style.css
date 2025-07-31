@@ -369,6 +369,14 @@ footer a:hover img {
   color: #6f42c1;
 }
 
+code,
+pre,
+code * {
+  font-family:
+    "Fira Code", "JetBrains Mono", "Courier New", monospace !important;
+  font-size: 1em;
+}
+
 /* Layout and photo */
 .content-wrapper {
   display: flex;
