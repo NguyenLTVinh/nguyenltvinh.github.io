@@ -17,22 +17,17 @@ body {
 
 header {
   background: #f0f0f3;
-  padding: 1.5rem 0;
+  padding: 0.5rem 0;
   text-align: center;
 }
 
 h2 {
-  margin: 1rem 0 1.5rem;
   font-size: 1.5rem;
 }
 
 h3 {
   margin: 0.5rem 0;
   font-size: 1.2rem;
-}
-
-p {
-  margin-top: 0.5rem;
 }
 
 a {
@@ -47,7 +42,7 @@ a:hover {
 .btn {
   display: inline-block;
   padding: 0.75rem 1.25rem;
-  margin: 1rem 0;
+  margin: 0;
   border: none;
   border-radius: 6px;
   background-color: #e0e0e0;
@@ -99,12 +94,12 @@ main img {
 }
 
 section {
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 footer {
   text-align: center;
-  padding: 2rem;
+  padding: 1.25rem;
   background: #f0f0f3;
   color: #111;
   display: flex;
@@ -140,12 +135,6 @@ footer a:hover img {
   min-height: 100vh;
 }
 
-#about-me,
-#hobbies {
-  text-align: left;
-  padding: 0 1rem;
-}
-
 #skills {
   background-color: #fff;
   max-width: 75%;
@@ -155,7 +144,7 @@ footer a:hover img {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 2rem;
-  margin: 2rem auto 3rem;
+  margin: 2rem auto 2rem;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -183,7 +172,6 @@ footer a:hover img {
 }
 
 #projects h2 {
-  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -191,7 +179,7 @@ footer a:hover img {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   padding: 1.5rem;
   transition:
     transform 0.3s ease,
@@ -220,59 +208,6 @@ footer a:hover img {
   color: #b30000;
 }
 
-#contact {
-  padding: 2rem;
-  max-width: 800px;
-  margin: auto;
-}
-
-#contact-form {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
-  max-width: 500px;
-  margin: 2rem auto;
-  text-align: center;
-}
-
-#contact-form form {
-  display: inline-block;
-  text-align: left;
-  width: 100%;
-}
-
-#contact-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-#contact-form input[type="text"],
-#contact-form input[type="email"],
-#contact-form textarea {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-#contact-form input[type="submit"] {
-  background-color: #e0e0e0;
-  color: #111;
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#contact-form input[type="submit"]:hover {
-  background-color: #d4cdc4;
-}
-
 #form-feedback {
   text-align: center;
 }
@@ -290,7 +225,7 @@ footer a:hover img {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .company-logo {
@@ -333,7 +268,7 @@ footer a:hover img {
 
 /* Education section */
 #education {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .degree {
@@ -456,7 +391,7 @@ code * {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .icon-grid img {
@@ -483,13 +418,14 @@ a {
 
 /* Responsive */
 @media screen and (max-width: 768px) {
-  body {
-    padding: 1rem;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
   main,
-  #projects,
-  #contact {
+  #projects {
     padding: 1rem;
     max-width: 100%;
   }
@@ -500,8 +436,7 @@ a {
     margin-bottom: 0.5rem;
   }
 
-  #skills,
-  #contact-form {
+  #skills {
     max-width: 100%;
   }
 
@@ -514,11 +449,6 @@ a {
     margin: 0.5rem;
   }
 
-  #contact-form input,
-  #contact-form textarea {
-    padding: 1rem;
-  }
-
   .content-wrapper {
     flex-direction: column;
     align-items: center;
@@ -527,7 +457,6 @@ a {
   .profile-photo {
     order: -1;
     max-width: 100%;
-    margin-bottom: 1rem;
   }
 
   .bio-content {
