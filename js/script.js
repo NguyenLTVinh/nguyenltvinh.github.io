@@ -11,7 +11,6 @@ function setLang(lang) {
   localStorage.setItem("lang", lang);
 
   const page = getPageName();
-
   fetch(`/components/header-${lang}.html`)
     .then((res) => res.text())
     .then((html) => {
@@ -19,6 +18,14 @@ function setLang(lang) {
       document
         .getElementById("translate-btn")
         ?.addEventListener("click", toggleLanguage);
+
+      const burger = document.getElementById("burger");
+      const navMenu = document.getElementById("nav-menu");
+      if (burger && navMenu) {
+        burger.addEventListener("click", () => {
+          navMenu.classList.toggle("open");
+        });
+      }
     });
 
   fetch(`/components/footer-${lang}.html`)
