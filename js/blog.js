@@ -63,7 +63,6 @@ function loadPosts(lang) {
 
           const titleHeading = document.createElement("h3");
           const titleLink = document.createElement("a");
-          titleLink.className = "code-keyword";
           titleLink.href = `/posts/post.html?post=${post.filename}`;
           titleLink.textContent = post.titleText;
 
