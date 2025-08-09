@@ -1,0 +1,142 @@
+<div class="post-header">
+  <h2>Internship at AWS DSQL: My Experience</h2>
+  <span>August 8th, 2025</span>
+</div>
+
+<h3>Introduction</h3>
+<p>
+  On Friday, August 8th, 2025, I finished my internship at Amazon Web Services.
+  It was an incredible experience, and I want to share it with all of you.
+  Honestly, the past year has been full of life-changing events for me. I earned
+  my undergraduate degree in Computer Science last December and started my
+  Master's degree this January. Not too long afterwards, I interviewed with DSQL
+  this March and started working this May. After 12 weeks of internship, my
+  manager gave me an "inclined" vote to return to DSQL. I could not be more
+  thrilled! Anyways, enough rambling in this section. Let's talk about my
+  experience interning at AWS DSQL!
+</p>
+
+<h3>The DSQL project and the DPFE team</h3>
+<p>
+  The team I interned with is a part of the
+  <a href="https://aws.amazon.com/rds/aurora/dsql/" target="_blank"
+    >Aurora DSQL</a
+  >
+  project, a serverless distributed relational database written in Rust. I
+  joined 2 days before launch, and was
+  <a
+    href="https://www.allthingsdistributed.com/2025/05/just-make-it-scale-an-aurora-dsql-story.html"
+    target="_blank"
+    >present in the org's launch photoshoot</a
+  >
+  even though I had not contributed anything to the project.
+</p>
+<p>
+  I was a part of the Data Plane Front-end team. Despite the name, we do not do
+  front-end as in user interfaces or UX designs and such. The DPFE team
+  maintains software that facilitates clients' connection to DSQL's PostgreSQL
+  engine. I'm not sure how much I'm allowed to say here before it's considered
+  leaking confidential design. Thus, I'm going to keep it as vague as possible
+  and not go any lower-level than what DSQL has on their website.
+</p>
+<img
+  src="https://d2908q01vomqb2.cloudfront.net/887309d048beef83ad3eabf2a79a64a389ab1c9f/2024/12/02/Single-Region-Cluster-Architecture.png"
+  alt="DSQL Architecture Diagram"
+/>
+<p>
+  If you look at the diagram above, the DPFE team operates somewhere between the
+  customer's application and the query processing layer. There are a lot of
+  intricacies going on under the hood to ensure lightning-fast connection time
+  and 99.99% availability. It's also the first time I get to work with Rust's
+  asynchronous crate, <a href="https://tokio.rs/" target="_blank">tokio</a>.
+  Interesting stuff!
+</p>
+
+<h3>My internship project</h3>
+<p>
+  My project supported our sister team that works on the query processing layer.
+  At a high level, I refactored components in DPFE to make it easier for
+  developers to experiment with different build permutations of the query
+  processing software in real infrastructure. I also created a CLI tool to
+  interact with this feature, along with some extra cloud development work. This
+  meant I had to ramp up on asynchronous Rust and navigate DPFE's large, complex
+  codebase, something that was overwhelming at first. During the first month, I
+  experienced plenty of impostor syndrome, wondering if I was really cut out to
+  be a systems engineer.
+</p>
+
+<h3>Phases of my internship</h3>
+<p>
+  The first two weeks were onboarding and ramping up on asynchronous Rust. I was
+  doing training and getting to know Amazon's internal development tools. I also
+  met with team members and did standard onboarding stuff. I started to do the
+  <a href="https://github.com/rust-lang/rustlings" target="_blank">Rustlings</a>
+  exercises to get refreshed on Rust (I highly recommend it if you want to learn
+  Rust). I was then given a Rust exercise to implement a simple server-client
+  application using Rust's tokio crate.
+</p>
+<p>
+  By the second sprint, the real work started to speed up. I wrote the low-level
+  design document and have it reviewed with the team by week 3. I submitted my
+  first pull request to the mainline by week 4. By that time, I'm starting to
+  get familiar with the code base and how each of the DPFE's components
+  interacts with each other. Still, there was a lot more to learn. By week 7, I
+  have done all the necessary refactoring of DPFE's components to support my
+  project. All that's left is to make the CLI. I also had my midpoint evaluation
+  around this time, and I was given feedback from my manager and mentor. There
+  were areas where I could improve, and I tried my best to do better during the
+  second half of the internship.
+</p>
+<p>
+  And by week 9, everything was pretty much done. I informed our sister team
+  about the project, and several developers started to use it for their testing.
+  I received feedback and feature requests, and I spent the rest of the time
+  working on the stretch goals and optimizing my core project.
+</p>
+<p>
+  I demoed my project in week 10 to the entire DSQL organization. I was very
+  nervous, as I am not much of a public speaker. Still, I pulled through, and
+  everyone seemed to like what I had done. The director of DSQL gave me his
+  compliments, which, to be honest, felt very good. During the final two weeks,
+  I finished the stretch goal, wrote the knowledge transfer document, and fixed
+  some permission issues with the project. I'm proud to say that I have left no
+  unfinished tasks for my team to pick up!
+</p>
+
+<h3>The result</h3>
+<p>
+  Well, I had a very successful internship. It seems my work was satisfactory,
+  and I managed to pick up and complete more work as well. I was proud of
+  myself. I went from being confused and doubting myself to being slightly less
+  confused and having a small sense of accomplishment. During the final meeting,
+  I was given an "inclined" vote from my manager to return to DSQL. If things go
+  well, I will update you in two weeks when I sign the full-time offer!
+</p>
+
+<h3>Some final ramblings and conclusion</h3>
+<p>
+  I want to talk a bit more about things that are going on within the software
+  engineering world of Big Tech. First of all, with the recent release of GPT-5,
+  I want to touch on the use of AI and how it has impacted our productivity. The
+  consensus from my team was that you can trust it about 50% of the time. The
+  fact is, AI is still pretty bad at asynchronous, concurrent, and parallel
+  programming, all of which require real-world context that LLMs can't really
+  grasp. Also, Rust is a fairly new language with less data to train on than,
+  say, Python or JavaScript. At the end of the day, I find it useful for
+  summarizing a new repository or prototyping, general lazy thinking work, where
+  you know it can do decently. I also ask AI to generate bash commands for me
+  when I'm too lazy to look up the manual. It's safe to say that AI won't be
+  replacing system engineers soon.
+</p>
+<p>
+  I want to give a huge shout-out and thank you to each and every member of my
+  team, and especially my mentor, Ben. The bar for the DPFE team is really high,
+  and all of them are very talented engineers. Ben was especially helpful, and I
+  felt thoroughly supported during the entire duration of the internship. Thanks
+  again, Ben!
+</p>
+<p>
+  I'm excited to return to DSQL after I finish my Master's degree. Meanwhile,
+  I'm taking 3 classes in C next semester, and I'm pretty excited about that!
+  This post is getting long now, so I'll have to end it here. See ya!
+</p>
