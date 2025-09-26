@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSCI 5607 Project 1</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-c.js"></script>
+  </head>
+
+  <body>
+    <div class="page-container">
+      <header>
+        <nav>
+          <div class="nav-container">
+            <button id="burger" aria-label="Toggle menu">☰</button>
+            <a href="/index.html" class="site-name">Vinh Nguyen</a>
+            <ul class="nav-menu" id="nav-menu">
+              <li><a href="/pages/about.html">About</a></li>
+              <li><a href="/pages/projects.html">Projects</a></li>
+              <li><a href="/pages/experience.html">Experience</a></li>
+              <li><a href="/pages/contact.html">Contact</a></li>
+              <li><a href="/pages/blog.html">Blog</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <main>
+        <h2>The Paragraph</h2>
+        <p>
+          This was a fun first project to take on. I guess the challenges that I
+          ran into were setting it up to compile in the first place. I do not
+          use a Debian-based Linux distribution, so the instructions given to
+          set up the project did not work for me. I figured it out in the end
+          how to install the required packages through the dnf package manager
+          instead of apt. The rest of the project was pretty straightforward. I
+          included the maths below if you want to read through them. I had to
+          swap around some positive signs to negative to get the behavior that I
+          want. For example, Goldy's image was loaded upside-down, so I fixed it
+          by swapping the signs. I also want the rotation to go with the mouse
+          direction, not against. I just did it because I had a lot of free
+          time. Otherwise, the gifs below show how it runs.
+        </p>
+
+        <h2>The Code</h2>
+        <p>
+          Download the code <a href="/assets/nguy4766-project1.zip">here!</a>
+        </p>
+
+        <h2>The GIFs</h2>
+        <h3>Translation</h3>
+        <img src="/images/translation.gif" />
+        <h3>Scaling</h3>
+        <img src="/images/scale.gif" />
+        <h3>Rotation</h3>
+        <img src="/images/rotation.gif" />
+        <h3>Reset Square</h3>
+        <img src="/images/reset.gif" />
+        <h3>Texture, Brightness, and Bonus</h3>
+        <img src="/images/bonus.gif" />
+
+        <h2>The Maths</h2>
+        <h3>Translation</h3>
+
+        <p>
+          We translate the square when the user clicks <em>inside</em> of it. To
+          determine this, we use the line equations of the four square edges.
+          Each edge can be expressed in the form:
+        </p>
+
+        <p>\[ ax + by + c = 0 \]</p>
+
+        <p>
+          where \((a, b, c)\) are derived from the line through two corner
+          points. The sign of this expression indicates on which side of the
+          line a point lies. The click position \((x_m, y_m)\) is considered
+          inside if it lies on the same side of all four edges as the square's
+          center \((x_c, y_c)\). Formally:
+        </p>
+
+        <p>\[ (ax_m + by_m + c)(ax_c + by_c + c) > 0 \]</p>
+
+        <p>
+          If this condition holds for every edge, the we enter translation mode.
+        </p>
+
+        <p>
+          Once in translation mode, the displacement of the mouse is applied
+          directly to the square's center. If the mouse moves from \((x_0,
+          y_0)\) to \((x_1, y_1)\), the displacement is:
+        </p>
+
+        <p>\[ \Delta = (x_1 - x_0, \; y_1 - y_0) \]</p>
+
+        <p>The new position of the square's center is then updated as:</p>
+
+        <p>\[ P' = P_0 + \Delta \]</p>
+
+        <pre><code class="language-c">
+// Inside detection in mouseClicked()
+float c1 = l1.x*rect_pos.x + l1.y*rect_pos.y + l1.w;
+float f1 = l1.x*clicked_mouse.x + l1.y*clicked_mouse.y + l1.w;
+float c2 = l2.x*rect_pos.x + l2.y*rect_pos.y + l2.w;
+float f2 = l2.x*clicked_mouse.x + l2.y*clicked_mouse.y + l2.w;
+float c3 = l3.x*rect_pos.x + l3.y*rect_pos.y + l3.w;
+float f3 = l3.x*clicked_mouse.x + l3.y*clicked_mouse.y + l3.w;
+float c4 = l4.x*rect_pos.x + l4.y*rect_pos.y + l4.w;
+float f4 = l4.x*clicked_mouse.x + l4.y*clicked_mouse.y + l4.w;
+
+if (f1*c1 > 0 && f2*c2 > 0 && f3*c3 > 0 && f4*c4 > 0) {
+    do_translate = true;
+}
+
+// Translation update in mouseDragged()
+if (do_translate) {
+    Dir2D disp = cur_mouse - clicked_mouse;
+    rect_pos = clicked_pos + disp;
+}
+</code></pre>
+
+        <h3>Scaling</h3>
+
+        <p>
+          We scale the square when the user clicks close to one of the it's four
+          corners. To detect this, we calculate the squared distance between the
+          mouse click position and each corner point. For a click at \((x_m,
+          y_m)\) and a corner at \((x_p, y_p)\), the squared distance is:
+        </p>
+
+        <p>\[ d^2 = (x_m - x_p)^2 + (y_m - y_p)^2 \]</p>
+
+        <p>
+          If this distance is less than a predefined threshold squared
+          (\(\epsilon^2\)), the click is considered to have selected a corner:
+        </p>
+
+        <p>\[ d^2 < \epsilon^2 \]</p>
+
+        <p>
+          I decided to use a small threshold here as it's pretty difficult to
+          click exactly on the corner pixel. If the user clicked close enough to
+          a corner, then we say they clicked on a corner. Once a corner has been
+          selected, dragging the mouse changes the scale of the square. The
+          algorithm measures how far the mouse is from the center of the square
+          relative to the initial click distance. Let the center be \(C(x_c,
+          y_c)\), the clicked mouse position be \(M_0(x_0, y_0)\), and the
+          current mouse position be \(M_1(x_1, y_1)\). The distances are:
+        </p>
+
+        <p>\[ r_0 = \| M_0 - C \|, \quad r_1 = \| M_1 - C \| \]</p>
+
+        <p>The new scale factor is computed as:</p>
+
+        <p>\[ s' = s_0 \cdot \frac{r_1}{r_0} \]</p>
+
+        <p>
+          where \(s_0\) is the scale value when the mouse was initially clicked.
+          This ensures proportional scaling as the mouse moves further from or
+          closer to the square's center.
+        </p>
+
+        <pre><code class="language-c">
+// Corner detection in mouseClicked()
+Dir2D d1 = clicked_mouse - p1;
+Dir2D d2 = clicked_mouse - p2;
+Dir2D d3 = clicked_mouse - p3;
+Dir2D d4 = clicked_mouse - p4;
+
+if (d1.magnitudeSqr() < corner_thresh_sqr ||
+    d2.magnitudeSqr() < corner_thresh_sqr ||
+    d3.magnitudeSqr() < corner_thresh_sqr ||
+    d4.magnitudeSqr() < corner_thresh_sqr) {
+    do_scale = true;
+}
+
+// Scaling update in mouseDragged()
+if (do_scale){
+    Dir2D v0 = clicked_mouse - rect_pos;
+    Dir2D v1 = cur_mouse - rect_pos;
+    float r0 = v0.magnitude();
+    float r1 = v1.magnitude();
+    if (r0 > 0) rect_scale = clicked_size * (r1 / r0);
+    else rect_scale = clicked_size;
+}
+</code></pre>
+        <h3>Rotation</h3>
+
+        <p>
+          We rotate the square when the user clicks near one of its edges. To
+          detect this, we use the line equation for each edge, which looks like
+          this:
+        </p>
+
+        <p>\[ ax + by + c = 0 \]</p>
+
+        <p>
+          By plugging in the mouse position \((x_m, y_m)\), we can compute how
+          far the click is from the edge using the perpendicular distance:
+        </p>
+
+        <p>\[ d = \frac{|ax_m + by_m + c|}{\sqrt{a^2 + b^2}} \]</p>
+
+        <p>
+          If this distance is smaller than a threshold \(\epsilon\), we consider
+          the click “close enough” to the edge, and we enter rotation mode.
+        </p>
+
+        <p>
+          Once in rotation mode, dragging the mouse changes the square's angle.
+          We calculate the angle between the square's center and the initial
+          click point, and also between the center and the current mouse
+          position. Using the two-argument arctangent, the angles are:
+        </p>
+
+        <p>
+          \[ \theta_0 = \arctan2(y_0 - y_c, \; x_0 - x_c), \quad \theta_1 =
+          \arctan2(y_1 - y_c, \; x_1 - x_c) \]
+        </p>
+
+        <p>The change in angle is:</p>
+
+        <p>\[ \Delta \theta = \theta_1 - \theta_0 \]</p>
+
+        <p>
+          We then update the square's rotation by subtracting this change from
+          the original angle at the moment of the click:
+        </p>
+
+        <p>\[ \theta' = \theta_{\text{clicked}} - \Delta \theta \]</p>
+
+        <p>
+          This ensures the square rotates smoothly around its center as we drag
+          along the edge.
+        </p>
+
+        <pre><code class="language-c">
+// Edge detection in mouseClicked()
+if (fabs(l1.x*clicked_mouse.x + l1.y*clicked_mouse.y + l1.w) < edge_thresh ||
+    fabs(l2.x*clicked_mouse.x + l2.y*clicked_mouse.y + l2.w) < edge_thresh ||
+    fabs(l3.x*clicked_mouse.x + l3.y*clicked_mouse.y + l3.w) < edge_thresh ||
+    fabs(l4.x*clicked_mouse.x + l4.y*clicked_mouse.y + l4.w) < edge_thresh) {
+    do_rotate = true;
+}
+
+// Rotation update in mouseDragged()
+if (do_rotate){
+    float a0 = atan2(clicked_mouse.y - rect_pos.y, clicked_mouse.x - rect_pos.x);
+    float a1 = atan2(cur_mouse.y - rect_pos.y, cur_mouse.x - rect_pos.x);
+    rect_angle = clicked_angle - (a1 - a0);
+}
+</code></pre>
+        <h3>Texture Mapping</h3>
+
+        <p>
+          We can texture the square with an image loaded from a PPM file. In our
+          code, we use a function called
+          <code>loadImage()</code> that reads an ASCII PPM file, extracts the
+          pixel values, and stores them in a format OpenGL can use. Then we
+          assign this image to the square's texture using OpenGL commands.
+        </p>
+
+        <pre><code class="language-c">
+// Load texture from PPM file
+int img_w, img_h;
+unsigned char* img_data = loadImage(img_w, img_h);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w, img_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+glGenerateMipmap(GL_TEXTURE_2D);
+delete [] img_data;
+</code></pre>
+
+        <p>
+          This makes the square display the loaded image as a texture. We can
+          also switch textures dynamically by changing
+          <code>textureName</code> and reloading.
+        </p>
+
+        <h3>Brightness Adjustment</h3>
+
+        <p>
+          We can brighten the image on the square without distorting colors.
+          This is done in the fragment shader by multiplying the texture's RGB
+          values by a <code>brightness</code> factor:
+        </p>
+
+        <pre><code class="language-c">
+// Adjust brightness in fragment shader
+uniform float brightness;
+vec3 col = texture(tex0, texcoord).rgb * brightness;
+outColor = min(col, vec3(1.0));
+</code></pre>
+
+        <p>
+          In the main loop, we update the <code>brightness</code> uniform when
+          the user presses 'W' (increase) or 'S' (decrease):
+        </p>
+
+        <pre><code class="language-c">
+if (event.key.key == SDLK_W) {
+    brightness += 0.2f;
+    glUniform1f(brightnessLoc, brightness);
+}
+if (event.key.key == SDLK_S) {
+    brightness -= 0.2f;
+    if (brightness < 0.0f) brightness = 0.0f;
+    glUniform1f(brightnessLoc, brightness);
+}
+</code></pre>
+
+        <p>
+          This lets us control how bright the square's texture appears while
+          keeping the colors consistent.
+        </p>
+
+        <h3>Reset Square</h3>
+
+        <p>
+          Pressing 'R' resets the square's position, scale, and orientation to
+          their original values. We do this by restoring the initial corner
+          points, edges, and other transformation variables:
+        </p>
+
+        <pre><code class="language-c">
+void r_keyPressed(){
+    rect_pos = Point2D(0,0);
+    rect_scale = 1.0f;
+    rect_angle = 0.0f;
+    p1 = init_p1; p2 = init_p2; p3 = init_p3; p4 = init_p4;
+    l1 = vee(p1,p2).normalized();
+    l2 = vee(p2,p3).normalized();
+    l3 = vee(p3,p4).normalized();
+    l4 = vee(p4,p1).normalized();
+    updateVertices();
+}
+</code></pre>
+
+        <p>
+          When we press 'R', the square instantly snaps back to its original
+          position, size, and rotation.
+        </p>
+
+        <h3>Extra Feature: Change Textures with Keyboard</h3>
+
+        <p>
+          As an extra feature, we let the user switch the square's texture using
+          the keyboard. Pressing 'A' goes to the previous texture, while 'D'
+          goes to the next one. The code updates the texture in GPU memory
+          dynamically:
+        </p>
+
+        <pre><code class="language-c">
+if (event.key.key == SDLK_A) {
+    currentTextureIndex = (currentTextureIndex - 1 + textureFiles.size()) % textureFiles.size();
+    textureName = textureFiles[currentTextureIndex];
+    int img_w2, img_h2;
+    unsigned char* img_data2 = loadImage(img_w2, img_h2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w2, img_h2, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data2);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    delete [] img_data2;
+}
+
+if (event.key.key == SDLK_D) {
+    currentTextureIndex = (currentTextureIndex + 1) % textureFiles.size();
+    textureName = textureFiles[currentTextureIndex];
+    int img_w3, img_h3;
+    unsigned char* img_data3 = loadImage(img_w3, img_h3);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w3, img_h3, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data3);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    delete [] img_data3;
+}
+</code></pre>
+
+        <p>
+          This gives us a fun way to change the square's appearance
+          interactively while keeping all the other transformations intact.
+        </p>
+      </main>
+      <footer>
+        <p>
+          Connect with me:
+          <a href="https://www.linkedin.com/in/nguyenltvinh/" target="_blank">
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-plain.svg"
+              title="LinkedIn"
+              alt="LinkedIn"
+            />
+          </a>
+          <a href="https://www.github.com/NguyenLTVinh" target="_blank">
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+              title="GitHub"
+              alt="GitHub"
+            />
+          </a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
