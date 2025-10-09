@@ -110,8 +110,15 @@
         </div>
       </div>
 
-      <h2>Brightness, Contrast & Saturation</h2>
+      <h2>Quantize, Brightness, Contrast & Saturation</h2>
       <div class="image-group">
+        <div class="image-container">
+          <img src="/images/penguins_quantize2.jpg" alt="Quantized Penguins" />
+          <div class="command">
+            ./image -input penguins.jpg -quantize 2 -output
+            penguins_quantize2.jpg
+          </div>
+        </div>
         <div class="image-container">
           <img src="/images/penguins_brighten.jpg" alt="Brightened Penguins" />
           <div class="command">
@@ -143,7 +150,7 @@
         <div class="image-container">
           <img src="/images/penguins_crop.jpg" alt="Cropped Penguins" />
           <div class="command">
-            /image -input penguins.jpg -crop 450 0 450 600 -output
+            ./image -input penguins.jpg -crop 450 100 450 350 -output
             penguins_crop.jpg
           </div>
         </div>
