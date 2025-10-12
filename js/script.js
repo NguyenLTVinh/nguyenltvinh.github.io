@@ -48,11 +48,19 @@ function setLang(lang) {
         "<p>Missing post filename.</p>";
     }
   } else {
-    const currentDir = getPageDir()
+    const currentDir = getPageDir();
     fetch(`${currentDir}/${lang}/${page}-main.html`)
       .then((res) => res.text())
       .then((html) => {
         document.querySelector("main").innerHTML = html;
+        document.dispatchEvent(new Event("mainContentUpdated"));
+
+        if (window.Prism) {
+          Prism.highlightAll();
+        }
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise();
+        }
         if (page === "blog" && typeof loadPosts === "function") {
           loadPosts(lang);
         }

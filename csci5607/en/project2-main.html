@@ -1,0 +1,223 @@
+<h2>Project overview</h2>
+<p>
+  This project was definitely more challenging than the last, as it involved a
+  lot more coding. The easier parts were probably those we implemented for
+  Homework 2, such as quantize, extract channel, etc. The most challenging parts
+  were implementing Floyd-Steinberg dithering, blur, sharpen, and the different
+  sampling methods. Selecting the parameters to clearly show the differences
+  between the sampling methods was also difficult. I scaled the images down, and
+  you can see the differences if you look at the back of the penguin on the
+  left. Point sampling is the blockiest, bilinear sampling smooths things out a
+  bit, and Gaussian sampling is the smoothest.
+</p>
+<p>
+  To make grading easier, I have included some features on this page using web
+  technologies. Clicking on an image will zoom it to full-screen, and clicking
+  the zoomed image again will exit full-screen mode. The parameters used to
+  create each image are included below the images.
+</p>
+<p>
+  I chose a picture of two penguins here because I like penguins. Did you know
+  that penguins can drink salt water because they have a special gland that
+  filters salt from seawater? Anyways, I digress.
+</p>
+<h2>The code</h2>
+<p>
+  You can download the code for this project
+  <a href="/assets/image.cpp">here!</a>
+</p>
+<h2>Original image</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins.jpg" alt="Original Penguins" />
+  </div>
+</div>
+
+<h2>Quantize, brightness, contrast & saturation</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_quantize2.jpg" alt="Quantized Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -quantize 2 -output penguins_quantize2.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_brighten.jpg" alt="Brightened Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -brightness 2.0 -output penguins_brighten.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_contrast.jpg" alt="Contrast Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -contrast 2.0 -output penguins_contrast.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_saturation.jpg" alt="Saturation Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -saturation 2.5 -output
+      penguins_saturation.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Crop</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_crop.jpg" alt="Cropped Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -crop 450 100 450 350 -output
+      penguins_crop.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Color channel extraction</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_extract_red.jpg" alt="Red Channel Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -extractChannel 0 -output
+      penguins_extract_red.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_extract_green.jpg"
+      alt="Green Channel Penguins"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -extractChannel 1 -output
+      penguins_extract_green.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_extract_blue.jpg" alt="Blue Channel Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -extractChannel 2 -output
+      penguins_extract_blue.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Dithering (random, Floyd-Steinberg, ordered) & noise</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_randomdither.jpg" alt="Random Dither Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -randomDither 2 -output
+      penguins_randomdither.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_fsDither.jpg"
+      alt="Floyd-Steinberg Dither Penguins"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -FloydSteinbergDither 1 -output
+      penguins_fsDither.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_odereddither.jpg"
+      alt="Ordered Dither Penguins"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -orderedDither 1 -output
+      penguins_odereddither.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_noise.jpg" alt="Noise Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -noise 0.8 -output penguins_noise.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Sharpen, blur & edge</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_sharpen.jpg" alt="Sharpened Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -sharpen 7 -output penguins_sharpen.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_blur.jpg" alt="Blurred Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -blur 9 -output penguins_blur.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img src="/images/penguins_edge.jpg" alt="Edge Detection Penguins" />
+    <div class="command">
+      ./image -input penguins.jpg -edgeDetect -output penguins_edge.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Rotation</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_rotate_point.jpg" alt="Rotate Point Sampling" />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 0 -rotate 120 -output
+      penguins_rotate_point.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_rotate_bilinear.jpg"
+      alt="Rotate Bilinear Sampling"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 1 -rotate 120 -output
+      penguins_rotate_bilinear.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_rotate_gaussian.jpg"
+      alt="Rotate Gaussian Sampling"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 2 -rotate 120 -output
+      penguins_rotate_gaussian.jpg
+    </div>
+  </div>
+</div>
+
+<h2>Scaling</h2>
+<div class="image-group">
+  <div class="image-container">
+    <img src="/images/penguins_scale_point.jpg" alt="Scale Point Sampling" />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 0 -scale 0.25 0.25 -output
+      penguins_scale_point.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_scale_bilinear.jpg"
+      alt="Scale Bilinear Sampling"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 1 -scale 0.25 0.25 -output
+      penguins_scale_bilinear.jpg
+    </div>
+  </div>
+  <div class="image-container">
+    <img
+      src="/images/penguins_scale_gaussian.jpg"
+      alt="Scale Gaussian Sampling"
+    />
+    <div class="command">
+      ./image -input penguins.jpg -sampling 2 -scale 0.25 0.25 -output
+      penguins_scale_gaussian.jpg
+    </div>
+  </div>
+</div>

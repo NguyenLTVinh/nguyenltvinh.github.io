@@ -1,0 +1,332 @@
+<h2>Tổng quan dự án</h2>
+<p>
+  Đây là một dự án đầu tiên khá vui. Có lẽ phần khó nhất ban đầu là làm sao cho
+  nó biên dịch được. Tôi không dùng bản phân phối Linux dựa trên Debian, nên
+  hướng dẫn cài đặt ban đầu không áp dụng được. Sau một hồi mày mò, tôi cũng tìm
+  ra cách cài các gói cần thiết bằng trình quản lý gói dnf thay vì apt. Sau khi
+  thiết lập xong thì mọi thứ còn lại khá dễ dàng. Tôi có ghi lại phần toán bên
+  dưới nếu bạn muốn xem thử. Tôi cũng phải đổi vài dấu cộng thành dấu trừ để đạt
+  được hành vi mong muốn. Ví dụ như hình Goldy bị tải ngược, nên tôi sửa lại
+  bằng cách đảo dấu. Tôi cũng muốn cho hình xoay cùng hướng với chuột thay vì
+  ngược lại, đơn giản là vì tôi rảnh và muốn thử xem sao. Các ảnh GIF bên dưới
+  sẽ cho bạn thấy cách chương trình hoạt động.
+</p>
+
+<h2>Mã nguồn</h2>
+<p>Tải mã nguồn <a href="/assets/nguy4766-project1.zip">tại đây!</a></p>
+
+<h2>Các ảnh GIF</h2>
+<h3>Tịnh tiến</h3>
+<img src="/images/translation.gif" />
+<h3>Phóng to / Thu nhỏ</h3>
+<img src="/images/scale.gif" />
+<h3>Xoay</h3>
+<img src="/images/rotation.gif" />
+<h3>Đặt lại hình vuông</h3>
+<img src="/images/reset.gif" />
+<h3>Kết cấu, độ sáng và phần thêm</h3>
+<img src="/images/bonus.gif" />
+
+<h2>Phần toán</h2>
+<h3>Tịnh tiến</h3>
+
+<p>
+  Hình vuông sẽ di chuyển khi người dùng nhấp chuột <em>bên trong</em> nó. Để
+  kiểm tra điều đó, ta dùng phương trình đường thẳng cho bốn cạnh của hình
+  vuông. Mỗi cạnh được viết như sau:
+</p>
+
+<p>\[ ax + by + c = 0 \]</p>
+
+<p>
+  Trong đó \((a, b, c)\) được xác định dựa trên hai điểm đầu mút của cạnh. Dấu
+  của biểu thức này cho biết điểm nằm ở phía nào của cạnh. Khi người dùng nhấp
+  chuột tại vị trí \((x_m, y_m)\), nếu điểm đó nằm cùng phía với tâm hình vuông
+  \((x_c, y_c)\) đối với tất cả các cạnh, thì nghĩa là chuột nhấp vào bên trong.
+</p>
+
+<p>\[ (ax_m + by_m + c)(ax_c + by_c + c) > 0 \]</p>
+
+<p>
+  Nếu điều kiện này đúng với cả bốn cạnh thì ta chuyển sang chế độ tịnh tiến.
+</p>
+
+<p>
+  Khi ở chế độ này, độ dịch chuyển của chuột sẽ được áp dụng trực tiếp cho tâm
+  hình vuông. Nếu chuột đi từ \((x_0, y_0)\) đến \((x_1, y_1)\), thì độ dịch
+  chuyển là:
+</p>
+
+<p>\[ \Delta = (x_1 - x_0, \; y_1 - y_0) \]</p>
+
+<p>Và vị trí tâm mới của hình vuông là:</p>
+
+<p>\[ P' = P_0 + \Delta \]</p>
+
+<pre><code class="language-c">
+// Kiểm tra nhấp bên trong trong mouseClicked()
+float c1 = l1.x*rect_pos.x + l1.y*rect_pos.y + l1.w;
+float f1 = l1.x*clicked_mouse.x + l1.y*clicked_mouse.y + l1.w;
+float c2 = l2.x*rect_pos.x + l2.y*rect_pos.y + l2.w;
+float f2 = l2.x*clicked_mouse.x + l2.y*clicked_mouse.y + l2.w;
+float c3 = l3.x*rect_pos.x + l3.y*rect_pos.y + l3.w;
+float f3 = l3.x*clicked_mouse.x + l3.y*clicked_mouse.y + l3.w;
+float c4 = l4.x*rect_pos.x + l4.y*rect_pos.y + l4.w;
+float f4 = l4.x*clicked_mouse.x + l4.y*clicked_mouse.y + l4.w;
+
+if (f1*c1 > 0 && f2*c2 > 0 && f3*c3 > 0 && f4*c4 > 0) {
+    do_translate = true;
+}
+
+// Cập nhật tịnh tiến trong mouseDragged()
+if (do_translate) {
+    Dir2D disp = cur_mouse - clicked_mouse;
+    rect_pos = clicked_pos + disp;
+}
+</code></pre>
+
+<h3>Phóng to / Thu nhỏ</h3>
+
+<p>
+  Hình vuông sẽ được phóng to hoặc thu nhỏ khi người dùng nhấp gần một trong bốn
+  góc của nó. Để nhận biết, ta tính khoảng cách bình phương giữa vị trí nhấp
+  chuột và từng góc. Nếu gọi vị trí nhấp là \((x_m, y_m)\) và góc là \((x_p,
+  y_p)\), thì:
+</p>
+
+<p>\[ d^2 = (x_m - x_p)^2 + (y_m - y_p)^2 \]</p>
+
+<p>
+  Nếu khoảng cách này nhỏ hơn một ngưỡng định sẵn (\(\epsilon^2\)), thì ta coi
+  như người dùng đã nhấp vào góc đó:
+</p>
+
+<p>\[ d^2 < \epsilon^2 \]</p>
+
+<p>
+  Tôi chọn ngưỡng nhỏ vì nhấp chính xác vào đúng pixel ở góc là chuyện rất khó.
+  Khi người dùng nhấp đủ gần góc, ta cho phép họ kéo để thay đổi kích thước hình
+  vuông. Cách làm là đo khoảng cách từ chuột đến tâm hình vuông trước và sau khi
+  di chuyển. Gọi tâm là \(C(x_c, y_c)\), vị trí chuột ban đầu là \(M_0(x_0,
+  y_0)\), và vị trí hiện tại là \(M_1(x_1, y_1)\):
+</p>
+
+<p>\[ r_0 = \| M_0 - C \|, \quad r_1 = \| M_1 - C \| \]</p>
+
+<p>Tỉ lệ mới được tính bằng:</p>
+
+<p>\[ s' = s_0 \cdot \frac{r_1}{r_0} \]</p>
+
+<p>
+  Trong đó \(s_0\) là tỉ lệ ban đầu khi người dùng bắt đầu kéo. Cách này giúp
+  việc phóng to / thu nhỏ trông mượt mà và tự nhiên hơn.
+</p>
+
+<pre><code class="language-c">
+// Kiểm tra góc trong mouseClicked()
+Dir2D d1 = clicked_mouse - p1;
+Dir2D d2 = clicked_mouse - p2;
+Dir2D d3 = clicked_mouse - p3;
+Dir2D d4 = clicked_mouse - p4;
+
+if (d1.magnitudeSqr() < corner_thresh_sqr ||
+    d2.magnitudeSqr() < corner_thresh_sqr ||
+    d3.magnitudeSqr() < corner_thresh_sqr ||
+    d4.magnitudeSqr() < corner_thresh_sqr) {
+    do_scale = true;
+}
+
+// Cập nhật phóng to / thu nhỏ trong mouseDragged()
+if (do_scale){
+    Dir2D v0 = clicked_mouse - rect_pos;
+    Dir2D v1 = cur_mouse - rect_pos;
+    float r0 = v0.magnitude();
+    float r1 = v1.magnitude();
+    if (r0 > 0) rect_scale = clicked_size * (r1 / r0);
+    else rect_scale = clicked_size;
+}
+</code></pre>
+
+<h3>Xoay</h3>
+
+<p>
+  Hình vuông sẽ xoay khi người dùng nhấp gần một cạnh của nó. Để nhận biết, ta
+  dùng phương trình đường thẳng của cạnh đó:
+</p>
+
+<p>\[ ax + by + c = 0 \]</p>
+
+<p>
+  Khi thay tọa độ chuột \((x_m, y_m)\) vào, ta tính được khoảng cách vuông góc
+  từ điểm nhấp đến cạnh:
+</p>
+
+<p>\[ d = \frac{|ax_m + by_m + c|}{\sqrt{a^2 + b^2}} \]</p>
+
+<p>
+  Nếu giá trị này nhỏ hơn ngưỡng \(\epsilon\), ta xem như người dùng nhấp gần
+  cạnh và chuyển sang chế độ xoay.
+</p>
+
+<p>
+  Khi đó, việc kéo chuột sẽ làm thay đổi góc xoay của hình vuông. Ta tính góc
+  giữa tâm và vị trí nhấp ban đầu, rồi so với góc giữa tâm và vị trí hiện tại.
+  Sử dụng hàm <code>atan2</code> hai tham số, ta có:
+</p>
+
+<p>
+  \[ \theta_0 = \arctan2(y_0 - y_c, \; x_0 - x_c) \] \[ \theta_1 = \arctan2(y_1
+  - y_c, \; x_1 - x_c) \]
+</p>
+
+<p>Độ thay đổi góc là:</p>
+
+<p>\[ \Delta \theta = \theta_1 - \theta_0 \]</p>
+
+<p>Và góc mới của hình vuông được cập nhật như sau:</p>
+
+<p>\[ \theta' = \theta_{\text{clicked}} - \Delta \theta \]</p>
+
+<p>
+  Cách này giúp hình vuông xoay trơn tru quanh tâm khi ta kéo dọc theo cạnh.
+</p>
+
+<pre><code class="language-c">
+// Kiểm tra cạnh trong mouseClicked()
+if (fabs(l1.x*clicked_mouse.x + l1.y*clicked_mouse.y + l1.w) < edge_thresh ||
+    fabs(l2.x*clicked_mouse.x + l2.y*clicked_mouse.y + l2.w) < edge_thresh ||
+    fabs(l3.x*clicked_mouse.x + l3.y*clicked_mouse.y + l3.w) < edge_thresh ||
+    fabs(l4.x*clicked_mouse.x + l4.y*clicked_mouse.y + l4.w) < edge_thresh) {
+    do_rotate = true;
+}
+
+// Cập nhật xoay trong mouseDragged()
+if (do_rotate){
+    float a0 = atan2(clicked_mouse.y - rect_pos.y, clicked_mouse.x - rect_pos.x);
+    float a1 = atan2(cur_mouse.y - rect_pos.y, cur_mouse.x - rect_pos.x);
+    rect_angle = clicked_angle - (a1 - a0);
+}
+</code></pre>
+
+<h3>Ánh xạ kết cấu</h3>
+
+<p>
+  Ta có thể gán ảnh kết cấu cho hình vuông bằng cách tải hình từ tệp PPM. Trong
+  code, hàm <code>loadImage()</code> sẽ đọc tệp PPM (dạng ASCII), lấy dữ liệu
+  pixel và chuyển về định dạng mà OpenGL có thể xử lý. Sau đó, ta gán hình ảnh
+  đó làm kết cấu cho hình vuông bằng lệnh OpenGL.
+</p>
+
+<pre><code class="language-c">
+// Tải kết cấu từ tệp PPM
+int img_w, img_h;
+unsigned char* img_data = loadImage(img_w, img_h);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w, img_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data);
+glGenerateMipmap(GL_TEXTURE_2D);
+delete [] img_data;
+</code></pre>
+
+<p>
+  Nhờ vậy mà hình vuông hiển thị được hình ảnh tải lên. Ngoài ra, ta còn có thể
+  đổi kết cấu trong lúc chạy bằng cách thay <code>textureName</code> rồi tải
+  lại.
+</p>
+
+<h3>Điều chỉnh độ sáng</h3>
+
+<p>
+  Ta có thể tăng giảm độ sáng của hình mà không làm biến đổi màu sắc. Việc này
+  được xử lý trong fragment shader bằng cách nhân giá trị RGB của ảnh với hệ số
+  <code>brightness</code>:
+</p>
+
+<pre><code class="language-c">
+// Điều chỉnh độ sáng trong fragment shader
+uniform float brightness;
+vec3 col = texture(tex0, texcoord).rgb * brightness;
+outColor = min(col, vec3(1.0));
+</code></pre>
+
+<p>
+  Trong vòng lặp chính, khi người dùng nhấn 'W' thì tăng sáng, còn nhấn 'S' thì
+  giảm sáng:
+</p>
+
+<pre><code class="language-c">
+if (event.key.key == SDLK_W) {
+    brightness += 0.2f;
+    glUniform1f(brightnessLoc, brightness);
+}
+if (event.key.key == SDLK_S) {
+    brightness -= 0.2f;
+    if (brightness < 0.0f) brightness = 0.0f;
+    glUniform1f(brightnessLoc, brightness);
+}
+</code></pre>
+
+<p>
+  Nhờ vậy ta có thể điều chỉnh độ sáng của hình một cách linh hoạt mà vẫn giữ
+  được màu gốc.
+</p>
+
+<h3>Đặt lại hình vuông</h3>
+
+<p>
+  Khi nhấn 'R', hình vuông sẽ trở về vị trí, kích thước và góc xoay ban đầu.
+  Cách làm rất đơn giản: chỉ cần khôi phục lại các giá trị gốc cho vị trí, tỉ lệ
+  và góc.
+</p>
+
+<pre><code class="language-c">
+void r_keyPressed(){
+    rect_pos = Point2D(0,0);
+    rect_scale = 1.0f;
+    rect_angle = 0.0f;
+    p1 = init_p1; p2 = init_p2; p3 = init_p3; p4 = init_p4;
+    l1 = vee(p1,p2).normalized();
+    l2 = vee(p2,p3).normalized();
+    l3 = vee(p3,p4).normalized();
+    l4 = vee(p4,p1).normalized();
+    updateVertices();
+}
+</code></pre>
+
+<p>
+  Chỉ cần một cú nhấn, hình vuông sẽ lập tức quay lại trạng thái ban đầu — tiện
+  và nhanh gọn.
+</p>
+
+<h3>Tính năng thêm: Đổi ảnh bằng bàn phím</h3>
+
+<p>
+  Ngoài ra tôi còn thêm một tính năng nhỏ: có thể đổi ảnh kết cấu bằng bàn phím.
+  Nhấn 'A' để lùi về ảnh trước, hoặc 'D' để chuyển sang ảnh tiếp theo. Code sẽ
+  tự động tải ảnh mới và cập nhật trong GPU:
+</p>
+
+<pre><code class="language-c">
+if (event.key.key == SDLK_A) {
+    currentTextureIndex = (currentTextureIndex - 1 + textureFiles.size()) % textureFiles.size();
+    textureName = textureFiles[currentTextureIndex];
+    int img_w2, img_h2;
+    unsigned char* img_data2 = loadImage(img_w2, img_h2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w2, img_h2, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data2);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    delete [] img_data2;
+}
+
+if (event.key.key == SDLK_D) {
+    currentTextureIndex = (currentTextureIndex + 1) % textureFiles.size();
+    textureName = textureFiles[currentTextureIndex];
+    int img_w3, img_h3;
+    unsigned char* img_data3 = loadImage(img_w3, img_h3);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_w3, img_h3, 0, GL_RGBA, GL_UNSIGNED_BYTE, img_data3);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    delete [] img_data3;
+}
+</code></pre>
+
+<p>
+  Tính năng nhỏ này giúp việc thử nghiệm các hình ảnh khác nhau trở nên vui hơn,
+  mà vẫn giữ nguyên các hiệu ứng chuyển động khác.
+</p>
