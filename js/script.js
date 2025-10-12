@@ -6,6 +6,11 @@ function getPageName() {
   return file === "" ? "index" : file.replace(".html", "");
 }
 
+function getPageDir() {
+  const path = window.location.pathname;
+  return path.substring(0, path.lastIndexOf("/"));
+}
+
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem("lang", lang);
@@ -43,7 +48,8 @@ function setLang(lang) {
         "<p>Missing post filename.</p>";
     }
   } else {
-    fetch(`/pages/${lang}/${page}-main.html`)
+    const currentDir = getPageDir()
+    fetch(`${currentDir}/${lang}/${page}-main.html`)
       .then((res) => res.text())
       .then((html) => {
         document.querySelector("main").innerHTML = html;
