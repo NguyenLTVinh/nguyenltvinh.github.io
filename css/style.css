@@ -92,6 +92,7 @@ nav a {
 
 nav a:hover {
   color: #5e4ef1;
+  text-decoration: none;
 }
 
 main {
@@ -156,17 +157,21 @@ footer a:hover img {
 
 /* SKILLS */
 #skills {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(120, 100, 255, 0.15);
+  position: relative;
   max-width: 75%;
+  margin: 2rem auto;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(120, 100, 255, 0.15);
   border-radius: 18px;
   box-shadow: 0 4px 16px rgba(120, 150, 255, 0.15);
-  padding: 2rem;
-  margin: 2rem auto;
+  overflow: hidden;
+
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -177,9 +182,50 @@ footer a:hover img {
   box-shadow: 0 6px 20px rgba(100, 160, 255, 0.2);
 }
 
+#skills::before,
+#skills::after {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border: 2px solid #9a8cff;
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#skills::before {
+  top: 0.75rem;
+  left: 0.75rem;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+}
+
+#skills::after {
+  bottom: 0.75rem;
+  right: 0.75rem;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+}
+
+#skills:hover::before,
+#skills:hover::after {
+  opacity: 0.35;
+}
+
+#skills h3 {
+  color: #302c84;
+  font-family: "Space Grotesk", sans-serif;
+  margin: 1rem 0 0.75rem;
+  text-align: center;
+}
+
 #skills ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 #skills li {
@@ -189,17 +235,12 @@ footer a:hover img {
 
 /*PROJECTS*/
 #projects {
-  max-width: 800px;
+  max-width: 100%;
   margin: 3rem auto;
-  padding: 0 1rem;
 }
 
 #projects h2 {
   text-align: center;
-  color: #2c2c6a;
-  font-family: "Space Grotesk", "Be Vietnam Pro", sans-serif;
-  font-weight: 600;
-  margin-bottom: 2rem;
 }
 
 /* Project cards */
@@ -580,6 +621,35 @@ mjx-container[jax="CHTML"][display="true"] > svg {
   height: auto;
   width: auto;
   transform-origin: left top;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.book img {
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.book img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.book p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
 }
 
 /* RESPONSIVE */
