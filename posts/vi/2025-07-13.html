@@ -83,7 +83,7 @@ printf("%s\n", message);     // ❌ lỗi use-after-free</code></pre>
   Rust tránh được toàn bộ nhóm vấn đề đó bằng cách sử dụng mô hình sở hữu. Mỗi
   giá trị chỉ có một chủ sở hữu duy nhất. Khi chủ sở hữu ra khỏi phạm vi, giá
   trị đó tự động bị hủy và bộ nhớ được giải phóng. Bạn không cần gọi
-  <code class="language-text">free()</code>. Bạn thậm chí không thể truy cập vào
+  <code class="language-rust">free()</code>. Bạn thậm chí không thể truy cập vào
   bộ nhớ đã giải phóng vì trình biên dịch không cho phép. Nếu bạn cố sử dụng dữ
   liệu sau khi nó bị chuyển quyền sở hữu hoặc bị hủy, chương trình sẽ không thể
   biên dịch.
@@ -110,7 +110,7 @@ printf("%s\n", message);     // ❌ lỗi use-after-free</code></pre>
 }
 </code></pre>
 <p>
-  Trong trường hợp này, <code class="language-text">message</code> không còn hợp
+  Trong trường hợp này, <code class="language-rust">message</code> không còn hợp
   lệ sau khi bị chuyển quyền sở hữu. Luật lệ này có thể cảm thấy nghiêm khắc lúc
   đầu, nhưng chính sự nghiêm khắc đó giúp loại bỏ hoàn toàn lỗi use-after-free
   và giải phóng hai lần.
@@ -130,9 +130,9 @@ fn main() {
 }
 </code></pre>
 <p>
-  Ở đây, <code class="language-text">&String</code> là một
+  Ở đây, <code class="language-rust">&String</code> là một
   <strong>tham chiếu bất biến</strong>. Nó cho phép hàm đọc
-  <code class="language-text">message</code> mà không chiếm quyền sở hữu. Nếu
+  <code class="language-rust">message</code> mà không chiếm quyền sở hữu. Nếu
   bạn muốn thay đổi dữ liệu, bạn có thể truyền một
   <strong>tham chiếu khả biến</strong>, nhưng Rust đảm bảo rằng chỉ có duy nhất
   một tham chiếu khả biến tồn tại trong một thời điểm:

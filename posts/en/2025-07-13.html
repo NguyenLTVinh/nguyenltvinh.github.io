@@ -80,7 +80,7 @@ printf("%s\n", message);     // ❌ use-after-free bug</code></pre>
   Rust avoids this entire class of problems using its ownership model. Every
   value has a single owner. When the owner goes out of scope, the value is
   automatically dropped and its memory is freed. You don't need to call
-  <code class="language-text">free()</code>. You don't even have access to freed
+  <code class="language-rust">free()</code>. You don't even have access to freed
   memory, because the compiler prevents it. If you try to use data after it's
   been moved or dropped, the program won't compile.
 </p>
@@ -103,7 +103,7 @@ printf("%s\n", message);     // ❌ use-after-free bug</code></pre>
 }
 </code></pre>
 <p>
-  In this case, <code class="language-text">message</code> is no longer valid
+  In this case, <code class="language-rust">message</code> is no longer valid
   after the move. This may feel strict at first, but it's also what eliminates
   use-after-free and double free errors entirely.
 </p>
@@ -121,9 +121,9 @@ fn main() {
 }
 </code></pre>
 <p>
-  Here, <code class="language-text">&String</code> is an
+  Here, <code class="language-rust">&String</code> is an
   <strong>immutable reference</strong>. It allows the function to read
-  <code class="language-text">message</code> without taking ownership. If you
+  <code class="language-rust">message</code> without taking ownership. If you
   want to mutate the data, you can pass a <strong>mutable reference</strong>,
   but Rust ensures that only one mutable reference exists at any given time:
 </p>

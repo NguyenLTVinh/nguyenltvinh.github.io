@@ -20,6 +20,7 @@ function setLang(lang) {
     .then((res) => res.text())
     .then((html) => {
       document.querySelector("header").innerHTML = html;
+
       document
         .getElementById("translate-btn")
         ?.addEventListener("click", toggleLanguage);
@@ -31,6 +32,8 @@ function setLang(lang) {
           navMenu.classList.toggle("open");
         });
       }
+
+      initDarkModeToggle();
     });
 
   fetch(`/components/footer-${lang}.html`)
@@ -55,15 +58,9 @@ function setLang(lang) {
         document.querySelector("main").innerHTML = html;
         document.dispatchEvent(new Event("mainContentUpdated"));
 
-        if (window.Prism) {
-          Prism.highlightAll();
-        }
-        if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise();
-        }
-        if (page === "blog" && typeof loadPosts === "function") {
-          loadPosts(lang);
-        }
+        if (window.Prism) Prism.highlightAll();
+        if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        if (page === "blog" && typeof loadPosts === "function") loadPosts(lang);
       });
   }
 }
@@ -77,6 +74,50 @@ function toggleLanguage() {
   setLang(newLang);
 }
 
+function initDarkModeToggle() {
+  const toggleBtn = document.getElementById("dark-mode-toggle");
+  if (!toggleBtn) return;
+  const icon = toggleBtn.querySelector("img");
+  const body = document.body;
+
+  const applySunStyle = () => {
+    icon.style.filter =
+      "invert(65%) sepia(64%) hue-rotate(200deg) saturate(15) contrast(90%)";
+    icon.style.opacity = "0.9";
+    icon.style.transition = "filter 0.3s ease";
+  };
+
+  const clearSunStyle = () => {
+    icon.style.filter = "";
+    icon.style.opacity = "";
+    icon.style.transition = "";
+  };
+
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    body.classList.add("dark-mode");
+    icon.src = "/images/sun-svgrepo-com.svg";
+    applySunStyle();
+  } else {
+    icon.src = "/images/moon-svgrepo-com.svg";
+    clearSunStyle();
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const isDark = body.classList.toggle("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    if (isDark) {
+      icon.src = "/images/sun-svgrepo-com.svg";
+      applySunStyle();
+    } else {
+      icon.src = "/images/moon-svgrepo-com.svg";
+      clearSunStyle();
+    }
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   setLang(currentLang);
+  initDarkModeToggle();
 });
