@@ -5,8 +5,8 @@
 </p>
 <p>
   This project required a considerable amount of work and is quite complex. Most
-  of the required features were implemented in Assignment 3, so I started with
-  my submitted Assignment 3 as the base code. Implementing the parsing of extra
+  of the required features were constructed in Assignment 3, so I started with
+  my submitted Assignment 3 as the base code. Programming the parsing of extra
   parameters, such as materials and different types of lights, was relatively
   simple using basic structs. I also stored all the lights and spheres in
   vectors to accommodate multiple lights and spheres. Although wrapping these
@@ -49,18 +49,18 @@ Color ApplyLightingModel( Scene scene, Ray ray, HitInformation hit ){
 </code></pre>
 
 <p>
-  I began by implementing helper functions to calculate ambient, diffuse, and
+  I began by writing helper functions to calculate ambient, diffuse, and
   specular colors. In the <code>applyLightingModel</code> function, I started
-  with the color black. Then I implemented a loop to iterate through all lights
-  in the vector and calculate their attenuation. Within this loop, shadow pixels
-  were also detected, and their color remains black. Diffuse and specular
+  with the color black. Then I wrote a loop to iterate through all lights in the
+  vector and calculate their attenuation. Within this loop, shadow pixels were
+  also detected, and their color remains black. Diffuse and specular
   contributions are calculated and added to the overall color using the formula
   <code>contribution += attenuation * (diff + spec)</code>. After the light
   loop, I added the ambient color.
 </p>
 <p>
-  The most challenging part was implementing the recursive ray tracer for
-  reflection and refraction. I implemented the helper functions
+  The most challenging part was programming the recursive ray tracer for
+  reflection and refraction. I wrote the helper functions
   <code>reflect()</code> and <code>refract()</code>, then followed the
   pseudocode for <code>evaluateRayTree</code>. It took a few attempts to get
   refraction correct. I encountered some issues with strange circular artifacts
@@ -71,7 +71,7 @@ Color ApplyLightingModel( Scene scene, Ray ray, HitInformation hit ){
 <p>
   Below are the implemented features (required and extra). The extra features
   attempted are highlighted in pink. Explanations of how these features were
-  implemented are included on this page.
+  programmed are included on this page.
 </p>
 
 <h3>Scene setup:</h3>
@@ -117,9 +117,10 @@ Color ApplyLightingModel( Scene scene, Ray ray, HitInformation hit ){
 <img src="/images//spheres2.png" />
 
 <p>
-  The images below showcase the different type of lights, and multiple light
-  sources. The exact input is below each images,
+  The images below showcase the different features implemented such as light
+  types, multiple light sources, reflection, and refraction.
 </p>
+
 <img src="/images/tricolor-spotlight.png" />
 <pre><code class="language-c">
 # Sphere lit by multiple colored spotlights
@@ -151,6 +152,32 @@ background: .05 .05 .05
 max_depth: 8
 </code>
 </pre>
+
+<img src="/images/twospheres.png" />
+<pre><code class="language-c">
+# Two spheres with reflection, refraction, and multiple light sources
+camera_pos: 0 2 -10
+camera_fwd: 0 .1 -.9 
+camera_up:  0 1 0
+camera_fov_ha: 26
+output_image: twospheres.png
+material: .75 .75 .75 .75 .75 .75 .3 .3 .3 32 .2 .2 .2 1.5
+sphere: 0 -50 0 50
+material: 0.9 0.5 0.4   0.9 0.5 0.4   1 1 1 128   0 0 0 1
+sphere: 1 1 -2 1.2
+material: 0.05 0.15 0.2 0.1 0.6 0.7 .3 .3 .3 16 .35 .7 .35 1
+sphere: -0.75 1 -4 1
+point_light: 10 10 10 0 5 0
+point_light: 50 50 50 10 5 -5
+ambient_light: .1 .1 .1
+background: .05 .05 .05
+max_depth: 2
+</code></pre>
+
+<p>
+  The images below showcase how the camera's position and direction can be
+  changed.
+</p>
 
 <img src="/images/spheres1_reversed.png" />
 <pre><code class="language-c">

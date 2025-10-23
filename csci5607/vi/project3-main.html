@@ -5,16 +5,16 @@
 </p>
 <p>
   Dự án này yêu cầu khối lượng công việc khá lớn và phức tạp. Phần lớn các tính
-  năng cần thiết đã được triển khai trong Bài Tập 3, vì vậy tôi bắt đầu dự án
-  này dựa trên mã nguồn đã nộp của bài đó. Việc mở rộng để phân tích thêm các
-  tham số như vật liệu và các loại ánh sáng khác nhau khá đơn giản khi sử dụng
-  các struct cơ bản. Tôi lưu toàn bộ đèn và hình cầu trong các vector để hỗ trợ
-  nhiều đối tượng và nguồn sáng. Mặc dù việc bao gói các vector này trong một
-  struct Scene sẽ gọn gàng hơn, nhưng tôi đã không thực hiện điều đó.
+  năng cần thiết đã được viết trong Bài Tập 3, vì vậy tôi bắt đầu dự án này dựa
+  trên mã nguồn đã nộp của bài đó. Việc mở rộng để phân tích thêm các tham số
+  như vật liệu và các loại ánh sáng khác nhau khá đơn giản khi sử dụng các cấu
+  trúc (struct) cơ bản. Tôi lưu toàn bộ nguồn sáng và hình cầu trong các vector
+  để hỗ trợ nhiều đối tượng và nguồn sáng. Mặc dù việc bao gói các vector này
+  trong một struct Scene sẽ gọn gàng hơn, nhưng tôi đã không thực hiện điều đó.
 </p>
 <p>
   Tôi dựa trên pseudocode được cung cấp trong slide bài giảng để xây dựng ray
-  tracer của mình. Việc triển khai chủ yếu tuân theo logic từ pseudocode này:
+  tracer của mình. Việc lập trình chủ yếu tuân theo logic từ pseudocode này:
 </p>
 
 <pre><code class="language-c">
@@ -36,7 +36,7 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
     HitInformation shadow_hit;
     bool blocked = FindIntersection(scene, shadow, &shadow_hit);
     if blocked && shadow_hit.t < Distance(L.pos, hit.pos):
-      continue; // nằm trong bóng, chuyển sang đèn tiếp theo
+      continue; // nằm trong bóng, chuyển sang nguồn sáng tiếp theo
     contribution += DiffuseContribution(L, hit);
     contribution += SpecularContribtion(L, ray, hit);
   Ray mirror = Reflect(ray, hit.normal);
@@ -49,17 +49,18 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
 </code></pre>
 
 <p>
-  Tôi bắt đầu bằng việc viết các hàm phụ để tính màu ambient, diffuse và
-  specular. Trong hàm <code>applyLightingModel</code>, tôi khởi tạo màu đen làm
-  giá trị ban đầu. Sau đó, tôi triển khai vòng lặp duyệt qua tất cả các nguồn
-  sáng trong vector và tính hệ số suy giảm (attenuation) của từng nguồn. Trong
-  vòng lặp này, các điểm bị che bóng được phát hiện và giữ nguyên màu đen. Các
-  thành phần diffuse và specular được tính toán và cộng vào tổng màu theo công
-  thức: <code>contribution += attenuation * (diff + spec)</code>. Sau vòng lặp
-  đèn, tôi thêm màu ambient.
+  Tôi bắt đầu bằng việc viết các hàm phụ để tính màu sáng môi trường (ambient),
+  màu sáng khuếch tán (diffuse) và màu sáng phản chiếu (specular). Trong hàm
+  <code>applyLightingModel</code>, tôi khởi tạo màu đen làm giá trị ban đầu. Sau
+  đó, tôi lập trình vòng lặp duyệt qua tất cả các nguồn sáng trong vector và
+  tính hệ số suy giảm (attenuation) của từng nguồn. Trong vòng lặp này, các điểm
+  bị che bóng được phát hiện và giữ nguyên màu đen. Các thành phần diffuse và
+  specular được tính toán và cộng vào tổng màu theo công thức:
+  <code>contribution += attenuation * (diff + spec)</code>. Sau vòng lặp nguồn
+  sáng, tôi thêm màu ambient.
 </p>
 <p>
-  Phần khó nhất là triển khai ray tracer đệ quy cho phản xạ và khúc xạ. Tôi đã
+  Phần khó nhất là lập trình ray tracer đệ quy cho phản xạ và khúc xạ. Tôi đã
   viết các hàm trợ giúp <code>reflect()</code> và <code>refract()</code>, sau đó
   làm theo pseudocode của <code>evaluateRayTree</code>. Việc khúc xạ đúng hướng
   mất khá nhiều lần thử nghiệm. Ban đầu, hình ảnh xuất hiện các vòng tròn lạ
@@ -69,7 +70,7 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
 </p>
 <p>
   Dưới đây là các tính năng đã triển khai (bao gồm cả phần bắt buộc và mở rộng).
-  Các tính năng thử nghiệm được đánh dấu màu hồng, kèm theo mô tả ngắn về cách
+  Các tính năng mở rộng được đánh dấu màu hồng, kèm theo mô tả ngắn về cách
   chúng được thực hiện.
 </p>
 
@@ -89,7 +90,7 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
 <ul>
   <li>Ánh sáng môi trường (ambient)</li>
   <li>Nguồn sáng điểm</li>
-  <li><span class="code-string">Bóng</span></li>
+  <li><span class="code-string">Đổ bóng</span></li>
   <li><span class="code-string">Nhiều nguồn sáng</span></li>
   <li><span class="code-string">Nguồn sáng hướng</span></li>
   <li><span class="code-string">Nguồn sáng chiếu điểm</span></li>
@@ -117,8 +118,8 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
 <img src="/images/spheres2.png" />
 
 <p>
-  Các hình ảnh tiếp theo thể hiện các loại ánh sáng khác nhau và nhiều nguồn
-  sáng trong cùng cảnh. Input tương ứng nằm dưới mỗi hình.
+  Những hình ảnh bên dưới cho thấy nhiều tính năng khác nhau của phần mềm như
+  các loại ánh sáng, nhiều nguồn sáng, phản xạ, khúc xạ.
 </p>
 
 <img src="/images/tricolor-spotlight.png" />
@@ -133,7 +134,7 @@ background: .5 .5 .5
 
 <img src="/images/reflective.png" />
 <pre><code class="language-c">
-# Hình cầu phản chiếu được chiếu sáng bởi nhiều đèn hướng và một đèn điểm xanh
+# Hình cầu phản chiếu được chiếu sáng bởi nhiều nguồn sáng hướng và một nguồn sáng điểm xanh
 camera_pos: -6 2 -4
 camera_fwd: -.77 0 -.64
 camera_up: 0 1 0
@@ -150,6 +151,32 @@ ambient_light: .2 .2 .2
 background: .05 .05 .05
 max_depth: 8
 </code></pre>
+
+<img src="/images/twospheres.png" />
+<pre><code class="language-c">
+# Hai quả cầu với phản xạ, khúc xạ, và nhiều nguồn sáng
+camera_pos: 0 2 -10
+camera_fwd: 0 .1 -.9 
+camera_up:  0 1 0
+camera_fov_ha: 26
+output_image: twospheres.png
+material: .75 .75 .75 .75 .75 .75 .3 .3 .3 32 .2 .2 .2 1.5
+sphere: 0 -50 0 50
+material: 0.9 0.5 0.4   0.9 0.5 0.4   1 1 1 128   0 0 0 1
+sphere: 1 1 -2 1.2
+material: 0.05 0.15 0.2 0.1 0.6 0.7 .3 .3 .3 16 .35 .7 .35 1
+sphere: -0.75 1 -4 1
+point_light: 10 10 10 0 5 0
+point_light: 50 50 50 10 5 -5
+ambient_light: .1 .1 .1
+background: .05 .05 .05
+max_depth: 2
+</code></pre>
+
+<p>
+  Những hình ảnh bên duới cho thấy vị trí và góc nhìn của camera có thể thay
+  đổi.
+</p>
 
 <img src="/images/spheres1_reversed.png" />
 <pre><code class="language-c">
@@ -174,8 +201,8 @@ camera_fov_ha: 26
 <h3>Giao nhau giữa tia và hình cầu</h3>
 <p>
   Tôi đã chỉnh sửa lại hàm được cung cấp để trả về giá trị t phục vụ việc tính
-  bóng. Nếu t dương và nhỏ hơn khoảng cách đến nguồn sáng, nghĩa là có vật thể
-  khác chắn giữa.
+  khu vực đổ bóng. Nếu t dương và nhỏ hơn khoảng cách đến nguồn sáng, nghĩa là
+  có vật thể khác chắn giữa.
 </p>
 <p>
   Để xác định tia có giao với hình cầu hay không, ta giải phương trình cho tia
@@ -216,24 +243,25 @@ float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &center,
 }
 </code></pre>
 
-<h3>Ánh sáng và các loại đèn</h3>
+<h3>Ánh sáng và các loại nguồn sáng</h3>
 <p>
   Trong ray tracing, ta tính đóng góp ánh sáng từ từng nguồn sáng trong cảnh.
   Mỗi vòng lặp duyệt qua tất cả các nguồn sáng và xác định hướng, khoảng cách
-  cùng hệ số suy giảm tùy theo loại đèn.
+  cùng hệ số suy giảm tùy theo loại nguồn sáng.
 </p>
 
-<h4>Đèn hướng</h4>
+<h4>Nguồn sáng hướng</h4>
 <p>
-  Đèn hướng mô phỏng nguồn sáng ở vô cực (như ánh sáng mặt trời). Hướng ánh sáng
-  là ngược lại với vector hướng của đèn:
+  Nguồn sáng hướng mô phỏng nguồn sáng ở vô cực (như ánh sáng mặt trời). Hướng
+  ánh sáng là ngược lại với vector hướng của nguồn sáng:
 </p>
 <p>\[ \mathbf{L}_{dir} = -\hat{\mathbf{L}}_{dir} \]</p>
 
-<h4>Đèn điểm</h4>
+<h4>Nguồn sáng điểm</h4>
 <p>
-  Đèn điểm phát sáng từ một vị trí duy nhất. Hướng ánh sáng là vector từ điểm va
-  chạm đến đèn, và cường độ giảm theo luật nghịch đảo bình phương khoảng cách:
+  Nguồn sáng điểm phát sáng từ một vị trí duy nhất. Hướng ánh sáng là vector từ
+  điểm va chạm đến nguồn sáng, và cường độ giảm theo luật nghịch đảo bình phương
+  khoảng cách:
 </p>
 <p>
   \[ \mathbf{L}_{dir} = \frac{\mathbf{L}_{pos} -
@@ -241,11 +269,11 @@ float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &center,
   \frac{1}{\|\mathbf{L}_{pos} - \mathbf{P}_{hit}\|^2} \]
 </p>
 
-<h4>Đèn chiếu điểm</h4>
+<h4>Nguồn sáng chiếu điểm</h4>
 <p>
-  Đèn chiếu điểm (spotlight) tương tự đèn điểm nhưng chỉ chiếu sáng trong một
-  hình nón. Hướng và hệ số suy giảm được tính như đèn điểm, nhưng thêm điều kiện
-  góc giữa hướng trung tâm và hướng đến điểm va chạm:
+  Nguồn sáng chiếu điểm (spotlight) tương tự nguồn sáng điểm nhưng chỉ chiếu
+  sáng trong một hình nón. Hướng và hệ số suy giảm được tính như nguồn sáng
+  điểm, nhưng thêm điều kiện góc giữa hướng trung tâm và hướng đến điểm va chạm:
 </p>
 <p>
   \[ \cos\theta = \hat{\mathbf{L}}_{spot} \cdot \frac{\mathbf{P}_{hit} -
@@ -334,10 +362,11 @@ Color specularContribution(Light &L, Dir3D &N, Dir3D &V, Material &m,
 }
 </code></pre>
 
-<h3>Bóng</h3>
+<h3>Đổ bóng</h3>
 <p>
-  Bóng được tính bằng cách bắn một tia từ điểm va chạm đến nguồn sáng. Nếu tia
-  này bị chặn trước khi đến đèn, điểm đó nằm trong bóng tối.
+  Khu vực đổ bóng được tính bằng cách bắn một tia từ điểm va chạm đến nguồn
+  sáng. Nếu tia này bị chặn trước khi đến nguồn sáng, điểm đó nằm trong bóng
+  tối.
 </p>
 
 <pre><code class="language-c">
