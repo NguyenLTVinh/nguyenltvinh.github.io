@@ -1,0 +1,428 @@
+<h2>Project Overview</h2>
+<p>
+  You can download the code for this project
+  <a href="/assets/nguy4766-project3.zip">here!</a>
+</p>
+<p>
+  This project required a considerable amount of work and is quite complex. Most
+  of the required features were implemented in Assignment 3, so I started with
+  my submitted Assignment 3 as the base code. Implementing the parsing of extra
+  parameters, such as materials and different types of lights, was relatively
+  simple using basic structs. I also stored all the lights and spheres in
+  vectors to accommodate multiple lights and spheres. Although wrapping these
+  vectors in a Scene struct might have been cleaner, I did not do that.
+</p>
+<p>
+  I used the pseudocode provided in the lecture slides as a basis for building
+  my ray tracer. The implementation largely follows this pseudocode:
+</p>
+
+<pre><code class="language-c">
+Color EvaluateRayTree(Scene scene, Ray ray){
+  boolean hit_somthing;
+  HitInformation hit; // structure containing hit point, normal, etc
+  hit_something = FindIntersection( scene, ray, &hit );
+  if (hit_something){
+    return ApplyLightingModel( ray, hit );
+  }else{
+    return BackgroundColor;
+  }
+}
+
+Color ApplyLightingModel( Scene scene, Ray ray, HitInformation hit ){
+  Color contribution = black;
+  for each light L:
+    Ray shadow ( hit.pos, L.pos - hit.pos );
+    HitInformation shadow_hit;
+    bool blocked = FindIntersection( scene, shadow, &shadow_hit );
+    if blocked && shadow_hit.t < Distance( L.pos, hit.pos ):
+      continue; // we're in shadow, on to the next light;
+    contribution += DiffuseContribution( L, hit );
+    contribution += SpecularContribtion( L, ray, hit );
+  Ray mirror = Reflect( ray, hit.normal );
+  contribution += Kr*EvaluateRayTree( scene, mirror )
+  Ray glass = Refract( ray, hit.normal );
+  contribution += Kt*EvaluateRayTree( scene, glass );
+  contribution += Ambient(); // superhack!
+  contribution += Emission( hit ); // for area light sources only
+} 
+</code></pre>
+
+<p>
+  I began by implementing helper functions to calculate ambient, diffuse, and
+  specular colors. In the <code>applyLightingModel</code> function, I started
+  with the color black. Then I implemented a loop to iterate through all lights
+  in the vector and calculate their attenuation. Within this loop, shadow pixels
+  were also detected, and their color remains black. Diffuse and specular
+  contributions are calculated and added to the overall color using the formula
+  <code>contribution += attenuation * (diff + spec)</code>. After the light
+  loop, I added the ambient color.
+</p>
+<p>
+  The most challenging part was implementing the recursive ray tracer for
+  reflection and refraction. I implemented the helper functions
+  <code>reflect()</code> and <code>refract()</code>, then followed the
+  pseudocode for <code>evaluateRayTree</code>. It took a few attempts to get
+  refraction correct. I encountered some issues with strange circular artifacts
+  on sphere reflections, and transparency was higher than in the example images.
+  It turned out I hadn't accounted for the ray's direction change when leaving
+  the material. Once that was fixed, the results looked correct.
+</p>
+<p>
+  Below are the implemented features (required and extra). The extra features
+  attempted are highlighted in pink. Explanations of how these features were
+  implemented are included on this page.
+</p>
+
+<h3>Scene setup:</h3>
+<ul>
+  <li>Camera placement</li>
+  <li>User-specified background colors</li>
+  <li><span class="code-string">PNG output</span></li>
+</ul>
+
+<h3>Primitives:</h3>
+<ul>
+  <li>Spheres</li>
+</ul>
+
+<h3>Lighting:</h3>
+<ul>
+  <li>Ambient lights</li>
+  <li>Point light sources</li>
+  <li><span class="code-string">Shadows</span></li>
+  <li><span class="code-string">Multiple light sources</span></li>
+  <li><span class="code-string">Directional light sources</span></li>
+  <li><span class="code-string">Spot light sources</span></li>
+</ul>
+
+<h3>Sampling:</h3>
+<ul>
+  <li>Basic Sampling</li>
+</ul>
+
+<h3>Materials:</h3>
+<ul>
+  <li>Color & Specularity</li>
+  <li><span class="code-string">Refraction</span></li>
+  <li><span class="code-string">Reflection</span></li>
+</ul>
+
+<h2>Ray Traced Images</h2>
+<p>
+  Below are the images rendered with the given <code>sphere1.txt</code> and
+  <code>spheres2.txt</code>. It should showcase reflection and refraction.
+</p>
+<img src="/images/spheres1.png" />
+<img src="/images//spheres2.png" />
+
+<p>
+  The images below showcase the different type of lights, and multiple light
+  sources. The exact input is below each images,
+</p>
+<img src="/images/tricolor-spotlight.png" />
+<pre><code class="language-c">
+# Sphere lit by multiple colored spotlights
+sphere: 0 0 2 1
+spot_light: 0 1 0  1 0 1  -1 0 0  45 90
+spot_light: 1 0 0  -1 1 1  1 -1 0  45 90
+spot_light: 0 0 1  0 -1 1  0 1 0  45 90
+background: .5 .5 .5
+</code></pre>
+<img src="/images/reflective.png" />
+
+<pre>
+<code class="language-c">
+# Reflective sphere lit by multiple direction lights and a blue point light
+camera_pos: -6 2 -4
+camera_fwd: -.77 0 -.64
+camera_up: 0 1 0
+camera_fov_ha: 35
+output_image: reflective.png
+material: 0 0 0   0 0 0   1 1 1   64   0 0 0   1.0
+sphere: -1 2 0 2
+material: .6 .6 .6   .6 .6 .6   .3 .3 .3   32   0 0 0   1.0
+sphere: 0 -50 0 50
+directional_light: 1 0.9 0.7  -1 -1 -1
+directional_light: 0.7 0.8 1  1 -1 -0.5
+point_light: -2 1 2   -2 0.5 -2
+ambient_light: .2 .2 .2
+background: .05 .05 .05
+max_depth: 8
+</code>
+</pre>
+
+<img src="/images/spheres1_reversed.png" />
+<pre><code class="language-c">
+# This is spheres1.txt with a different camera setup
+camera_pos: 6 2 4
+camera_fwd: 0.77 0 0.64
+camera_up:  0 1 0
+camera_fov_ha: 35
+</code></pre>
+
+<img src="/images/spheres2-top.png" />
+<pre><code class="language-c">
+# This is spheres2.txt with the camera looking straight down
+camera_pos: 0 20 0 
+camera_fwd: 0 1 0
+camera_up: 0 0 -1
+camera_fov_ha: 26 
+</code></pre>
+
+<h2>The Maths</h2>
+
+<h3>Ray-sphere intersection</h3>
+<p>
+  I refactored the given function to return t for shadow implementation. If t is
+  positive and smaller than the distance to the light, it means another object
+  is blocking the path.
+</p>
+<p>
+  To determine whether a ray intersects a sphere, we solve the equation for a
+  ray \(\mathbf{R}(t) = \mathbf{O} + t \mathbf{D}\) and a sphere of radius \(r\)
+  centered at \(\mathbf{C}\):
+</p>
+<p>\[ \|\mathbf{O} + t\mathbf{D} - \mathbf{C}\|^2 = r^2 \]</p>
+<p>Expanding this gives a quadratic in \(t\):</p>
+<p>\[ a t^2 + b t + c = 0 \]</p>
+<p>where</p>
+<p>
+  \[ a = \mathbf{D} \cdot \mathbf{D}, \quad b = 2 (\mathbf{D} \cdot (\mathbf{O}
+  - \mathbf{C})) \] \[ c = (\mathbf{O} - \mathbf{C}) \cdot (\mathbf{O} -
+  \mathbf{C}) - r^2 \]
+</p>
+<p>If \(b^2 - 4ac < 0\), there is no intersection.</p>
+
+<pre><code class="language-c">
+float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &center,
+                      float radius) {
+  Dir3D L = Dir3D(rayOrigin.x - center.x, rayOrigin.y - center.y,
+                  rayOrigin.z - center.z);
+  // O + t * D
+  float a = dot(rayDir, rayDir);
+  float b = 2.0f * dot(rayDir, L);
+  float c = dot(L, L) - radius * radius;
+  float discr = b * b - 4 * a * c;
+  if (discr < 0.0f)
+    return -1.0f;
+  float sqrtD = sqrtf(discr);
+  float t0 = (-b - sqrtD) / (2.0f * a);
+  float t1 = (-b + sqrtD) / (2.0f * a);
+  // smallest positive t
+  float t = -1.0f;
+  if (t0 > EPSILON)
+    t = t0;
+  else if (t1 > EPSILON)
+    t = t1;
+  return t;
+}
+</code></pre>
+
+<h3>Lighting and Light Types</h3>
+<p>
+  In ray tracing, we calculate lighting contributions for each light in the
+  scene. The loop iterates through all lights and computes the direction,
+  distance, and attenuation of the light at the hit point depending on its type:
+</p>
+
+<h4>1. Directional Light</h4>
+<p>
+  Directional lights simulate a light source at infinity (like sunlight). The
+  light direction is simply the opposite of the light's direction vector:
+</p>
+<p>\[ \mathbf{L}_{dir} = -\hat{\mathbf{L}}_{dir} \]</p>
+
+<h4>2. Point Light</h4>
+<p>
+  Point lights emit light from a single position. The light direction is the
+  vector from the hit point to the light, and intensity attenuates according to
+  the inverse-square law:
+</p>
+<p>
+  \[ \mathbf{L}_{dir} = \frac{\mathbf{L}_{pos} -
+  \mathbf{P}_{hit}}{\|\mathbf{L}_{pos} - \mathbf{P}_{hit}\|}\] \[attenuation =
+  \frac{1}{\|\mathbf{L}_{pos} - \mathbf{P}_{hit}\|^2} \]
+</p>
+
+<h4>3. Spot Light</h4>
+<p>
+  Spot lights are like point lights but restricted to a cone. The direction and
+  attenuation are computed like point lights, but we also compute the angle
+  between the light's central direction and the vector toward the hit point:
+</p>
+<p>
+  \[ \cos\theta = \hat{\mathbf{L}}_{spot} \cdot \frac{\mathbf{P}_{hit} -
+  \mathbf{L}_{pos}}{\|\mathbf{P}_{hit} - \mathbf{L}_{pos}\|}\]\[attenuation *=
+  f(\theta) \]
+</p>
+<p>
+  Here, \(f(\theta)\) defines the angular falloff: - If \(\theta > \theta_2\),
+  the point is outside the outer cone → no contribution. - If \(\theta_1 <
+  \theta \le \theta_2\), a linear falloff scales the light intensity between the
+  inner and outer cones.
+</p>
+
+<pre><code class="language-c">
+for (Light &L : lights) {
+    Dir3D Ldir;
+    float attenuation = 1.0f;
+    float maxLightDist = 1e30f;
+
+    if (L.type == DIRECTIONAL_LIGHT) {
+        Ldir = L.dir.normalized() * -1.0f;
+    } else if (L.type == POINT_LIGHT) {
+        Dir3D tmp = L.pos - hitPoint;
+        float dist2 = tmp.magnitudeSqr();
+        maxLightDist = sqrtf(dist2);
+        if (maxLightDist > 0.0f)
+            Ldir = tmp.normalized();
+        else
+            continue;
+        attenuation = 1.0f / dist2;
+    } else if (L.type == SPOT_LIGHT) {
+        Dir3D tmp = L.pos - hitPoint;
+        float dist2 = tmp.magnitudeSqr();
+        maxLightDist = sqrtf(dist2);
+        if (maxLightDist > 0.0f)
+            Ldir = tmp.normalized();
+        else
+            continue;
+        attenuation = 1.0f / dist2;
+
+        Dir3D spotToPoint = (hitPoint - L.pos).normalized();
+        float cosAngle = dot(spotToPoint, L.dir.normalized());
+        float ang = acosf(clamp(cosAngle, 0.0f, 1.0f)) * (180.0f / M_PI);
+        if (ang > L.angle2) continue;
+        else if (ang > L.angle1) {
+            float tfall = (ang - L.angle1) / (L.angle2 - L.angle1);
+            attenuation *= (1.0f - tfall);
+        }
+    }
+}
+</code></pre>
+
+<h3>Diffuse lighting (Lambertian)</h3>
+<p>
+  The diffuse contribution is proportional to the cosine of the angle between
+  the light direction \(\mathbf{L}\) and the surface normal \(\mathbf{N}\):
+</p>
+<p>\[ C_\text{diffuse} = k_d (\mathbf{L} \cdot \mathbf{N}) \mathbf{I}_L \]</p>
+
+<pre><code class="language-c">
+Color diffuseContribution(Light &L, Dir3D &N, Material &m, Dir3D &Ldir) {
+  float NdotL = std::max(dot(N, Ldir), 0.0f);
+  return Color(m.dr * NdotL * L.intensity.r, m.dg * NdotL * L.intensity.g,
+               m.db * NdotL * L.intensity.b);
+}
+</code></pre>
+
+<h3>Specular lighting (Phong)</h3>
+<p>
+  Specular highlights are computed using the reflected light vector
+  \(\mathbf{R}\) and the view direction \(\mathbf{V}\):
+</p>
+<p>
+  \[ C_\text{specular} = k_s (\mathbf{R} \cdot \mathbf{V})^n \mathbf{I}_L \]
+</p>
+
+<pre><code class="language-c">
+Color specularContribution(Light &L, Dir3D &N, Dir3D &V, Material &m,
+                           Dir3D &Ldir) {
+  Dir3D negLdir = Ldir * -1.0f;
+  Dir3D R = reflect(negLdir, N);
+  float RdotV = std::max(dot(R, V), 0.0f);
+  float specFactor = (m.ns > 0.0f) ? powf(RdotV, m.ns) : 0.0f;
+  return Color(m.sr * specFactor * L.intensity.r,
+               m.sg * specFactor * L.intensity.g,
+               m.sb * specFactor * L.intensity.b);
+}
+</code></pre>
+
+<h3>Shadows</h3>
+<p>
+  Shadows are computed by casting a ray from the hit point toward the light. If
+  any object intersects this ray before the light, the point is in shadow.
+</p>
+
+<pre><code class="language-c">
+Point3D shadowOrigin = hitPoint + N * EPSILON;
+bool blocked = false;
+for (Sphere &s : spheres) {
+    float t = intersectSphere(shadowOrigin, Ldir, s.center, s.radius);
+    if (t > 0.0f && t < maxLightDist - EPSILON) {
+    blocked = true;
+    break;
+    }
+}
+if (blocked)
+    continue;
+</code></pre>
+
+<h3>Reflection (Phong model)</h3>
+<p>
+  The reflection direction of an incident ray \(\mathbf{I}\) on a surface with
+  normal \(\mathbf{N}\) is computed using vector reflection:
+</p>
+<p>
+  \[ \mathbf{R} = \mathbf{I} - 2 (\mathbf{I} \cdot \mathbf{N}) \mathbf{N} \]
+</p>
+<p>
+  This forms the basis of Phong specular reflection, where highlights are
+  computed based on the angle between \(\mathbf{R}\) and the viewer direction
+  \(\mathbf{V}\).
+</p>
+
+<pre><code class="language-c">
+Dir3D reflect(Dir3D &I, Dir3D &N) {
+  float dotIN = dot(I, N);
+  Dir3D scaledNormal = 2.0f * dotIN * N;
+  return I - scaledNormal;
+}
+</code></pre>
+
+<h3>Refraction (Snell's law)</h3>
+<p>Refraction is computed using Snell's law:</p>
+<p>\[ n_i \sin \theta_i = n_r \sin \theta_r \]</p>
+<p>
+  In vector form, if \(\mathbf{I}\) is the incident ray and \(\mathbf{N}\) the
+  normal:
+</p>
+<p>
+  \[ \mathbf{T} = \eta \mathbf{I} + (\eta \cos\theta_i - \cos\theta_r)
+  \mathbf{N} \]
+</p>
+<p>
+  where \(\eta = n_i / n_r\), \(\cos\theta_i = -\mathbf{I} \cdot \mathbf{N}\),
+  and \(\cos\theta_r = \sqrt{1 - \eta^2 (1 - \cos^2 \theta_i)}\). If the square
+  root is negative, total internal reflection occurs.
+</p>
+<p>
+  By checking whether \(\cos\theta_i\) is less than or greater than 0, we can
+  determine if the ray is entering or leaving the object. If it's leaving, it
+  flips the surface normal and swaps the refractive indices so the refraction
+  math bends the ray in the correct direction.
+</p>
+
+<pre><code class="language-c">
+Dir3D refract(Dir3D &I, Dir3D &N, float ior) {
+  Dir3D I_norm = I.normalized();
+  float cosi = clamp(dot(I_norm, N), -1.0f, 1.0f);
+  float nui = 1, nur = ior;
+  Dir3D n = N;
+
+  if (cosi < 0) {
+    cosi = -cosi;
+  } else {
+    std::swap(nui, nur);
+    n = N * -1.0f;
+  }
+
+  float nu = nui / nur;
+  float k = 1 - nu * nu * (1 - cosi * cosi);
+  if (k < 0)
+    return Dir3D(0, 0, 0);
+
+  return (nu * I_norm + (nu * cosi - sqrtf(k)) * n).normalized();
+}
+</code></pre>

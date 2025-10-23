@@ -1,0 +1,421 @@
+<h2>Tổng Quan Dự Án</h2>
+<p>
+  Bạn có thể tải mã nguồn của dự án này
+  <a href="/assets/nguy4766-project3.zip">tại đây!</a>
+</p>
+<p>
+  Dự án này yêu cầu khối lượng công việc khá lớn và phức tạp. Phần lớn các tính
+  năng cần thiết đã được triển khai trong Bài Tập 3, vì vậy tôi bắt đầu dự án
+  này dựa trên mã nguồn đã nộp của bài đó. Việc mở rộng để phân tích thêm các
+  tham số như vật liệu và các loại ánh sáng khác nhau khá đơn giản khi sử dụng
+  các struct cơ bản. Tôi lưu toàn bộ đèn và hình cầu trong các vector để hỗ trợ
+  nhiều đối tượng và nguồn sáng. Mặc dù việc bao gói các vector này trong một
+  struct Scene sẽ gọn gàng hơn, nhưng tôi đã không thực hiện điều đó.
+</p>
+<p>
+  Tôi dựa trên pseudocode được cung cấp trong slide bài giảng để xây dựng ray
+  tracer của mình. Việc triển khai chủ yếu tuân theo logic từ pseudocode này:
+</p>
+
+<pre><code class="language-c">
+Color EvaluateRayTree(Scene scene, Ray ray){
+  boolean hit_something;
+  HitInformation hit; // struct chứa điểm va chạm, pháp tuyến, v.v.
+  hit_something = FindIntersection(scene, ray, &hit);
+  if (hit_something){
+    return ApplyLightingModel(ray, hit);
+  }else{
+    return BackgroundColor;
+  }
+}
+
+Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
+  Color contribution = black;
+  for each light L:
+    Ray shadow(hit.pos, L.pos - hit.pos);
+    HitInformation shadow_hit;
+    bool blocked = FindIntersection(scene, shadow, &shadow_hit);
+    if blocked && shadow_hit.t < Distance(L.pos, hit.pos):
+      continue; // nằm trong bóng, chuyển sang đèn tiếp theo
+    contribution += DiffuseContribution(L, hit);
+    contribution += SpecularContribtion(L, ray, hit);
+  Ray mirror = Reflect(ray, hit.normal);
+  contribution += Kr * EvaluateRayTree(scene, mirror);
+  Ray glass = Refract(ray, hit.normal);
+  contribution += Kt * EvaluateRayTree(scene, glass);
+  contribution += Ambient(); // phần bù ambient
+  contribution += Emission(hit); // dùng cho nguồn sáng diện tích
+} 
+</code></pre>
+
+<p>
+  Tôi bắt đầu bằng việc viết các hàm phụ để tính màu ambient, diffuse và
+  specular. Trong hàm <code>applyLightingModel</code>, tôi khởi tạo màu đen làm
+  giá trị ban đầu. Sau đó, tôi triển khai vòng lặp duyệt qua tất cả các nguồn
+  sáng trong vector và tính hệ số suy giảm (attenuation) của từng nguồn. Trong
+  vòng lặp này, các điểm bị che bóng được phát hiện và giữ nguyên màu đen. Các
+  thành phần diffuse và specular được tính toán và cộng vào tổng màu theo công
+  thức: <code>contribution += attenuation * (diff + spec)</code>. Sau vòng lặp
+  đèn, tôi thêm màu ambient.
+</p>
+<p>
+  Phần khó nhất là triển khai ray tracer đệ quy cho phản xạ và khúc xạ. Tôi đã
+  viết các hàm trợ giúp <code>reflect()</code> và <code>refract()</code>, sau đó
+  làm theo pseudocode của <code>evaluateRayTree</code>. Việc khúc xạ đúng hướng
+  mất khá nhiều lần thử nghiệm. Ban đầu, hình ảnh xuất hiện các vòng tròn lạ
+  quanh phản xạ và độ trong suốt cao hơn so với mẫu. Nguyên nhân là tôi chưa
+  tính đến việc đổi hướng tia khi rời khỏi vật liệu. Khi sửa lại phần này, kết
+  quả đã chính xác hơn rất nhiều.
+</p>
+<p>
+  Dưới đây là các tính năng đã triển khai (bao gồm cả phần bắt buộc và mở rộng).
+  Các tính năng thử nghiệm được đánh dấu màu hồng, kèm theo mô tả ngắn về cách
+  chúng được thực hiện.
+</p>
+
+<h3>Thiết lập cảnh</h3>
+<ul>
+  <li>Đặt vị trí camera</li>
+  <li>Màu nền do người dùng chỉ định</li>
+  <li><span class="code-string">Xuất ảnh PNG</span></li>
+</ul>
+
+<h3>Đối tượng cơ bản</h3>
+<ul>
+  <li>Hình cầu</li>
+</ul>
+
+<h3>Ánh sáng</h3>
+<ul>
+  <li>Ánh sáng môi trường (ambient)</li>
+  <li>Nguồn sáng điểm</li>
+  <li><span class="code-string">Bóng</span></li>
+  <li><span class="code-string">Nhiều nguồn sáng</span></li>
+  <li><span class="code-string">Nguồn sáng hướng</span></li>
+  <li><span class="code-string">Nguồn sáng chiếu điểm</span></li>
+</ul>
+
+<h3>Lấy mẫu</h3>
+<ul>
+  <li>Lấy mẫu cơ bản</li>
+</ul>
+
+<h3>Vật liệu</h3>
+<ul>
+  <li>Màu và độ bóng</li>
+  <li><span class="code-string">Khúc xạ</span></li>
+  <li><span class="code-string">Phản xạ</span></li>
+</ul>
+
+<h2>Hình Ảnh Ray Trace</h2>
+<p>
+  Dưới đây là các hình ảnh được kết xuất từ
+  <code>sphere1.txt</code> và <code>spheres2.txt</code>, thể hiện rõ hiệu ứng
+  phản xạ và khúc xạ.
+</p>
+<img src="/images/spheres1.png" />
+<img src="/images/spheres2.png" />
+
+<p>
+  Các hình ảnh tiếp theo thể hiện các loại ánh sáng khác nhau và nhiều nguồn
+  sáng trong cùng cảnh. Input tương ứng nằm dưới mỗi hình.
+</p>
+
+<img src="/images/tricolor-spotlight.png" />
+<pre><code class="language-c">
+# Hình cầu được chiếu sáng bởi nhiều spotlight nhiều màu
+sphere: 0 0 2 1
+spot_light: 0 1 0  1 0 1  -1 0 0  45 90
+spot_light: 1 0 0  -1 1 1  1 -1 0  45 90
+spot_light: 0 0 1  0 -1 1  0 1 0  45 90
+background: .5 .5 .5
+</code></pre>
+
+<img src="/images/reflective.png" />
+<pre><code class="language-c">
+# Hình cầu phản chiếu được chiếu sáng bởi nhiều đèn hướng và một đèn điểm xanh
+camera_pos: -6 2 -4
+camera_fwd: -.77 0 -.64
+camera_up: 0 1 0
+camera_fov_ha: 35
+output_image: reflective.png
+material: 0 0 0   0 0 0   1 1 1   64   0 0 0   1.0
+sphere: -1 2 0 2
+material: .6 .6 .6   .6 .6 .6   .3 .3 .3   32   0 0 0   1.0
+sphere: 0 -50 0 50
+directional_light: 1 0.9 0.7  -1 -1 -1
+directional_light: 0.7 0.8 1  1 -1 -0.5
+point_light: -2 1 2   -2 0.5 -2
+ambient_light: .2 .2 .2
+background: .05 .05 .05
+max_depth: 8
+</code></pre>
+
+<img src="/images/spheres1_reversed.png" />
+<pre><code class="language-c">
+# Phiên bản spheres1.txt với góc nhìn camera khác
+camera_pos: 6 2 4
+camera_fwd: 0.77 0 0.64
+camera_up:  0 1 0
+camera_fov_ha: 35
+</code></pre>
+
+<img src="/images/spheres2-top.png" />
+<pre><code class="language-c">
+# Phiên bản spheres2.txt với góc nhìn từ trên xuống
+camera_pos: 0 20 0 
+camera_fwd: 0 1 0
+camera_up: 0 0 -1
+camera_fov_ha: 26 
+</code></pre>
+
+<h2>Toán Học</h2>
+
+<h3>Giao nhau giữa tia và hình cầu</h3>
+<p>
+  Tôi đã chỉnh sửa lại hàm được cung cấp để trả về giá trị t phục vụ việc tính
+  bóng. Nếu t dương và nhỏ hơn khoảng cách đến nguồn sáng, nghĩa là có vật thể
+  khác chắn giữa.
+</p>
+<p>
+  Để xác định tia có giao với hình cầu hay không, ta giải phương trình cho tia
+  \(\mathbf{R}(t) = \mathbf{O} + t \mathbf{D}\) và hình cầu bán kính \(r\) tâm
+  tại \(\mathbf{C}\):
+</p>
+<p>\[ \|\mathbf{O} + t\mathbf{D} - \mathbf{C}\|^2 = r^2 \]</p>
+<p>Mở rộng ra phương trình bậc hai theo \(t\):</p>
+<p>\[ a t^2 + b t + c = 0 \]</p>
+<p>với</p>
+<p>
+  \[ a = \mathbf{D} \cdot \mathbf{D}, \quad b = 2 (\mathbf{D} \cdot (\mathbf{O}
+  - \mathbf{C})) \] \[ c = (\mathbf{O} - \mathbf{C}) \cdot (\mathbf{O} -
+  \mathbf{C}) - r^2 \]
+</p>
+<p>Nếu \(b^2 - 4ac < 0\), tia không giao với hình cầu.</p>
+
+<pre><code class="language-c">
+float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &center,
+                      float radius) {
+  Dir3D L = Dir3D(rayOrigin.x - center.x, rayOrigin.y - center.y,
+                  rayOrigin.z - center.z);
+  float a = dot(rayDir, rayDir);
+  float b = 2.0f * dot(rayDir, L);
+  float c = dot(L, L) - radius * radius;
+  float discr = b * b - 4 * a * c;
+  if (discr < 0.0f)
+    return -1.0f;
+  float sqrtD = sqrtf(discr);
+  float t0 = (-b - sqrtD) / (2.0f * a);
+  float t1 = (-b + sqrtD) / (2.0f * a);
+  float t = -1.0f;
+  if (t0 > EPSILON)
+    t = t0;
+  else if (t1 > EPSILON)
+    t = t1;
+  return t;
+}
+</code></pre>
+
+<h3>Ánh sáng và các loại đèn</h3>
+<p>
+  Trong ray tracing, ta tính đóng góp ánh sáng từ từng nguồn sáng trong cảnh.
+  Mỗi vòng lặp duyệt qua tất cả các nguồn sáng và xác định hướng, khoảng cách
+  cùng hệ số suy giảm tùy theo loại đèn.
+</p>
+
+<h4>Đèn hướng</h4>
+<p>
+  Đèn hướng mô phỏng nguồn sáng ở vô cực (như ánh sáng mặt trời). Hướng ánh sáng
+  là ngược lại với vector hướng của đèn:
+</p>
+<p>\[ \mathbf{L}_{dir} = -\hat{\mathbf{L}}_{dir} \]</p>
+
+<h4>Đèn điểm</h4>
+<p>
+  Đèn điểm phát sáng từ một vị trí duy nhất. Hướng ánh sáng là vector từ điểm va
+  chạm đến đèn, và cường độ giảm theo luật nghịch đảo bình phương khoảng cách:
+</p>
+<p>
+  \[ \mathbf{L}_{dir} = \frac{\mathbf{L}_{pos} -
+  \mathbf{P}_{hit}}{\|\mathbf{L}_{pos} - \mathbf{P}_{hit}\|}\] \[attenuation =
+  \frac{1}{\|\mathbf{L}_{pos} - \mathbf{P}_{hit}\|^2} \]
+</p>
+
+<h4>Đèn chiếu điểm</h4>
+<p>
+  Đèn chiếu điểm (spotlight) tương tự đèn điểm nhưng chỉ chiếu sáng trong một
+  hình nón. Hướng và hệ số suy giảm được tính như đèn điểm, nhưng thêm điều kiện
+  góc giữa hướng trung tâm và hướng đến điểm va chạm:
+</p>
+<p>
+  \[ \cos\theta = \hat{\mathbf{L}}_{spot} \cdot \frac{\mathbf{P}_{hit} -
+  \mathbf{L}_{pos}}{\|\mathbf{P}_{hit} - \mathbf{L}_{pos}\|}\] \[attenuation *=
+  f(\theta) \]
+</p>
+<p>
+  Hàm \(f(\theta)\) mô tả độ giảm sáng theo góc: - Nếu \(\theta > \theta_2\),
+  điểm nằm ngoài vùng chiếu → không có ánh sáng. - Nếu \(\theta_1 < \theta \le
+  \theta_2\), ánh sáng giảm dần tuyến tính giữa nón trong và nón ngoài.
+</p>
+
+<pre><code class="language-c">
+for (Light &L : lights) {
+    Dir3D Ldir;
+    float attenuation = 1.0f;
+    float maxLightDist = 1e30f;
+
+    if (L.type == DIRECTIONAL_LIGHT) {
+        Ldir = L.dir.normalized() * -1.0f;
+    } else if (L.type == POINT_LIGHT) {
+        Dir3D tmp = L.pos - hitPoint;
+        float dist2 = tmp.magnitudeSqr();
+        maxLightDist = sqrtf(dist2);
+        if (maxLightDist > 0.0f)
+            Ldir = tmp.normalized();
+        else
+            continue;
+        attenuation = 1.0f / dist2;
+    } else if (L.type == SPOT_LIGHT) {
+        Dir3D tmp = L.pos - hitPoint;
+        float dist2 = tmp.magnitudeSqr();
+        maxLightDist = sqrtf(dist2);
+        if (maxLightDist > 0.0f)
+            Ldir = tmp.normalized();
+        else
+            continue;
+        attenuation = 1.0f / dist2;
+
+        Dir3D spotToPoint = (hitPoint - L.pos).normalized();
+        float cosAngle = dot(spotToPoint, L.dir.normalized());
+        float ang = acosf(clamp(cosAngle, 0.0f, 1.0f)) * (180.0f / M_PI);
+        if (ang > L.angle2) continue;
+        else if (ang > L.angle1) {
+            float tfall = (ang - L.angle1) / (L.angle2 - L.angle1);
+            attenuation *= (1.0f - tfall);
+        }
+    }
+}
+</code></pre>
+
+<h3>Ánh sáng khuếch tán (Lambert)</h3>
+<p>
+  Thành phần khuếch tán tỉ lệ với cosin của góc giữa hướng sáng \(\mathbf{L}\)
+  và pháp tuyến bề mặt \(\mathbf{N}\):
+</p>
+<p>\[ C_\text{diffuse} = k_d (\mathbf{L} \cdot \mathbf{N}) \mathbf{I}_L \]</p>
+
+<pre><code class="language-c">
+Color diffuseContribution(Light &L, Dir3D &N, Material &m, Dir3D &Ldir) {
+  float NdotL = std::max(dot(N, Ldir), 0.0f);
+  return Color(m.dr * NdotL * L.intensity.r, m.dg * NdotL * L.intensity.g,
+               m.db * NdotL * L.intensity.b);
+}
+</code></pre>
+
+<h3>Ánh sáng phản chiếu (Phong)</h3>
+<p>
+  Thành phần phản chiếu được xác định bằng góc giữa vector phản xạ
+  \(\mathbf{R}\) và hướng nhìn \(\mathbf{V}\):
+</p>
+<p>
+  \[ C_\text{specular} = k_s (\mathbf{R} \cdot \mathbf{V})^n \mathbf{I}_L \]
+</p>
+
+<pre><code class="language-c">
+Color specularContribution(Light &L, Dir3D &N, Dir3D &V, Material &m,
+                           Dir3D &Ldir) {
+  Dir3D negLdir = Ldir * -1.0f;
+  Dir3D R = reflect(negLdir, N);
+  float RdotV = std::max(dot(R, V), 0.0f);
+  float specFactor = (m.ns > 0.0f) ? powf(RdotV, m.ns) : 0.0f;
+  return Color(m.sr * specFactor * L.intensity.r,
+               m.sg * specFactor * L.intensity.g,
+               m.sb * specFactor * L.intensity.b);
+}
+</code></pre>
+
+<h3>Bóng</h3>
+<p>
+  Bóng được tính bằng cách bắn một tia từ điểm va chạm đến nguồn sáng. Nếu tia
+  này bị chặn trước khi đến đèn, điểm đó nằm trong bóng tối.
+</p>
+
+<pre><code class="language-c">
+Point3D shadowOrigin = hitPoint + N * EPSILON;
+bool blocked = false;
+for (Sphere &s : spheres) {
+    float t = intersectSphere(shadowOrigin, Ldir, s.center, s.radius);
+    if (t > 0.0f && t < maxLightDist - EPSILON) {
+    blocked = true;
+    break;
+    }
+}
+if (blocked)
+    continue;
+</code></pre>
+
+<h3>Phản xạ</h3>
+<p>
+  Hướng phản xạ của tia tới \(\mathbf{I}\) tại bề mặt có pháp tuyến
+  \(\mathbf{N}\) được tính bằng công thức:
+</p>
+<p>
+  \[ \mathbf{R} = \mathbf{I} - 2 (\mathbf{I} \cdot \mathbf{N}) \mathbf{N} \]
+</p>
+<p>
+  Đây là cơ sở cho thành phần phản chiếu trong mô hình Phong, nơi vùng sáng phụ
+  thuộc vào góc giữa \(\mathbf{R}\) và hướng nhìn \(\mathbf{V}\).
+</p>
+
+<pre><code class="language-c">
+Dir3D reflect(Dir3D &I, Dir3D &N) {
+  float dotIN = dot(I, N);
+  Dir3D scaledNormal = 2.0f * dotIN * N;
+  return I - scaledNormal;
+}
+</code></pre>
+
+<h3>Khúc xạ (định luật Snell)</h3>
+<p>Khúc xạ được tính dựa trên định luật Snell:</p>
+<p>\[ n_i \sin \theta_i = n_r \sin \theta_r \]</p>
+<p>
+  Dưới dạng vector, nếu \(\mathbf{I}\) là tia tới và \(\mathbf{N}\) là pháp
+  tuyến:
+</p>
+<p>
+  \[ \mathbf{T} = \eta \mathbf{I} + (\eta \cos\theta_i - \cos\theta_r)
+  \mathbf{N} \]
+</p>
+<p>
+  với \(\eta = n_i / n_r\), \(\cos\theta_i = -\mathbf{I} \cdot \mathbf{N}\), và
+  \(\cos\theta_r = \sqrt{1 - \eta^2 (1 - \cos^2 \theta_i)}\). Nếu phần căn bậc
+  hai âm, xảy ra phản xạ toàn phần.
+</p>
+<p>
+  Dựa vào dấu của \(\cos\theta_i\), ta xác định tia đang đi vào hay đi ra khỏi
+  vật thể. Nếu đi ra, cần đảo ngược pháp tuyến và hoán đổi chỉ số khúc xạ để tia
+  khúc xạ được tính đúng hướng.
+</p>
+
+<pre><code class="language-c">
+Dir3D refract(Dir3D &I, Dir3D &N, float ior) {
+  Dir3D I_norm = I.normalized();
+  float cosi = clamp(dot(I_norm, N), -1.0f, 1.0f);
+  float nui = 1, nur = ior;
+  Dir3D n = N;
+
+  if (cosi < 0) {
+    cosi = -cosi;
+  } else {
+    std::swap(nui, nur);
+    n = N * -1.0f;
+  }
+
+  float nu = nui / nur;
+  float k = 1 - nu * nu * (1 - cosi * cosi);
+  if (k < 0)
+    return Dir3D(0, 0, 0);
+
+  return (nu * I_norm + (nu * cosi - sqrtf(k)) * n).normalized();
+}
+</code></pre>
