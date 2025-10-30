@@ -1,0 +1,566 @@
+<h2>Project Overview</h2>
+<p>
+  You can download the code for this project
+  <a href="/assets/nguy4766-project3b.zip">here!</a>
+</p>
+<p>
+  This project builds upon the last one. I have already implemented most of the
+  required features such as reflection, refraction, shadow, light types, and
+  multiple light sources in project 3A. In project 3B, the only remaining
+  required feature was vertices and triangles. For extra credits, I implemented
+  new geometric primitives: boxes, planes, cylinders, and cones. I also
+  parallelized the ray tracer's main pixel loop.
+</p>
+
+<p>
+  Below are the new features. Explanations of the mathematics and code details
+  are included on this page.
+</p>
+
+<h3>Parallelization:</h3>
+<ul>
+  <li>
+    <span class="code-string">Multi-threading support</span> - OpenMP
+    parallelization and command-line input to control number of threads
+  </li>
+</ul>
+
+<h3>Primitives:</h3>
+<ul>
+  <li><span class="code-string">Triangles</span></li>
+  <li><span class="code-string">Normal triangles</span></li>
+  <li><span class="code-string">Planes</span></li>
+  <li><span class="code-string">Boxes</span></li>
+  <li><span class="code-string">Cylinders</span></li>
+  <li><span class="code-string">Cones</span></li>
+</ul>
+
+<h2>Ray Traced Images</h2>
+<p>
+  You can download the scene files for the images below
+  <a href="/assets/scenefiles.zip">here!</a>
+</p>
+<p>
+  The models for Rabbit and Eevee were downloaded from
+  <a href="https://www.thingiverse.com/" target="_blank">Thingiverse</a> and
+  reduced to low polygons with
+  <a href="https://lowpoly3d.xyz/" target="_blank">3D Low Poly Generator.</a>
+</p>
+
+<code>ShadowTest.txt</code>
+<img src="/images/ShadowTest.png" />
+<code>geometric_garden.txt</code>
+<img src="/images/geometric_garden.png" />
+<code>sculptures.txt</code>
+<img src="/images/sculptures.png" />
+<code>gear.txt</code>
+<img src="/images/gear.png" />
+<code>rabbit.txt</code>
+<img src="/images/rabbit.png" />
+<code>eevee.txt</code>
+<img src="/images/eevee.png" />
+
+<h2>Maths and Code Details</h2>
+
+<h3>HitResult structure</h3>
+<p>
+  I added a <code>HitResult</code> structure that wraps all intersection
+  information in one place. This replaces the previous approach of passing
+  multiple output parameters by reference, making the code cleaner and more
+  maintainable.
+</p>
+
+<pre><code class="language-c">
+struct HitResult {
+  bool hit = false;
+  PrimitiveType type;
+  int index = -1;
+  float t = -1.0f;
+  Point3D hitPoint;
+  Dir3D normal;
+  Material *mat = nullptr;
+  float u = 0.0f, v = 0.0f;         // UV coords for triangles
+  bool hitCap = false;              // For cylinders/cones
+  bool hitTop = false;              // For cylinder caps
+};
+</code></pre>
+
+<h3>Ray-triangle intersection</h3>
+<p>
+  To determine if a ray hits a triangle, I used the Möller-Trumbore algorithm.
+  We are able to directly calculate both the intersection parameter t and the
+  barycentric coordinates u and v without first computing the plane equation.
+</p>
+
+<p>
+  Given a triangle with vertices \(\mathbf{V}_0\), \(\mathbf{V}_1\),
+  \(\mathbf{V}_2\) and a ray \(\mathbf{R}(t) = \mathbf{O} + t\mathbf{D}\), we
+  can express any point on the triangle as:
+</p>
+<p>
+  \[ \mathbf{P} = \mathbf{V}_0 + u(\mathbf{V}_1 - \mathbf{V}_0) + v(\mathbf{V}_2
+  - \mathbf{V}_0) \]
+</p>
+<p>
+  Setting this equal to the ray equation and solving gives us \(t\), \(u\), and
+  \(v\). The intersection is valid if:
+</p>
+<p>\[ u \geq 0, \quad v \geq 0, \quad u + v \leq 1, \quad t > 0 \]</p>
+
+<pre><code class="language-c">
+float intersectTriangle(Point3D &rayOrigin, Dir3D &rayDir, Triangle &tri,
+                        float &outU, float &outV) {
+  Dir3D edge1 = tri.v1 - tri.v0;
+  Dir3D edge2 = tri.v2 - tri.v0;
+  Dir3D h = cross(rayDir, edge2);
+  float a = dot(edge1, h);
+
+  if (fabs(a) < EPSILON)
+    return -1.0f;  // Ray parallel to triangle
+
+  float f = 1.0f / a;
+  Dir3D s = rayOrigin - tri.v0;
+  float u = f * dot(s, h);
+
+  if (u < 0.0f || u > 1.0f)
+    return -1.0f;
+
+  Dir3D q = cross(s, edge1);
+  float v = f * dot(rayDir, q);
+
+  if (v < 0.0f || u + v > 1.0f)
+    return -1.0f;
+
+  float t = f * dot(edge2, q);
+  outU = u;
+  outV = v;
+
+  return (t > EPSILON) ? t : -1.0f;
+}
+</code></pre>
+
+<h4>Smooth shading with vertex normals</h4>
+<p>
+  For smooth surfaces, we interpolate vertex normals using the barycentric
+  coordinates \(u\) and \(v\):
+</p>
+<p>
+  \[ \mathbf{N}_{\text{interp}} = w\mathbf{N}_0 + u\mathbf{N}_1 + v\mathbf{N}_2
+  \]
+</p>
+<p>where \(w = 1 - u - v\) ensures the weights sum to 1.</p>
+
+<pre><code class="language-c">
+if (tri.useVertexNormals) {
+  float w = 1.0f - result.u - result.v;
+  result.normal = (w * tri.n0 + result.u * tri.n1 + 
+                   result.v * tri.n2).normalized();
+} else {
+  result.normal = tri.normal;
+}
+</code></pre>
+
+<h3>Ray-plane intersection</h3>
+<p>
+  A plane is defined by a point \(\mathbf{P}_0\) on the plane and a normal
+  vector \(\mathbf{N}\). Any point \(\mathbf{P}\) on the plane satisfies:
+</p>
+<p>\[ (\mathbf{P} - \mathbf{P}_0) \cdot \mathbf{N} = 0 \]</p>
+<p>
+  Substituting the ray equation \(\mathbf{R}(t) = \mathbf{O} + t\mathbf{D}\) and
+  solving for \(t\):
+</p>
+<p>
+  \[ t = \frac{(\mathbf{P}_0 - \mathbf{O}) \cdot \mathbf{N}}{\mathbf{D} \cdot
+  \mathbf{N}} \]
+</p>
+<p>If the denominator is near zero, the ray is parallel to the plane.</p>
+
+<pre><code class="language-c">
+float intersectPlane(Point3D &rayOrigin, Dir3D &rayDir, Plane &pl) {
+  float denom = dot(pl.normal, rayDir);
+  if (fabs(denom) < EPSILON)
+    return -1.0f;  // Parallel to plane
+  
+  float t = dot(pl.point - rayOrigin, pl.normal) / denom;
+  return (t > EPSILON) ? t : -1.0f;
+}
+</code></pre>
+
+<h3>Ray-box Intersection</h3>
+<p>
+  Box intersection uses the slab method. An axis-aligned box is the intersection
+  of three pairs of parallel planes (slabs). For each axis, we compute where the
+  ray enters and exits the slab:
+</p>
+<p>
+  \[ t_{\text{min}}^i = \frac{\text{min}_i - O_i}{D_i}, \quad t_{\text{max}}^i =
+  \frac{\text{max}_i - O_i}{D_i} \]
+</p>
+<p>
+  We then find the overlap of all three intervals. The ray intersects the box
+  if:
+</p>
+<p>
+  \[ t_{\text{enter}} = \max(t_{\text{min}}^x, t_{\text{min}}^y,
+  t_{\text{min}}^z) \]
+</p>
+<p>
+  \[ t_{\text{exit}} = \min(t_{\text{max}}^x, t_{\text{max}}^y,
+  t_{\text{max}}^z) \]
+</p>
+<p>\[ t_{\text{enter}} < t_{\text{exit}} \text{ and } t_{\text{exit}} > 0 \]</p>
+
+<pre><code class="language-c">
+float intersectBox(Point3D &rayOrigin, Dir3D &rayDir, Box &b) {
+  float tmin = (b.minCorner.x - rayOrigin.x) / rayDir.x;
+  float tmax = (b.maxCorner.x - rayOrigin.x) / rayDir.x;
+  if (tmin > tmax) std::swap(tmin, tmax);
+
+  float tymin = (b.minCorner.y - rayOrigin.y) / rayDir.y;
+  float tymax = (b.maxCorner.y - rayOrigin.y) / rayDir.y;
+  if (tymin > tymax) std::swap(tymin, tymax);
+
+  if ((tmin > tymax) || (tymin > tmax))
+    return -1.0f;
+
+  if (tymin > tmin) tmin = tymin;
+  if (tymax < tmax) tmax = tymax;
+
+  float tzmin = (b.minCorner.z - rayOrigin.z) / rayDir.z;
+  float tzmax = (b.maxCorner.z - rayOrigin.z) / rayDir.z;
+  if (tzmin > tzmax) std::swap(tzmin, tzmax);
+
+  if ((tmin > tzmax) || (tzmin > tmax))
+    return -1.0f;
+
+  if (tzmin > tmin) tmin = tzmin;
+  if (tzmax < tmax) tmax = tzmax;
+
+  return (tmin > EPSILON) ? tmin : ((tmax > EPSILON) ? tmax : -1.0f);
+}
+</code></pre>
+
+<p>
+  The normal at the hit point is determined by checking which face was hit (by
+  comparing the hit point coordinates to the box boundaries).
+</p>
+
+<h3>Ray-cylinder Intersection</h3>
+<p>
+  A cylinder is defined by a base point \(\mathbf{B}\), axis direction
+  \(\mathbf{A}\) (normalized), radius \(r\), and height \(h\). We must check
+  three components: the cylindrical side surface and two circular caps.
+</p>
+
+<h4>Infinite cylinder (Side Surface)</h4>
+<p>
+  We project the ray onto the plane perpendicular to the cylinder's axis. Let:
+</p>
+<p>\[ \mathbf{D}' = \mathbf{D} - (\mathbf{D} \cdot \mathbf{A})\mathbf{A} \]</p>
+<p>\[ \Delta = \mathbf{O} - \mathbf{B} \]</p>
+<p>\[ \Delta' = \Delta - (\Delta \cdot \mathbf{A})\mathbf{A} \]</p>
+<p>
+  The intersection with the infinite cylinder satisfies \(\|\Delta' +
+  t\mathbf{D}'\|^2 = r^2\), which expands to:
+</p>
+<p>\[ a t^2 + bt + c = 0 \]</p>
+<p>
+  where \(a = \mathbf{D}' \cdot \mathbf{D}'\), \(b = 2(\mathbf{D}' \cdot
+  \Delta')\), \(c = \Delta' \cdot \Delta' - r^2\)
+</p>
+<p>
+  For each solution \(t\), we compute \(y = \mathbf{A} \cdot ((\mathbf{O} +
+  t\mathbf{D}) - \mathbf{B})\) and accept it only if \(0 \leq y \leq h\).
+</p>
+
+<h4>Circular caps</h4>
+<p>Each cap is a disk. For the bottom cap at \(\mathbf{B}\):</p>
+<p>
+  \[ t = \frac{(\mathbf{B} - \mathbf{O}) \cdot \mathbf{A}}{\mathbf{D} \cdot
+  \mathbf{A}} \]
+</p>
+<p>
+  We then verify the hit point \(\mathbf{P} = \mathbf{O} + t\mathbf{D}\) is
+  within distance \(r\) from the axis. Similarly for the top cap at \(\mathbf{B}
+  + h\mathbf{A}\).
+</p>
+
+<pre><code class="language-c">
+float intersectCylinder(Point3D &rayOrigin, Dir3D &rayDir, Cylinder &cyl,
+                        bool &hitCap, bool &hitTop) {
+  hitCap = false;
+  hitTop = false;
+  float bestT = -1.0f;
+
+  // Intersect infinite cylinder (side surface)
+  Dir3D d = rayDir - dot(rayDir, cyl.axis) * cyl.axis;
+  Dir3D delta = rayOrigin - cyl.base;
+  Dir3D deltaProj = delta - dot(delta, cyl.axis) * cyl.axis;
+
+  float a = dot(d, d);
+  float b = 2.0f * dot(d, deltaProj);
+  float c = dot(deltaProj, deltaProj) - cyl.radius * cyl.radius;
+
+  float discr = b * b - 4 * a * c;
+  if (discr >= 0 && a > EPSILON) {
+    float sqrtD = sqrtf(discr);
+    float t0 = (-b - sqrtD) / (2 * a);
+    float t1 = (-b + sqrtD) / (2 * a);
+
+    for (float t : {t0, t1}) {
+      if (t < EPSILON) continue;
+      float y = dot(cyl.axis, (rayOrigin + rayDir * t) - cyl.base);
+      if (y >= 0 && y <= cyl.height) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+        }
+      }
+    }
+  }
+
+  // Intersect bottom cap
+  float denom = dot(cyl.axis, rayDir);
+  if (fabs(denom) > EPSILON) {
+    float t = dot(cyl.base - rayOrigin, cyl.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - cyl.base;
+      float distSq = dot(toP, toP) - dot(toP, cyl.axis) * dot(toP, cyl.axis);
+      if (distSq <= cyl.radius * cyl.radius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitCap = true;
+          hitTop = false;
+        }
+      }
+    }
+  }
+
+  // Intersect top cap
+  Point3D topCenter = cyl.base + cyl.axis * cyl.height;
+  if (fabs(denom) > EPSILON) {
+    float t = dot(topCenter - rayOrigin, cyl.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - topCenter;
+      float distSq = dot(toP, toP) - dot(toP, cyl.axis) * dot(toP, cyl.axis);
+      if (distSq <= cyl.radius * cyl.radius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitCap = true;
+          hitTop = true;
+        }
+      }
+    }
+  }
+
+  return bestT;
+}
+</code></pre>
+
+<p>
+  The normal calculation differs for caps versus the side. For caps, the normal
+  is simply \(\pm\mathbf{A}\). For the side surface, the normal is perpendicular
+  to the axis:
+</p>
+<p>
+  \[ \mathbf{N} = \frac{\mathbf{P} - \mathbf{P}_{\text{axis}}}{\|\mathbf{P} -
+  \mathbf{P}_{\text{axis}}\|} \]
+</p>
+<p>
+  where \(\mathbf{P}_{\text{axis}}\) is the closest point on the axis to the hit
+  point.
+</p>
+
+<h3>Ray-cone intersection</h3>
+<p>
+  A cone is defined by an apex \(\mathbf{V}\), axis direction \(\mathbf{A}\),
+  half-angle \(\theta\), and height \(h\). Like cylinders, we check both the
+  conical surface and the circular base.
+</p>
+
+<h4>Infinite cone</h4>
+<p>
+  The cone surface satisfies the constraint that the angle between any point
+  \(\mathbf{P}\) on the surface and the axis is constant:
+</p>
+<p>
+  \[ \left(\frac{(\mathbf{P} - \mathbf{V}) \cdot \mathbf{A}}{\|\mathbf{P} -
+  \mathbf{V}\|}\right)^2 = \cos^2\theta \]
+</p>
+<p>
+  Substituting \(\mathbf{P} = \mathbf{O} + t\mathbf{D}\) and simplifying leads
+  to a quadratic equation. Let \(\mathbf{CO} = \mathbf{O} - \mathbf{V}\):
+</p>
+<p>\[ a = (\mathbf{D} \cdot \mathbf{A})^2 - \cos^2\theta \]</p>
+<p>
+  \[ b = 2[(\mathbf{D} \cdot \mathbf{A})(\mathbf{CO} \cdot \mathbf{A}) -
+  (\mathbf{D} \cdot \mathbf{CO})\cos^2\theta] \]
+</p>
+<p>
+  \[ c = (\mathbf{CO} \cdot \mathbf{A})^2 - (\mathbf{CO} \cdot
+  \mathbf{CO})\cos^2\theta \]
+</p>
+<p>
+  For each solution, we verify that \(y = \mathbf{A} \cdot ((\mathbf{O} +
+  t\mathbf{D}) - \mathbf{V})\) satisfies \(0 \leq y \leq h\).
+</p>
+
+<h4>Circular base</h4>
+<p>
+  The base is a disk at \(\mathbf{B} = \mathbf{V} + h\mathbf{A}\) with radius
+  \(r = h\tan\theta\). The intersection test is identical to the cylinder caps.
+</p>
+
+<pre><code class="language-c">
+float intersectCone(Point3D &rayOrigin, Dir3D &rayDir, Cone &cone,
+                    bool &hitBase) {
+  hitBase = false;
+  float bestT = -1.0f;
+
+  // Intersect infinite double cone
+  Dir3D co = rayOrigin - cone.apex;
+  float cos2 = cosf(cone.angle) * cosf(cone.angle);
+
+  float dv = dot(rayDir, cone.axis);
+  float coV = dot(co, cone.axis);
+
+  float a = dv * dv - cos2;
+  float b = 2 * (dv * coV - dot(rayDir, co) * cos2);
+  float c = coV * coV - dot(co, co) * cos2;
+
+  float discr = b * b - 4 * a * c;
+  if (discr >= 0 && fabs(a) > EPSILON) {
+    float sqrtD = sqrtf(discr);
+    float t0 = (-b - sqrtD) / (2 * a);
+    float t1 = (-b + sqrtD) / (2 * a);
+
+    for (float t : {t0, t1}) {
+      if (t < EPSILON) continue;
+      Point3D hitPt = rayOrigin + rayDir * t;
+      float y = dot(cone.axis, hitPt - cone.apex);
+      if (y >= 0 && y <= cone.height) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+        }
+      }
+    }
+  }
+
+  // Intersect base cap
+  Point3D baseCenter = cone.apex + cone.axis * cone.height;
+  float baseRadius = cone.height * tanf(cone.angle);
+
+  float denom = dot(cone.axis, rayDir);
+  if (fabs(denom) > EPSILON) {
+    float t = dot(baseCenter - rayOrigin, cone.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - baseCenter;
+      float distSq = dot(toP, toP) - dot(toP, cone.axis) * dot(toP, cone.axis);
+      if (distSq <= baseRadius * baseRadius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitBase = true;
+        }
+      }
+    }
+  }
+
+  return bestT;
+}
+</code></pre>
+
+<p>
+  The surface normal for a cone is more complex. For the base, it's simply
+  \(\mathbf{A}\). For the conical surface:
+</p>
+<p>
+  \[ \mathbf{N} = \cos\theta \cdot \mathbf{R} - \sin\theta \cdot \mathbf{A} \]
+</p>
+<p>
+  where \(\mathbf{R}\) is the radial direction (perpendicular to the axis,
+  pointing outward from the cone).
+</p>
+
+<h3>Multi-threading with OpenMP</h3>
+<p>
+  The ray tracer parallelizes the pixel rendering loop using OpenMP. Each thread
+  independently traces rays for different pixels, and the
+  <code>collapse(2)</code> directive combines the nested loops for better work
+  distribution:
+</p>
+
+<pre><code class="language-c">
+#pragma omp parallel for collapse(2) schedule(dynamic)
+for (int i = 0; i < img_width; i++) {
+  for (int j = 0; j < img_height; j++) {
+    float u = (halfW - (imgW) * ((i + 0.5) / imgW));
+    float v = (halfH - (imgH) * ((j + 0.5) / imgH));
+    Point3D p = eye - d * forward + u * right + v * up;
+    Dir3D rayDir = (p - eye).normalized();
+    Color pixelColor = evaluateRayTree(eye, rayDir, max_depth);
+    outputImg.setPixel(i, j, pixelColor);
+  }
+}
+</code></pre>
+
+<p>
+  The <code>schedule(dynamic)</code> clause distributes work dynamically, which
+  is important because different pixels may require vastly different amounts of
+  computation (due to varying ray tree depths or number of intersection tests).
+</p>
+
+<p>
+  I used the <code>eevee.txt</code> scene to benchmark. Multi-threading provides
+  significant speedups up until 8 threads. The speedup is nearly linear up to 4
+  threads, with efficiency remaining above 85%. At 8 threads, we still see
+  strong scaling at 5.58× speedup. However, at 16 threads, performance gains
+  diminish significantly (only improving from 17.4s to 16.8s). Using 16 threads,
+  which is the maximum number on my CPU, there was no speedup compared to 8
+  threads.
+</p>
+
+<p>
+  The following table shows rendering performance for the
+  <code>eevee.txt</code> scene with different thread counts. The scene contains
+  1 sphere and 2 lights with reflection and refraction enabled.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Threads</th>
+      <th>Rendering Time (ms)</th>
+      <th>Speedup</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>97,089.50</td>
+      <td>1.00×</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>52,261.59</td>
+      <td>1.86×</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>28,346.76</td>
+      <td>3.43×</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>17,414.00</td>
+      <td>5.58×</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>16,755.17</td>
+      <td>5.79×</td>
+    </tr>
+  </tbody>
+</table>

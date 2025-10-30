@@ -1,0 +1,130 @@
+# Model bounds: (-52.7286, 10.8201, -54.1581) to (52.8252, 91.8073, 54.3044)
+# Model center: (0.0483322, 51.3137, 0.073185)
+# Model size: 108.463
+
+camera_pos: 0 -200 60
+camera_fwd: 0 -1 0.3
+camera_up: 0 0 1
+camera_fov_ha: 20
+output_image: rabbit.png
+
+directional_light: 0.25 0.25 0.25  0.5 0.5 -4
+directional_light: 1 1 1 1 1 0
+ambient_light: .25 .25 .25
+background: .05 .05 .05
+max_depth: 5
+
+# "ground" sphere
+material: .75 .75 .75 .75 .75 .75 .3 .3 .3 32 .2 .2 .2 1.5
+sphere: 0 50 -500 450
+
+# Mesh data
+max_vertices: 36
+
+vertex: 38.0706 61.3667 -7.2028
+vertex: 40.3 47.0901 -53.7112
+vertex: -10.6863 89.7633 35.3734
+vertex: -22.7984 32.1559 -39.3785
+vertex: 1.69145 69.5986 -43.5354
+vertex: -1.60653 78.6279 -25.8842
+vertex: -20.5139 58.6703 21.1432
+vertex: -18.8488 62.2711 9.77857
+vertex: -13.9518 91.8073 54.3044
+vertex: -0.130482 81.5612 45.2232
+vertex: 6.19167 70.9901 34.8053
+vertex: 29.0515 63.5412 5.28118
+vertex: -0.944551 70.7 -14.0485
+vertex: -32.3263 71.6423 41.7733
+vertex: -25.5733 87.6576 25.843
+vertex: -28.2912 87.9102 51.9339
+vertex: -23.7853 59.6155 31.8691
+vertex: -52.7286 43.8611 1.062
+vertex: -51.7652 45.3576 27.3554
+vertex: 24.6604 65.6684 -53.3299
+vertex: -7.77574 71.2278 -53.2729
+vertex: 18.5805 40.7111 16.1421
+vertex: -16.1942 34.112 6.21042
+vertex: -36.6243 29.918 -53.93
+vertex: -34.8833 27.2124 -4.03241
+vertex: 41.6762 26.0829 -7.85311
+vertex: -37.7251 53.8431 -33.9003
+vertex: 0.945621 77.3061 53.9719
+vertex: -0.628674 62.5876 52.9737
+vertex: -35.9897 17.7471 3.29434
+vertex: -10.2972 15.6024 -52.3301
+vertex: 16.5794 18.9149 -49.1881
+vertex: 12.5418 10.8201 -29.176
+vertex: 37.0944 26.9219 -54.0223
+vertex: 16.2986 20.5051 -54.1581
+vertex: 52.8252 42.4634 -27.3977
+
+material: 0.8 0.2 0.2 0.8 0.2 0.2 .7 .7 .7 64 .1 .1 .1 1.0
+
+triangle: 0 19 5
+triangle: 19 35 1
+triangle: 15 2 14
+triangle: 19 4 5
+triangle: 8 2 15
+triangle: 9 10 6
+triangle: 11 0 12
+triangle: 27 10 9
+triangle: 7 12 17
+triangle: 20 19 23
+triangle: 12 4 26
+triangle: 16 9 6
+triangle: 0 11 21
+triangle: 0 21 25
+triangle: 17 12 26
+triangle: 5 4 12
+triangle: 18 29 28
+triangle: 0 5 12
+triangle: 16 6 2
+triangle: 2 8 16
+triangle: 6 22 7
+triangle: 30 31 32
+triangle: 33 23 1
+triangle: 25 32 35
+triangle: 27 9 16
+triangle: 13 18 16
+triangle: 18 17 29
+triangle: 34 33 32
+triangle: 28 29 22
+triangle: 25 21 24
+triangle: 21 22 24
+triangle: 13 17 18
+triangle: 28 22 6
+triangle: 34 23 33
+triangle: 27 16 28
+triangle: 7 17 13
+triangle: 21 7 22
+triangle: 19 1 23
+triangle: 18 28 16
+triangle: 16 8 15
+triangle: 34 31 30
+triangle: 24 32 25
+triangle: 11 12 7
+triangle: 20 26 4
+triangle: 3 23 30
+triangle: 24 22 29
+triangle: 17 3 24
+triangle: 35 19 0
+triangle: 14 7 13
+triangle: 17 26 3
+triangle: 6 7 14
+triangle: 15 14 13
+triangle: 20 23 3
+triangle: 24 30 32
+triangle: 14 2 6
+triangle: 35 32 33
+triangle: 21 11 7
+triangle: 30 24 3
+triangle: 28 6 10
+triangle: 10 27 28
+triangle: 25 35 0
+triangle: 35 33 1
+triangle: 24 29 17
+triangle: 20 3 26
+triangle: 4 19 20
+triangle: 30 23 34
+triangle: 31 34 32
+triangle: 13 16 15

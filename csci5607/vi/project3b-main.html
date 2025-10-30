@@ -1,0 +1,563 @@
+<h2>Tổng Quan Dự Án</h2>
+<p>
+  Bạn có thể tải mã nguồn cho dự án này
+  <a href="/assets/nguy4766-project3b.zip">tại đây!</a>
+</p>
+<p>
+  Dự án này được xây dựng dựa trên dự án trước đó. Tôi đã lập trình hầu hết các
+  tính năng bắt buộc như phản xạ, khúc xạ, bóng đổ, các loại nguồn sáng, và
+  nhiều nguồn sáng trong dự án 3A. Trong dự án 3B, tính năng bắt buộc còn lại
+  duy nhất là đỉnh và tam giác. Đối với điểm cộng thêm, tôi đã lập trình các
+  hình học cơ bản mới: hộp, mặt phẳng, hình trụ và hình nón. Tôi cũng đã song
+  song hóa vòng lặp pixel chính của ray tracer.
+</p>
+
+<p>
+  Dưới đây là các tính năng mới. Giải thích về toán học và chi tiết mã nguồn
+  được bao gồm trên trang này.
+</p>
+
+<h3>Song song hóa:</h3>
+<ul>
+  <li>
+    <span class="code-string">Hỗ trợ đa luồng</span> - Song song hóa OpenMP và
+    đầu vào dòng lệnh để điều khiển số lượng luồng
+  </li>
+</ul>
+
+<h3>Đối tượng cơ bản:</h3>
+<ul>
+  <li><span class="code-string">Tam giác</span></li>
+  <li><span class="code-string">Tam giác có vector pháp tuyến</span></li>
+  <li><span class="code-string">Mặt phẳng</span></li>
+  <li><span class="code-string">Hộp</span></li>
+  <li><span class="code-string">Hình trụ</span></li>
+  <li><span class="code-string">Hình nón</span></li>
+</ul>
+
+<h2>Hình Ảnh Ray Trace</h2>
+<p>
+  Bạn có thể tải các file cảnh cho hình ảnh bên dưới
+  <a href="/assets/scenefiles.zip">tại đây!</a>
+</p>
+<p>
+  Các mô hình Rabbit và Eevee được tải xuống từ
+  <a href="https://www.thingiverse.com/" target="_blank">Thingiverse</a> và được
+  giảm xuống đa giác thấp với
+  <a href="https://lowpoly3d.xyz/" target="_blank">3D Low Poly Generator.</a>
+</p>
+
+<code>ShadowTest.txt</code>
+<img src="/images/ShadowTest.png" />
+<code>geometric_garden.txt</code>
+<img src="/images/geometric_garden.png" />
+<code>sculptures.txt</code>
+<img src="/images/sculptures.png" />
+<code>gear.txt</code>
+<img src="/images/gear.png" />
+<code>rabbit.txt</code>
+<img src="/images/rabbit.png" />
+<code>eevee.txt</code>
+<img src="/images/eevee.png" />
+
+<h2>Toán Học và Chi Tiết Mã Nguồn</h2>
+
+<h3>Cấu trúc HitResult</h3>
+<p>
+  Tôi đã thêm một cấu trúc <code>HitResult</code> bao bọc tất cả thông tin giao
+  nhau trong một nơi. Điều này thay thế cách tiếp cận trước đó là truyền nhiều
+  tham số đầu ra bằng tham chiếu, làm cho mã nguồn sạch hơn và dễ bảo trì hơn.
+</p>
+
+<pre><code class="language-c">
+struct HitResult {
+  bool hit = false;
+  PrimitiveType type;
+  int index = -1;
+  float t = -1.0f;
+  Point3D hitPoint;
+  Dir3D normal;
+  Material *mat = nullptr;
+  float u = 0.0f, v = 0.0f;         // Tọa độ UV cho tam giác
+  bool hitCap = false;              // Cho hình trụ/hình nón
+  bool hitTop = false;              // Cho nắp hình trụ
+};
+</code></pre>
+
+<h3>Giao điểm tia-tam giác</h3>
+<p>
+  Để xác định xem một tia có va chạm với tam giác hay không, tôi đã sử dụng
+  thuật toán Möller-Trumbore. Chúng ta có thể tính toán trực tiếp cả tham số
+  giao điểm t và tọa độ trọng tâm u và v mà không cần tính toán phương trình mặt
+  phẳng trước.
+</p>
+
+<p>
+  Cho một tam giác với các đỉnh \(\mathbf{V}_0\), \(\mathbf{V}_1\),
+  \(\mathbf{V}_2\) và một tia \(\mathbf{R}(t) = \mathbf{O} + t\mathbf{D}\),
+  chúng ta có thể biểu diễn bất kỳ điểm nào trên tam giác như:
+</p>
+<p>
+  \[ \mathbf{P} = \mathbf{V}_0 + u(\mathbf{V}_1 - \mathbf{V}_0) + v(\mathbf{V}_2
+  - \mathbf{V}_0) \]
+</p>
+<p>
+  Đặt điều này bằng với phương trình tia và giải cho chúng ta \(t\), \(u\), và
+  \(v\). Giao điểm hợp lệ nếu:
+</p>
+<p>\[ u \geq 0, \quad v \geq 0, \quad u + v \leq 1, \quad t > 0 \]</p>
+
+<pre><code class="language-c">
+float intersectTriangle(Point3D &rayOrigin, Dir3D &rayDir, Triangle &tri,
+                        float &outU, float &outV) {
+  Dir3D edge1 = tri.v1 - tri.v0;
+  Dir3D edge2 = tri.v2 - tri.v0;
+  Dir3D h = cross(rayDir, edge2);
+  float a = dot(edge1, h);
+
+  if (fabs(a) < EPSILON)
+    return -1.0f;  // Tia song song với tam giác
+
+  float f = 1.0f / a;
+  Dir3D s = rayOrigin - tri.v0;
+  float u = f * dot(s, h);
+
+  if (u < 0.0f || u > 1.0f)
+    return -1.0f;
+
+  Dir3D q = cross(s, edge1);
+  float v = f * dot(rayDir, q);
+
+  if (v < 0.0f || u + v > 1.0f)
+    return -1.0f;
+
+  float t = f * dot(edge2, q);
+  outU = u;
+  outV = v;
+
+  return (t > EPSILON) ? t : -1.0f;
+}
+</code></pre>
+
+<h4>Tô bóng mượt với vector pháp tuyến đỉnh</h4>
+<p>
+  Đối với các bề mặt mượt, chúng ta nội suy các vector pháp tuyến đỉnh sử dụng
+  tọa độ trọng tâm \(u\) và \(v\):
+</p>
+<p>
+  \[ \mathbf{N}_{\text{interp}} = w\mathbf{N}_0 + u\mathbf{N}_1 + v\mathbf{N}_2
+  \]
+</p>
+<p>trong đó \(w = 1 - u - v\) đảm bảo các trọng số tổng bằng 1.</p>
+
+<pre><code class="language-c">
+if (tri.useVertexNormals) {
+  float w = 1.0f - result.u - result.v;
+  result.normal = (w * tri.n0 + result.u * tri.n1 + 
+                   result.v * tri.n2).normalized();
+} else {
+  result.normal = tri.normal;
+}
+</code></pre>
+
+<h3>Giao điểm tia-mặt phẳng</h3>
+<p>
+  Một mặt phẳng được định nghĩa bởi một điểm \(\mathbf{P}_0\) trên mặt phẳng và
+  một vector pháp tuyến \(\mathbf{N}\). Bất kỳ điểm \(\mathbf{P}\) nào trên mặt
+  phẳng thỏa mãn:
+</p>
+<p>\[ (\mathbf{P} - \mathbf{P}_0) \cdot \mathbf{N} = 0 \]</p>
+<p>
+  Thay thế phương trình tia \(\mathbf{R}(t) = \mathbf{O} + t\mathbf{D}\) và giải
+  cho \(t\):
+</p>
+<p>
+  \[ t = \frac{(\mathbf{P}_0 - \mathbf{O}) \cdot \mathbf{N}}{\mathbf{D} \cdot
+  \mathbf{N}} \]
+</p>
+<p>Nếu mẫu số gần bằng không, tia song song với mặt phẳng.</p>
+
+<pre><code class="language-c">
+float intersectPlane(Point3D &rayOrigin, Dir3D &rayDir, Plane &pl) {
+  float denom = dot(pl.normal, rayDir);
+  if (fabs(denom) < EPSILON)
+    return -1.0f;  // Song song với mặt phẳng
+  
+  float t = dot(pl.point - rayOrigin, pl.normal) / denom;
+  return (t > EPSILON) ? t : -1.0f;
+}
+</code></pre>
+
+<h3>Giao điểm tia-hộp</h3>
+<p>
+  Giao điểm hộp sử dụng phương pháp slab. Một hộp thẳng hàng với trục là giao
+  của ba cặp mặt phẳng song song (slabs). Đối với mỗi trục, chúng ta tính toán
+  nơi tia đi vào và đi ra khỏi slab:
+</p>
+<p>
+  \[ t_{\text{min}}^i = \frac{\text{min}_i - O_i}{D_i}, \quad t_{\text{max}}^i =
+  \frac{\text{max}_i - O_i}{D_i} \]
+</p>
+<p>
+  Sau đó chúng ta tìm phần chồng chéo của cả ba khoảng. Tia giao với hộp nếu:
+</p>
+<p>
+  \[ t_{\text{enter}} = \max(t_{\text{min}}^x, t_{\text{min}}^y,
+  t_{\text{min}}^z) \]
+</p>
+<p>
+  \[ t_{\text{exit}} = \min(t_{\text{max}}^x, t_{\text{max}}^y,
+  t_{\text{max}}^z) \]
+</p>
+<p>\[ t_{\text{enter}} < t_{\text{exit}} \text{ và } t_{\text{exit}} > 0 \]</p>
+
+<pre><code class="language-c">
+float intersectBox(Point3D &rayOrigin, Dir3D &rayDir, Box &b) {
+  float tmin = (b.minCorner.x - rayOrigin.x) / rayDir.x;
+  float tmax = (b.maxCorner.x - rayOrigin.x) / rayDir.x;
+  if (tmin > tmax) std::swap(tmin, tmax);
+
+  float tymin = (b.minCorner.y - rayOrigin.y) / rayDir.y;
+  float tymax = (b.maxCorner.y - rayOrigin.y) / rayDir.y;
+  if (tymin > tymax) std::swap(tymin, tymax);
+
+  if ((tmin > tymax) || (tymin > tmax))
+    return -1.0f;
+
+  if (tymin > tmin) tmin = tymin;
+  if (tymax < tmax) tmax = tymax;
+
+  float tzmin = (b.minCorner.z - rayOrigin.z) / rayDir.z;
+  float tzmax = (b.maxCorner.z - rayOrigin.z) / rayDir.z;
+  if (tzmin > tzmax) std::swap(tzmin, tzmax);
+
+  if ((tmin > tzmax) || (tzmin > tmax))
+    return -1.0f;
+
+  if (tzmin > tmin) tmin = tzmin;
+  if (tzmax < tmax) tmax = tzmax;
+
+  return (tmin > EPSILON) ? tmin : ((tmax > EPSILON) ? tmax : -1.0f);
+}
+</code></pre>
+
+<p>
+  Vector pháp tuyến tại điểm va chạm được xác định bằng cách kiểm tra mặt nào bị
+  va chạm (bằng cách so sánh tọa độ điểm va chạm với ranh giới hộp).
+</p>
+
+<h3>Giao điểm tia-hình trụ</h3>
+<p>
+  Một hình trụ được định nghĩa bởi một điểm đáy \(\mathbf{B}\), hướng trục
+  \(\mathbf{A}\) (chuẩn hóa), bán kính \(r\), và chiều cao \(h\). Chúng ta phải
+  kiểm tra ba thành phần: bề mặt bên hình trụ và hai nắp tròn.
+</p>
+
+<h4>Hình trụ vô hạn (Bề mặt bên)</h4>
+<p>Chúng ta chiếu tia lên mặt phẳng vuông góc với trục của hình trụ. Đặt:</p>
+<p>\[ \mathbf{D}' = \mathbf{D} - (\mathbf{D} \cdot \mathbf{A})\mathbf{A} \]</p>
+<p>\[ \Delta = \mathbf{O} - \mathbf{B} \]</p>
+<p>\[ \Delta' = \Delta - (\Delta \cdot \mathbf{A})\mathbf{A} \]</p>
+<p>
+  Giao điểm với hình trụ vô hạn thỏa mãn \(\|\Delta' + t\mathbf{D}'\|^2 = r^2\),
+  mở rộng thành:
+</p>
+<p>\[ a t^2 + bt + c = 0 \]</p>
+<p>
+  trong đó \(a = \mathbf{D}' \cdot \mathbf{D}'\), \(b = 2(\mathbf{D}' \cdot
+  \Delta')\), \(c = \Delta' \cdot \Delta' - r^2\)
+</p>
+<p>
+  Đối với mỗi nghiệm \(t\), chúng ta tính \(y = \mathbf{A} \cdot ((\mathbf{O} +
+  t\mathbf{D}) - \mathbf{B})\) và chấp nhận nó chỉ khi \(0 \leq y \leq h\).
+</p>
+
+<h4>Nắp tròn</h4>
+<p>Mỗi nắp là một đĩa tròn. Đối với nắp dưới tại \(\mathbf{B}\):</p>
+<p>
+  \[ t = \frac{(\mathbf{B} - \mathbf{O}) \cdot \mathbf{A}}{\mathbf{D} \cdot
+  \mathbf{A}} \]
+</p>
+<p>
+  Sau đó chúng ta xác minh điểm va chạm \(\mathbf{P} = \mathbf{O} +
+  t\mathbf{D}\) nằm trong khoảng cách \(r\) từ trục. Tương tự cho nắp trên tại
+  \(\mathbf{B} + h\mathbf{A}\).
+</p>
+
+<pre><code class="language-c">
+float intersectCylinder(Point3D &rayOrigin, Dir3D &rayDir, Cylinder &cyl,
+                        bool &hitCap, bool &hitTop) {
+  hitCap = false;
+  hitTop = false;
+  float bestT = -1.0f;
+
+  // Giao hình trụ vô hạn (bề mặt bên)
+  Dir3D d = rayDir - dot(rayDir, cyl.axis) * cyl.axis;
+  Dir3D delta = rayOrigin - cyl.base;
+  Dir3D deltaProj = delta - dot(delta, cyl.axis) * cyl.axis;
+
+  float a = dot(d, d);
+  float b = 2.0f * dot(d, deltaProj);
+  float c = dot(deltaProj, deltaProj) - cyl.radius * cyl.radius;
+
+  float discr = b * b - 4 * a * c;
+  if (discr >= 0 && a > EPSILON) {
+    float sqrtD = sqrtf(discr);
+    float t0 = (-b - sqrtD) / (2 * a);
+    float t1 = (-b + sqrtD) / (2 * a);
+
+    for (float t : {t0, t1}) {
+      if (t < EPSILON) continue;
+      float y = dot(cyl.axis, (rayOrigin + rayDir * t) - cyl.base);
+      if (y >= 0 && y <= cyl.height) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+        }
+      }
+    }
+  }
+
+  // Giao nắp dưới
+  float denom = dot(cyl.axis, rayDir);
+  if (fabs(denom) > EPSILON) {
+    float t = dot(cyl.base - rayOrigin, cyl.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - cyl.base;
+      float distSq = dot(toP, toP) - dot(toP, cyl.axis) * dot(toP, cyl.axis);
+      if (distSq <= cyl.radius * cyl.radius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitCap = true;
+          hitTop = false;
+        }
+      }
+    }
+  }
+
+  // Giao nắp trên
+  Point3D topCenter = cyl.base + cyl.axis * cyl.height;
+  if (fabs(denom) > EPSILON) {
+    float t = dot(topCenter - rayOrigin, cyl.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - topCenter;
+      float distSq = dot(toP, toP) - dot(toP, cyl.axis) * dot(toP, cyl.axis);
+      if (distSq <= cyl.radius * cyl.radius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitCap = true;
+          hitTop = true;
+        }
+      }
+    }
+  }
+
+  return bestT;
+}
+</code></pre>
+
+<p>
+  Tính toán vector pháp tuyến khác nhau cho nắp so với mặt bên. Đối với nắp,
+  pháp tuyến đơn giản là \(\pm\mathbf{A}\). Đối với bề mặt bên, pháp tuyến vuông
+  góc với trục:
+</p>
+<p>
+  \[ \mathbf{N} = \frac{\mathbf{P} - \mathbf{P}_{\text{axis}}}{\|\mathbf{P} -
+  \mathbf{P}_{\text{axis}}\|} \]
+</p>
+<p>
+  trong đó \(\mathbf{P}_{\text{axis}}\) là điểm gần nhất trên trục đến điểm va
+  chạm.
+</p>
+
+<h3>Giao điểm tia-hình nón</h3>
+<p>
+  Một hình nón được định nghĩa bởi một đỉnh \(\mathbf{V}\), hướng trục
+  \(\mathbf{A}\), nửa góc \(\theta\), và chiều cao \(h\). Giống như hình trụ,
+  chúng ta kiểm tra cả bề mặt hình nón và đáy tròn.
+</p>
+
+<h4>Hình nón vô hạn</h4>
+<p>
+  Bề mặt hình nón thỏa mãn ràng buộc rằng góc giữa bất kỳ điểm \(\mathbf{P}\)
+  nào trên bề mặt và trục là hằng số:
+</p>
+<p>
+  \[ \left(\frac{(\mathbf{P} - \mathbf{V}) \cdot \mathbf{A}}{\|\mathbf{P} -
+  \mathbf{V}\|}\right)^2 = \cos^2\theta \]
+</p>
+<p>
+  Thay thế \(\mathbf{P} = \mathbf{O} + t\mathbf{D}\) và đơn giản hóa dẫn đến
+  phương trình bậc hai. Đặt \(\mathbf{CO} = \mathbf{O} - \mathbf{V}\):
+</p>
+<p>\[ a = (\mathbf{D} \cdot \mathbf{A})^2 - \cos^2\theta \]</p>
+<p>
+  \[ b = 2[(\mathbf{D} \cdot \mathbf{A})(\mathbf{CO} \cdot \mathbf{A}) -
+  (\mathbf{D} \cdot \mathbf{CO})\cos^2\theta] \]
+</p>
+<p>
+  \[ c = (\mathbf{CO} \cdot \mathbf{A})^2 - (\mathbf{CO} \cdot
+  \mathbf{CO})\cos^2\theta \]
+</p>
+<p>
+  Đối với mỗi nghiệm, chúng ta xác minh rằng \(y = \mathbf{A} \cdot ((\mathbf{O}
+  + t\mathbf{D}) - \mathbf{V})\) thỏa mãn \(0 \leq y \leq h\).
+</p>
+
+<h4>Đáy tròn</h4>
+<p>
+  Đáy là một đĩa tròn tại \(\mathbf{B} = \mathbf{V} + h\mathbf{A}\) với bán kính
+  \(r = h\tan\theta\). Kiểm tra giao điểm giống hệt với nắp hình trụ.
+</p>
+
+<pre><code class="language-c">
+float intersectCone(Point3D &rayOrigin, Dir3D &rayDir, Cone &cone,
+                    bool &hitBase) {
+  hitBase = false;
+  float bestT = -1.0f;
+
+  // Giao hình nón kép vô hạn
+  Dir3D co = rayOrigin - cone.apex;
+  float cos2 = cosf(cone.angle) * cosf(cone.angle);
+
+  float dv = dot(rayDir, cone.axis);
+  float coV = dot(co, cone.axis);
+
+  float a = dv * dv - cos2;
+  float b = 2 * (dv * coV - dot(rayDir, co) * cos2);
+  float c = coV * coV - dot(co, co) * cos2;
+
+  float discr = b * b - 4 * a * c;
+  if (discr >= 0 && fabs(a) > EPSILON) {
+    float sqrtD = sqrtf(discr);
+    float t0 = (-b - sqrtD) / (2 * a);
+    float t1 = (-b + sqrtD) / (2 * a);
+
+    for (float t : {t0, t1}) {
+      if (t < EPSILON) continue;
+      Point3D hitPt = rayOrigin + rayDir * t;
+      float y = dot(cone.axis, hitPt - cone.apex);
+      if (y >= 0 && y <= cone.height) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+        }
+      }
+    }
+  }
+
+  // Giao nắp đáy
+  Point3D baseCenter = cone.apex + cone.axis * cone.height;
+  float baseRadius = cone.height * tanf(cone.angle);
+
+  float denom = dot(cone.axis, rayDir);
+  if (fabs(denom) > EPSILON) {
+    float t = dot(baseCenter - rayOrigin, cone.axis) / denom;
+    if (t > EPSILON) {
+      Point3D p = rayOrigin + rayDir * t;
+      Dir3D toP = p - baseCenter;
+      float distSq = dot(toP, toP) - dot(toP, cone.axis) * dot(toP, cone.axis);
+      if (distSq <= baseRadius * baseRadius) {
+        if (bestT < 0 || t < bestT) {
+          bestT = t;
+          hitBase = true;
+        }
+      }
+    }
+  }
+
+  return bestT;
+}
+</code></pre>
+
+<p>
+  Vector pháp tuyến bề mặt cho hình nón phức tạp hơn. Đối với đáy, nó đơn giản
+  là \(\mathbf{A}\). Đối với bề mặt hình nón:
+</p>
+<p>
+  \[ \mathbf{N} = \cos\theta \cdot \mathbf{R} - \sin\theta \cdot \mathbf{A} \]
+</p>
+<p>
+  trong đó \(\mathbf{R}\) là hướng xuyên tâm (vuông góc với trục, hướng ra ngoài
+  từ hình nón).
+</p>
+
+<h3>Đa luồng với OpenMP</h3>
+<p>
+  Ray tracer song song hóa vòng lặp render pixel sử dụng OpenMP. Mỗi luồng độc
+  lập truy vết tia cho các pixel khác nhau, và chỉ thị
+  <code>collapse(2)</code> kết hợp các vòng lặp lồng nhau để phân phối công việc
+  tốt hơn:
+</p>
+
+<pre><code class="language-c">
+#pragma omp parallel for collapse(2) schedule(dynamic)
+for (int i = 0; i < img_width; i++) {
+  for (int j = 0; j < img_height; j++) {
+    float u = (halfW - (imgW) * ((i + 0.5) / imgW));
+    float v = (halfH - (imgH) * ((j + 0.5) / imgH));
+    Point3D p = eye - d * forward + u * right + v * up;
+    Dir3D rayDir = (p - eye).normalized();
+    Color pixelColor = evaluateRayTree(eye, rayDir, max_depth);
+    outputImg.setPixel(i, j, pixelColor);
+  }
+}
+</code></pre>
+
+<p>
+  Mệnh đề <code>schedule(dynamic)</code> phân phối công việc động, điều này quan
+  trọng vì các pixel khác nhau có thể yêu cầu lượng tính toán rất khác nhau (do
+  độ sâu cây tia khác nhau hoặc số lượng kiểm tra giao điểm).
+</p>
+
+<p>
+  Tôi đã sử dụng cảnh <code>eevee.txt</code> để đo hiệu năng. Đa luồng cung cấp
+  tăng tốc đáng kể cho đến 8 luồng. Tăng tốc gần như tuyến tính lên đến 4 luồng,
+  với hiệu suất vẫn trên 85%. Ở 8 luồng, chúng ta vẫn thấy khả năng mở rộng mạnh
+  ở tăng tốc 5.58×. Tuy nhiên, ở 16 luồng, hiệu suất tăng giảm đáng kể (chỉ cải
+  thiện từ 17.4s xuống 16.8s). Sử dụng 16 luồng, là số lượng tối đa trên CPU của
+  tôi, không có tăng tốc so với 8 luồng.
+</p>
+
+<p>
+  Bảng sau đây cho thấy hiệu năng render cho cảnh <code>eevee.txt</code> với số
+  lượng luồng khác nhau. Cảnh chứa 1 hình cầu và 2 nguồn sáng với phản xạ và
+  khúc xạ được bật.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Số luồng</th>
+      <th>Thời gian Render (ms)</th>
+      <th>Tăng tốc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>97,089.50</td>
+      <td>1.00×</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>52,261.59</td>
+      <td>1.86×</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>28,346.76</td>
+      <td>3.43×</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>17,414.00</td>
+      <td>5.58×</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>16,755.17</td>
+      <td>5.79×</td>
+    </tr>
+  </tbody>
+</table>

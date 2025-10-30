@@ -1,0 +1,109 @@
+camera_pos: 0 5 -15
+camera_fwd: 0 0.25 -1
+camera_up: 0 1 0
+camera_fov_ha: 30
+output_image: geometric_garden.png
+
+# Ground plane
+material: 0.4 0.4 0.4 0.8 0.8 0.8 0.6 0.6 0.6 64 0.2 0.2 0.2 1.5
+plane: 0 0 0 0 1 0
+
+# Central fountain base - large cylinder
+material: 0.3 0.4 0.5 0.6 0.7 0.8 0.4 0.4 0.4 32 0.1 0.1 0.1 1.3
+cylinder: 0 0 0 0 1 0 3 0.5
+
+# Fountain water sphere
+material: 0.1 0.2 0.3 0.2 0.3 0.4 0.8 0.8 0.8 128 0.7 0.8 0.9 1.33
+sphere: 0 2.5 0 1.8
+
+# Left sculpture - stacked boxes
+material: 0.8 0.2 0.2 0.9 0.3 0.3 0.5 0.5 0.5 64 0.1 0.1 0.1 1.2
+box: -6 0 -3 -5 2.5 -2
+
+material: 0.9 0.4 0.1 1 0.5 0.2 0.6 0.6 0.6 64 0.15 0.15 0.15 1.2
+box: -5.8 2.5 -2.8 -4.7 4.5 -1.7
+
+material: 1 0.6 0.2 1 0.7 0.3 0.7 0.7 0.7 64 0.2 0.2 0.2 1.2
+box: -5.5 4.5 -2.5 -4.5 6 -1.5
+
+
+# Right sculpture - three stacking cylinders with cone on top
+material: 1 0.8 0.2 1 0.9 0.3 0.9 0.9 0.8 128 0.2 0.2 0.1 1.4
+cylinder: 6 0 -2 0 1 0 1.0 1.8
+
+material: 0.2 0.8 1 0.3 0.9 1 0.9 0.9 1 128 0.2 0.2 0.2 1.4
+cylinder: 6 1.8 -2 0 1 0 0.8 1.5
+
+material: 1 0.3 0.6 1 0.4 0.7 0.9 0.8 0.8 128 0.2 0.1 0.2 1.4
+cylinder: 6 3.3 -2 0 1 0 0.6 1.2
+
+material: 0.35 0.95 0.55 0.45 1 0.65 0.7 0.7 0.7 64 0.35 0.35 0.35 1.3
+cone: 6 6 -2 0 -1 0 20 1.5
+
+# Back left - tall cone tree
+material: 0.2 0.6 0.3 0.3 0.7 0.4 0.3 0.3 0.3 32 0.1 0.1 0.1 1.1
+cone: -8 6 8 0 -1 0 25 6
+
+# Front right - smaller cone
+material: 0.9 0.3 0.9 0.9 0.3 0.9 1 1 1 256 0.4 0.1 0.4 1.8
+cone: 3 4 -5 0 -1 0 10 4
+
+# Back right - metallic sphere cluster
+material: 0.9 0.9 0.9 0.5 0.5 0.5 0.9 0.9 0.9 128 0.4 0.4 0.4 1.5
+sphere: 8 1.5 7 1.5
+
+material: 0.95 0.95 0.85 0.6 0.6 0.5 0.95 0.95 0.85 128 0.3 0.3 0.3 1.4
+sphere: 7 0.8 8.5 0.8
+
+material: 0.85 0.85 0.95 0.5 0.5 0.6 0.85 0.85 0.95 128 0.3 0.3 0.3 1.4
+sphere: 9 0.9 8.8 0.9
+
+# Triangular pieces
+max_vertices: 15
+max_normals: 4
+
+# Front left triangle monument
+vertex: -3 0 -6
+vertex: -5 0 -6
+vertex: -3.5 3 -6
+
+vertex: -3 0 -4
+vertex: -3 0 -6
+vertex: -3.5 3 -6
+
+# Front right pyramid base vertices
+vertex: 3 0 -8
+vertex: 4 0 -8
+vertex: 4 0 -7
+vertex: 3 0 -7
+vertex: 3.5 3 -7.5
+
+# Normals for smooth shading
+normal: 0 0 -1
+normal: 1 0 0
+normal: 0 1 0.3
+normal: 0.5 0.5 0.5
+
+# Blue glass triangular monument (left)
+material: 0.2 0.3 0.9 0.3 0.4 1 0.8 0.8 0.9 128 0.5 0.6 0.8 1.5
+triangle: 0 1 2
+triangle: 3 4 5
+
+# Golden pyramid monument (right) - 4 triangular faces
+material: 0.8 0.6 0.1 0.9 0.7 0.2 0.9 0.8 0.4 96 0.3 0.2 0.1 1.3
+triangle: 6 7 10
+triangle: 7 8 10
+triangle: 8 9 10
+triangle: 9 6 10
+
+# Sky box
+material: 0.15 0.2 0.35 0.2 0.25 0.4 0.1 0.1 0.1 8 0 0 0 1
+box: -50 20 -30 50 50 30
+
+point_light: 20 20 20 -10 15 -10
+point_light: 20 20 20 10 12 -8
+point_light: 20 20 20 0 10 8
+ambient_light: 0.15 0.15 0.15
+background: 0.1 0.15 0.25
+
+max_depth: 4
