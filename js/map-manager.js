@@ -6,6 +6,7 @@ class MapManager {
     this.listSelector = config.listSelector || "#places-list li";
     this.addressAttribute = config.addressAttribute || "data-address";
     this.zoom = config.zoom || 12;
+    this.mobileZoom = config.mobileZoom || 11;
     this.center = config.center || { lat: 44.975, lng: -93.23 };
     this.contentParser = config.contentParser || this.defaultContentParser;
     this.infoWindowStyle =
@@ -33,15 +34,23 @@ class MapManager {
     `;
   }
 
-  loadMapScript() {
+  async loadMapScript() {
     if (this.isScriptLoaded) return;
 
-    const script = document.createElement("script");
-    script.src = `${this.apiUrl}/api/maps/js?callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    this.isScriptLoaded = true;
+    try {
+      const configResponse = await fetch(`${this.apiUrl}/api/config`);
+      const { mapsApiKey } = await configResponse.json();
+      this.mapsApiKey = mapsApiKey;
+
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.mapsApiKey}&callback=initMap`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+      this.isScriptLoaded = true;
+    } catch (error) {
+      console.error("Failed to load map script:", error);
+    }
   }
 
   initMap() {
@@ -51,8 +60,13 @@ class MapManager {
       return;
     }
 
+    const isMobile = window.matchMedia(
+      "only screen and (max-width: 768px)",
+    ).matches;
+    const zoomLevel = isMobile ? this.mobileZoom : this.zoom;
+
     this.map = new google.maps.Map(mapElement, {
-      zoom: this.zoom,
+      zoom: zoomLevel,
       center: this.center,
     });
 
