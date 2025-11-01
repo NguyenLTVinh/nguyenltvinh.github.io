@@ -14,6 +14,8 @@ class MapManager {
     this.markers = [];
     this.map = null;
     this.isScriptLoaded = false;
+    this.geocodeCache = new Map();
+    this.markerCache = new Map();
   }
 
   defaultContentParser(listItem) {
@@ -66,59 +68,68 @@ class MapManager {
 
   async initializeMarkers() {
     this.clearMarkers();
-
     const listItems = document.querySelectorAll(this.listSelector);
-
     for (const li of listItems) {
       const address = li.getAttribute(this.addressAttribute);
       if (!address) continue;
 
-      console.log(`Geocoding address: ${address}`);
+      let coords = this.geocodeCache.get(address);
+      if (!coords) {
+        try {
+          const response = await fetch(
+            `${this.apiUrl}/api/geocode?address=${encodeURIComponent(address)}`,
+          );
+          coords = await response.json();
+          this.geocodeCache.set(address, coords);
+        } catch (error) {
+          console.error(`Error fetching coordinates for ${address}:`, error);
+          continue;
+        }
+      }
 
-      try {
-        const response = await fetch(
-          `${this.apiUrl}/api/geocode?address=${encodeURIComponent(address)}`,
-        );
-        const { lat, lng } = await response.json();
-        console.log(`Coordinates for ${address}:`, lat, lng);
-
+      let marker = this.markerCache.get(address);
+      if (!marker) {
         const { title } = this.contentParser(li);
-
-        const marker = new google.maps.Marker({
-          position: { lat, lng },
+        marker = new google.maps.Marker({
+          position: { lat: coords.lat, lng: coords.lng },
           map: this.map,
           title: title,
         });
-
+        this.markerCache.set(address, marker);
         this.markers.push(marker);
 
         const infoWindow = new google.maps.InfoWindow();
-        const markerAddress = address;
-        const parser = this.contentParser;
-        const styleFunc = this.infoWindowStyle;
-        const listSelector = this.listSelector.split(" ")[0];
-        const addressAttr = this.addressAttribute;
-
         marker.addListener("click", () => {
           const currentLi = document.querySelector(
-            `${listSelector} [${addressAttr}="${markerAddress}"]`,
+            `${this.listSelector.split(" ")[0]} [${this.addressAttribute}="${address}"]`,
           );
-
           if (currentLi) {
-            const { title, description } = parser(currentLi);
-            infoWindow.setContent(styleFunc(title, description));
+            const { title, description } = this.contentParser(currentLi);
+            infoWindow.setContent(this.infoWindowStyle(title, description));
             infoWindow.open(this.map, marker);
           }
         });
-      } catch (error) {
-        console.error(`Error fetching coordinates for ${address}:`, error);
       }
     }
   }
 
   refresh() {
     if (this.map) {
-      this.initializeMarkers();
+      this.markers.forEach((marker) => {
+        const address = marker.getTitle();
+        const li = document.querySelector(
+          `${this.listSelector.split(" ")[0]} [${this.addressAttribute}="${address}"]`,
+        );
+        if (li) {
+          const { title, description } = this.contentParser(li);
+          const infoWindow = new google.maps.InfoWindow({
+            content: this.infoWindowStyle(title, description),
+          });
+          marker.addListener("click", () => {
+            infoWindow.open(this.map, marker);
+          });
+        }
+      });
     }
   }
 
