@@ -1,0 +1,54 @@
+<h2>Homework 4 Answers</h2>
+<h3>Images</h3>
+<img src="/images/cube.gif" />
+<img src="/images/cubelit.gif" />
+<img src="/images/modelload.gif" />
+<img src="/images/triangle.png" />
+<h3>
+  Q1. In Cube3D.cpp we call glEnable(GL_DEPTH_TEST). Remove this call, how do
+  you explain the resulting image?
+</h3>
+<p>
+  When <code>glEnable(GL_DEPTH_TEST)</code> is removed, the depth testing is
+  disabled. This means OpenGL will no longer compare the depth (z-coordinate) of
+  fragments before rendering them. Instead, it will render fragments in the
+  order they are drawn. The resulting cube appears visually incorrect and very
+  weird. Triangles that should be hidden behind would sometimes appear in front
+  of the triangles that should be visible. It almost look like a rotating
+  tesseract.
+</p>
+<img src="/images/cubenew.gif" />
+<h3>
+  Q2. Currently, all of our examples exit when Escape is pressed. Update the
+  code to also exit when the "Q" key is pressed. What did you need to change?
+</h3>
+<p>
+  To add support for exiting when the "Q" key is pressed, I needed to add an
+  additional condition in the event handling loop.
+</p>
+<pre><code class="language-c">if (windowEvent.type == SDL_EVENT_KEY_UP && windowEvent.key.key == SDLK_Q)
+  quit = true;</code></pre>
+
+<h3>
+  Q3. In CubeLit.cpp change the shader so the light is coming from below the
+  cube. What change did you make?
+</h3>
+<p>
+  To make the light come from below the cube instead of from above, I needed to
+  modify the light direction vector in the fragment shader.
+</p>
+<p><strong>Change made:</strong></p>
+<p>
+  In the fragment shader (inside <code>fragmentSource</code> string), I changed
+  the light direction from:
+</p>
+<pre><code class="language-c">const vec3 lightDir = vec3(0,1,1);</code></pre>
+<p>to:</p>
+<pre><code class="language-c">const vec3 lightDir = vec3(0,-1,1);</code></pre>
+<img src="/images/cubelitnew.gif" />
+<h3>
+  Q4. Create a new model file, by hand, that contains a single large triangle.
+  Load this model instead of the defaults. Upload a picture of the rendering of
+  this large triangle.
+</h3>
+<img src="/images/modelloadnew.gif" />
