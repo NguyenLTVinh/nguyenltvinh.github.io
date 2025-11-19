@@ -1,0 +1,121 @@
+<h2>Project Overview</h2>
+<p>I attempted all required features and the following extra features:</p>
+<ul>
+  <li>Integrated keyboard and mouse control</li>
+  <li>Jumping</li>
+  <li>Animate the process of doors opening after they are unlocked</li>
+  <li>Load existing models in the OBJ 3d format</li>
+  <li>A video of me playing the game</li>
+</ul>
+
+<p>
+  I mostly followed the given Lua code to structure my project. You can download
+  the code <a href="/assets/MazeGame-cpp.zip">here!</a>
+</p>
+
+<h2>Full Gameplay Video</h2>
+
+<video controls>
+  <source src="/videos/fullgame.mp4" type="video/mp4" />
+</video>
+
+<h2>Implementation Details</h2>
+<h3>Continuous movement with mouse and keyboard control</h3>
+<p>
+  I stored the player's position using floats (<code>playerX</code>,
+  <code>playerZ</code>, <code>playerY</code>) instead of integers, so they
+  aren't locked to grid positions. Each frame, I update these coordinates by
+  small amounts based on delta time and move speed.
+</p>
+<p>
+  I implemented WASD controls where W and S move forward and backward along the
+  player's facing direction, while A and D strafe left and right. For the A and
+  D keys, I calculate movement perpendicular to the facing direction by using
+  the player's direction angle without the -π/2 offset, which gives true
+  sidestepping motion independent of where the player is looking vertically. For
+  camera control, I capture mouse motion events and use the relative movement to
+  adjust yaw (<code>playerDir</code>) and pitch (<code>playerPitch</code>).
+</p>
+
+<h3>Jumping</h3>
+<p>
+  When the player presses spacebar while grounded, I apply an initial upward
+  velocity of 4.0. Each frame, I subtract gravity (9.8 m/s²) from the velocity
+  and integrate it into the vertical position, creating a natural parabolic jump
+  arc that lands smoothly.
+</p>
+
+<video controls>
+  <source src="/videos/movement.mp4" type="video/mp4" />
+</video>
+
+<h3>Walls & doors</h3>
+<p>
+  I render walls as white cubes with a brick texture whenever I encounter a 'W'
+  tile. For doors A through E, I give each one a unique color: red for A, green
+  for B, blue for C, yellow for D, and magenta for E. The colors are applied by
+  checking the tile character and setting the appropriate RGB values.
+</p>
+
+<h3>Floors & Ceilings</h3>
+<p>
+  I render a floor cube at y=-0.5 for every tile in the map, giving it a darker
+  gray color to distinguish it from walls. I decided not to implement a ceiling
+  to keep the scene more open.
+</p>
+
+<h3>Collision detection</h3>
+<p>
+  I created an <code>isWalkable()</code> function that tests four corner points
+  around the player's circular collision radius against the map grid. Movement
+  only proceeds if none of these points would intersect walls or locked doors.
+</p>
+
+<h3>Door Animation</h3>
+<p>
+  When a player unlocks a door, I add it to an <code>activeDoors</code> vector
+  with a 1-second timer. Each frame, I decrease the door's y-offset to make it
+  sink into the floor, and once the timer expires, I remove that tile from the
+  map entirely so the player can walk through.
+</p>
+
+<h3>Lighting</h3>
+<p>
+  I pass normal vectors with each vertex to the fragment shader, which uses them
+  for ambient and diffuse lighting calculations.
+</p>
+
+<video controls>
+  <source src="/videos/dooranimation.mp4" type="video/mp4" />
+</video>
+<img src="/images/doorsandwall.png" />
+<img src="/images/reddoor.png" />
+
+<h3>Keys</h3>
+<p>
+  I load the keys from an OBJ file as actual 3D models. This model was
+  downloaded free from Thingiverse. To make collected keys follow the player, I
+  invert the view matrix and position them in screen space at the bottom of the
+  viewport, applying a continuous rotation so they appear to float and spin in
+  front of the camera.
+</p>
+
+<h3>OBJ Loading</h3>
+<p>
+  I implemented <code>loadOBJ()</code> to parse OBJ files by reading vertex
+  positions and face indices. For each triangle, I calculate the surface normal
+  using cross products of the edges, then pack everything into the vertex buffer
+  format.
+</p>
+
+<video controls>
+  <source src="/videos/key.mp4" type="video/mp4" />
+</video>
+<img src="/images/key.png" />
+
+<h3>New Maps</h3>
+<p>
+  I wrote a <code>loadMap()</code> function that reads level files from disk,
+  allowing me to specify different map layouts via command-line arguments or
+  defaulting to level1.txt. I used level3.txt for the demo on this page.
+</p>
