@@ -53,7 +53,13 @@ function setLang(lang) {
   } else {
     const currentDir = getPageDir();
     fetch(`${currentDir}/${lang}/${page}-main.html`)
-      .then((res) => res.text())
+      .then((res) => {
+        if (!res.ok) {
+          const langName = lang === "vi" ? "Vietnamese" : "English";
+          return `<h1>No ${langName} translation done for this page!</h1>`;
+        }
+        return res.text();
+      })
       .then((html) => {
         document.querySelector("main").innerHTML = html;
         document.dispatchEvent(new Event("mainContentUpdated"));
@@ -118,6 +124,12 @@ function initDarkModeToggle() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const langParam = params.get("lang");
+  if (langParam === "en" || langParam === "vi") {
+    currentLang = langParam;
+    localStorage.setItem("lang", currentLang);
+  }
   setLang(currentLang);
   initDarkModeToggle();
 });

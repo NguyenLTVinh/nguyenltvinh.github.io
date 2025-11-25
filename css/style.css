@@ -13,7 +13,7 @@ body {
     Ubuntu,
     sans-serif;
   color: #1c1c1c;
-  background: linear-gradient(180deg, #fefcff 0%, #f8fcff 60%, #fff8fd 100%);
+  background: #f8fcff;
   line-height: 1.75;
   margin: 0;
   padding: 0;
@@ -802,7 +802,7 @@ a:hover {
 
 body.dark-mode {
   color: #ccc;
-  background: linear-gradient(180deg, #1a1a1a 0%, #222235 60%, #1c1c28 100%);
+  background: #222235;
 }
 
 body.dark-mode header {

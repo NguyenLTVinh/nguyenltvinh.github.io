@@ -1,6 +1,11 @@
 {
   "en": [
     {
+      "filename": "2025-11-24.html",
+      "date": "2025-11-24",
+      "title": "Beyond Silicon Valley: The European Tech Story Nobody Tells"
+    },
+    {
       "filename": "2025-08-08.html",
       "date": "2025-08-08",
       "title": "Internship at AWS DSQL: My Experience"
@@ -23,9 +28,14 @@
   ],
   "vi": [
     {
+      "filename": "2025-11-24.html",
+      "date": "2025-11-24",
+      "title": "Ngoài Thung Lũng Silicon: Công Nghệ Đến Từ Châu Âu Bị Lãng Quên"
+    },
+    {
       "filename": "2025-08-08.html",
       "date": "2025-08-08",
-      "title": "Thực tập tại AWS DSQL: Trải nghiệm của tôi"
+      "title": "Thực Tập Tại AWS DSQL: Trải Nghiệm Của Tôi"
     },
     {
       "filename": "2025-07-31.html",
