@@ -222,7 +222,7 @@ camera_fov_ha: 26
 <p>If \(b^2 - 4ac < 0\), there is no intersection.</p>
 
 <pre><code class="language-c">
-float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &center,
+float intersectSphere(Point3D &rayOrigin, Dir3D &rayDir, Point3D &ampcenter,
                       float radius) {
   Dir3D L = Dir3D(rayOrigin.x - center.x, rayOrigin.y - center.y,
                   rayOrigin.z - center.z);
