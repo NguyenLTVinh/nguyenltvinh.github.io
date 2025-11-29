@@ -1,0 +1,110 @@
+<div class="post-header">
+  <h2>Local LLMs: Privacy and Open-Source AI with Ollama</h2>
+  <span>November 30th, 2025</span>
+</div>
+
+<h3>Introduction: Why I started running AI models locally</h3>
+
+<p>
+  Recently, I have been dabbling in running local large language models. I do
+  this for several reasons. It is known that OpenAI stores your data on their
+  servers. It is quite obvious, but every conversation you've ever had with
+  their AI models is stored and does not get deleted even if you delete that
+  conversation from the front end. It will only appear to be deleted to you, but
+  it is still stored out there somewhere. This should be a big "uh oh" for a lot
+  of people, as I know, both from articles and personal relationships, that some
+  people share sensitive information about themselves with these AI models. And
+  you should not trust closed-source, closed-weights AI models from a company
+  that falsely calls itself "Open".
+</p>
+
+<p>
+  The other reason I started running language AI models locally is mostly
+  curiosity. I was curious if my hardware is enough to run really large models.
+  I'm talking about models with tens of billions of parameters. My laptop is
+  rocking an AMD Radeon RX 6500M, which is quite powerful, but all of the large
+  language models are trained on and run with NVIDIA's
+  <a href="https://developer.nvidia.com/cuda">CUDA platform</a> compatible only
+  with NVIDIA GPUs. It would be a lot of work for me to figure out how to run
+  these models with my AMD GPU. Luckily, someone else has already figured that
+  out for me.
+</p>
+
+<h3>Ollama: The software that makes this possible</h3>
+
+<p>
+  I want to bring your attention to <a href="https://ollama.com/">Ollama</a>, an
+  open-source software created by Jeffrey Morgan and Michael Chiang. Ollama
+  solves several challenges that typically make local AI models difficult to
+  use. Instead of dealing with Python environments, CUDA installations, model
+  weight files, and complex configurations, users simply install Ollama and can
+  start running models with commands as simple as
+  <code>ollama run llama3</code> &nbspor&nbsp <code>ollama run mistral</code>
+</p>
+<p>
+  The application automatically downloads the model, manages memory allocation,
+  and optimizes performance for your hardware. Ollama also supports AMD GPUs by
+  building support for
+  <a href="https://www.amd.com/en/products/software/rocm.html">ROCm</a> (AMD's
+  computing platform similar to NVIDIA's CUDA) directly into their application,
+  so it can run AI models using AMD GPUs through ROCm's native APIs. It is also
+  highly optimized, allowing users to run large language models without needing
+  the beefiest GPUs.
+</p>
+
+<p>
+  I installed
+  <a href="https://flathub.org/en/apps/com.jeffser.Alpaca">Alpaca</a>, a Flatpak
+  application which acts as a GUI for Ollama. It provides a user interface to
+  chat with these models instead of having to interact with Ollama from the
+  terminal. You can also download the open-weights large language models you
+  want on Alpaca. I have downloaded a couple of models with different sizes to
+  test them out. My computer was able to handle models with 3 billion parameters
+  or less like Gemma or Llama 3 easily. I could have a chat window open and
+  still do other things on my computer. For medium-sized models like Mistral
+  with 7 billion parameters, my computer could handle it if it's the only
+  running process. Think of it like running a very intensive video game. I
+  opened another application and Ollama was killed by the Linux kernel
+  automatically. I did not even try to run any larger models after that.
+</p>
+<img src="/images/alpaca2.png" />
+<img src="/images/alpaca1.png" />
+
+<h3>How is the quality?</h3>
+
+<p>
+  Since these are small to medium models, they were quite dumb. They can hold a
+  conversation in English just fine, but they are prone to hallucinate false
+  information, and they can't do difficult technical problems in coding or
+  mathematics. If I could compare these models to an OpenAI model, they would
+  probably be in the same ballpark as GPT-3 or GPT-3.5. You can see from the
+  picture below how Tinyllama hallucinate the facts about a character from a
+  video game I play:
+</p>
+<img src="/images/alpacahallucinate.png" />
+
+<p>
+  Even though my computer can't run more powerful models, it was a fun
+  experiment. Theoretically, if I could get my hands on a more powerful computer
+  with hardware designed to run these models, I could have a very advanced AI
+  running locally on my desk. I can also make it available to everyone sharing
+  my WiFi network by turning that computer into a local server. I'm looking at
+  the <a href="https://frame.work/desktop">Framework Desktop</a>, which is a
+  computer with hardware built for running local models, and I'm very interested
+  in buying one once I start getting paid with that Big Tech salary. You know
+  me, I don't want my data stored on their servers, and I appreciate open-source
+  software a lot more than closed-source. This extends to AI, where open-weights
+  models follow the same spirit.
+</p>
+
+<h3>Final words</h3>
+
+<p>
+  The people behind Ollama are really cool for making AI models accessible to
+  many people. If you find yourself using large language models a lot (for
+  whatever reason, but you should NOT be using it for therapy) and you have or
+  are planning to get a beefy computer, consider running these models locally.
+  It will prevent your data from being collected by these AI companies, and you
+  can use these open-weights models for free without subscription tier limits.
+  Remember to use AI responsibly and always cite your sources!
+</p>

@@ -1,6 +1,11 @@
 {
   "en": [
     {
+      "filename": "2025-11-30.html",
+      "date": "2025-11-30",
+      "title": "Local LLMs: Privacy and Open-Source AI with Ollama"
+    },
+    {
       "filename": "2025-11-26.html",
       "date": "2025-11-26",
       "title": "Why I Use Linux (And Why You Might Want To)"
@@ -32,6 +37,11 @@
     }
   ],
   "vi": [
+    {
+      "filename": "2025-11-30.html",
+      "date": "2025-11-30",
+      "title": "LLM Cục Bộ: Riêng Tư Và AI Mã Nguồn Mở Với Ollama"
+    },
     {
       "filename": "2025-11-26.html",
       "date": "2025-11-26",
