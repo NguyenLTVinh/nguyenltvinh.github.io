@@ -1,0 +1,58 @@
+<h2>Final Project Progress Report</h2>
+<h3>Project description</h3>
+<p>
+  I'm working solo on a voxel engine written in Rust that's basically a
+  Minecraft clone. The main goals are to get a chunk-based rendering system
+  working that doesn't render faces you can't see, generate infinite terrain
+  using noise functions, let players place and remove blocks, add a day-night
+  cycle with lighting that actually changes, and build a command system so you
+  can control aspects of the game, similar to the one in they have in Minecraft.
+  This project covers mostly the graphics concepts we used for Project 4: 3D
+  rendering, textures, mesh generation, lighting with OpenGL.
+</p>
+<h3>Current progress</h3>
+<p>
+  I've got the basic rendering working with OpenGL and the chunk system
+  structure is in place. Camera movement is done - you can fly around with WASD
+  and look with the mouse. The terrain generation is working at a basic level
+  using noise functions to make hills and valleys.
+</p>
+<h3>Milestones before deadline</h3>
+<p>
+  By December 10th, I want to have the mesh generation optimized with
+  face-culling so it doesn't tank my frame rate. The lighting needs to be
+  updated based on the day night cycle and the position of the sun and moon. The
+  player should be able to interact with the world through breaking and placing
+  blocks. The chunk generation also needs to be done asynchronously as well, as
+  currently, every time a new chunk is generated, the frame rate tanks.
+</p>
+<h3>Biggest concerns/unknowns</h3>
+<p>
+  1. Infinite Terrain Loading: I haven't actually implemented the chunk
+  loading/unloading system yet. I'm not sure how to prioritize which chunks to
+  generate and how to do it without causing stuttering when new terrain loads
+  in.
+</p>
+<p>
+  2. Antialiasing: There are a lot of aliasing on textures that appear further
+  away right now. This has been quite complex, as I have tried multiple methods
+  such as mipmapping to no avails.
+</p>
+<p>
+  3. Rust's quirks: I wanted to do this project in Rust, so I have to deal with
+  its quirks and find equivalent crates to work with. I have been using the gl
+  crate for OpenGL calls, and I plan to use tokio for async operations.
+</p>
+
+<p>
+  I'm planning to look at how other voxel engines handle these problems and
+  start with simpler solutions first. I have decompiled the Java edition of the
+  game to study the code, as well as looking at Luanti, an open source Minecraft
+  clone written in C++.
+</p>
+
+<h3>Image of progress</h3>
+<p>Below are some images taken of the game:</p>
+<img src="/images/scene1.png" />
+<img src="/images/scene2.png" />
+<img src="/images/scene3.png" />
