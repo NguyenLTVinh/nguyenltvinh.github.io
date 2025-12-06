@@ -31,7 +31,7 @@
 <h2>Ảnh gốc</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins.jpg" alt="Ảnh gốc - Chim cánh cụt" />
+    <img src="/images/csci5607/penguins.jpg" alt="Ảnh gốc - Chim cánh cụt" />
   </div>
 </div>
 
@@ -39,7 +39,7 @@
 <div class="image-group">
   <div class="image-container">
     <img
-      src="/images/penguins_quantize2.jpg"
+      src="/images/csci5607/penguins_quantize2.jpg"
       alt="Giảm số màu - Chim cánh cụt"
     />
     <div class="command">
@@ -47,14 +47,17 @@
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_brighten.jpg" alt="Tăng sáng - Chim cánh cụt" />
+    <img
+      src="/images/csci5607/penguins_brighten.jpg"
+      alt="Tăng sáng - Chim cánh cụt"
+    />
     <div class="command">
       ./image -input penguins.jpg -brightness 2.0 -output penguins_brighten.jpg
     </div>
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_contrast.jpg"
+      src="/images/csci5607/penguins_contrast.jpg"
       alt="Tăng tương phản - Chim cánh cụt"
     />
     <div class="command">
@@ -63,7 +66,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_saturation.jpg"
+      src="/images/csci5607/penguins_saturation.jpg"
       alt="Tăng độ bão hòa - Chim cánh cụt"
     />
     <div class="command">
@@ -76,7 +79,7 @@
 <h2>Cắt ảnh</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_crop.jpg" alt="Ảnh đã cắt" />
+    <img src="/images/csci5607/penguins_crop.jpg" alt="Ảnh đã cắt" />
     <div class="command">
       ./image -input penguins.jpg -crop 450 100 450 350 -output
       penguins_crop.jpg
@@ -87,21 +90,24 @@
 <h2>Tách kênh màu</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_extract_red.jpg" alt="Kênh đỏ" />
+    <img src="/images/csci5607/penguins_extract_red.jpg" alt="Kênh đỏ" />
     <div class="command">
       ./image -input penguins.jpg -extractChannel 0 -output
       penguins_extract_red.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_extract_green.jpg" alt="Kênh xanh lá" />
+    <img src="/images/csci5607/penguins_extract_green.jpg" alt="Kênh xanh lá" />
     <div class="command">
       ./image -input penguins.jpg -extractChannel 1 -output
       penguins_extract_green.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_extract_blue.jpg" alt="Kênh xanh dương" />
+    <img
+      src="/images/csci5607/penguins_extract_blue.jpg"
+      alt="Kênh xanh dương"
+    />
     <div class="command">
       ./image -input penguins.jpg -extractChannel 2 -output
       penguins_extract_blue.jpg
@@ -112,28 +118,37 @@
 <h2>Phối nhiễu (ngẫu nhiên, Floyd-Steinberg, có thứ tự) và thêm nhiễu</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_randomdither.jpg" alt="Phối nhiễu ngẫu nhiên" />
+    <img
+      src="/images/csci5607/penguins_randomdither.jpg"
+      alt="Phối nhiễu ngẫu nhiên"
+    />
     <div class="command">
       ./image -input penguins.jpg -randomDither 2 -output
       penguins_randomdither.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_fsDither.jpg" alt="Phối nhiễu Floyd-Steinberg" />
+    <img
+      src="/images/csci5607/penguins_fsDither.jpg"
+      alt="Phối nhiễu Floyd-Steinberg"
+    />
     <div class="command">
       ./image -input penguins.jpg -FloydSteinbergDither 1 -output
       penguins_fsDither.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_odereddither.jpg" alt="Phối nhiễu có thứ tự" />
+    <img
+      src="/images/csci5607/penguins_odereddither.jpg"
+      alt="Phối nhiễu có thứ tự"
+    />
     <div class="command">
       ./image -input penguins.jpg -orderedDither 1 -output
       penguins_odereddither.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_noise.jpg" alt="Thêm nhiễu" />
+    <img src="/images/csci5607/penguins_noise.jpg" alt="Thêm nhiễu" />
     <div class="command">
       ./image -input penguins.jpg -noise 0.8 -output penguins_noise.jpg
     </div>
@@ -143,19 +158,19 @@
 <h2>Làm sắc nét, làm mờ và phát hiện biên</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_sharpen.jpg" alt="Làm sắc nét" />
+    <img src="/images/csci5607/penguins_sharpen.jpg" alt="Làm sắc nét" />
     <div class="command">
       ./image -input penguins.jpg -sharpen 7 -output penguins_sharpen.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_blur.jpg" alt="Làm mờ" />
+    <img src="/images/csci5607/penguins_blur.jpg" alt="Làm mờ" />
     <div class="command">
       ./image -input penguins.jpg -blur 9 -output penguins_blur.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_edge.jpg" alt="Phát hiện biên" />
+    <img src="/images/csci5607/penguins_edge.jpg" alt="Phát hiện biên" />
     <div class="command">
       ./image -input penguins.jpg -edgeDetect -output penguins_edge.jpg
     </div>
@@ -165,7 +180,10 @@
 <h2>Xoay ảnh</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_rotate_point.jpg" alt="Xoay - Lấy mẫu điểm" />
+    <img
+      src="/images/csci5607/penguins_rotate_point.jpg"
+      alt="Xoay - Lấy mẫu điểm"
+    />
     <div class="command">
       ./image -input penguins.jpg -sampling 0 -rotate 120 -output
       penguins_rotate_point.jpg
@@ -173,7 +191,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_rotate_bilinear.jpg"
+      src="/images/csci5607/penguins_rotate_bilinear.jpg"
       alt="Xoay - Lấy mẫu song tuyến tính"
     />
     <div class="command">
@@ -183,7 +201,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_rotate_gaussian.jpg"
+      src="/images/csci5607/penguins_rotate_gaussian.jpg"
       alt="Xoay - Lấy mẫu Gaussian"
     />
     <div class="command">
@@ -196,7 +214,10 @@
 <h2>Phóng to / Thu nhỏ</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_scale_point.jpg" alt="Thu nhỏ - Lấy mẫu điểm" />
+    <img
+      src="/images/csci5607/penguins_scale_point.jpg"
+      alt="Thu nhỏ - Lấy mẫu điểm"
+    />
     <div class="command">
       ./image -input penguins.jpg -sampling 0 -scale 0.25 0.25 -output
       penguins_scale_point.jpg
@@ -204,7 +225,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_scale_bilinear.jpg"
+      src="/images/csci5607/penguins_scale_bilinear.jpg"
       alt="Thu nhỏ - Lấy mẫu song tuyến tính"
     />
     <div class="command">
@@ -214,7 +235,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_scale_gaussian.jpg"
+      src="/images/csci5607/penguins_scale_gaussian.jpg"
       alt="Thu nhỏ - Lấy mẫu Gaussian"
     />
     <div class="command">

@@ -114,15 +114,15 @@ Color ApplyLightingModel(Scene scene, Ray ray, HitInformation hit){
   <code>sphere1.txt</code> và <code>spheres2.txt</code>, thể hiện rõ hiệu ứng
   phản xạ và khúc xạ.
 </p>
-<img src="/images/spheres1.png" />
-<img src="/images/spheres2.png" />
+<img src="/images/csci5607/spheres1.png" />
+<img src="/images/csci5607/spheres2.png" />
 
 <p>
   Những hình ảnh bên dưới cho thấy nhiều tính năng khác nhau của phần mềm như
   các loại ánh sáng, nhiều nguồn sáng, phản xạ, khúc xạ.
 </p>
 
-<img src="/images/tricolor-spotlight.png" />
+<img src="/images/csci5607/tricolor-spotlight.png" />
 <pre><code class="language-c">
 # Hình cầu được chiếu sáng bởi nhiều spotlight nhiều màu
 sphere: 0 0 2 1
@@ -132,7 +132,7 @@ spot_light: 0 0 1  0 -1 1  0 1 0  45 90
 background: .5 .5 .5
 </code></pre>
 
-<img src="/images/reflective.png" />
+<img src="/images/csci5607/reflective.png" />
 <pre><code class="language-c">
 # Hình cầu phản chiếu được chiếu sáng bởi nhiều nguồn sáng hướng và một nguồn sáng điểm xanh
 camera_pos: -6 2 -4
@@ -152,7 +152,7 @@ background: .05 .05 .05
 max_depth: 8
 </code></pre>
 
-<img src="/images/twospheres.png" />
+<img src="/images/csci5607/twospheres.png" />
 <pre><code class="language-c">
 # Hai quả cầu với phản xạ, khúc xạ, và nhiều nguồn sáng
 camera_pos: 0 2 -10
@@ -178,7 +178,7 @@ max_depth: 2
   đổi.
 </p>
 
-<img src="/images/spheres1_reversed.png" />
+<img src="/images/csci5607/spheres1_reversed.png" />
 <pre><code class="language-c">
 # Phiên bản spheres1.txt với góc nhìn camera khác
 camera_pos: 6 2 4
@@ -187,7 +187,7 @@ camera_up:  0 1 0
 camera_fov_ha: 35
 </code></pre>
 
-<img src="/images/spheres2-top.png" />
+<img src="/images/csci5607/spheres2-top.png" />
 <pre><code class="language-c">
 # Phiên bản spheres2.txt với góc nhìn từ trên xuống
 camera_pos: 0 20 0 

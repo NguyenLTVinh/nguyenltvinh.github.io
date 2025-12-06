@@ -29,32 +29,41 @@
 <h2>Original image</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins.jpg" alt="Original Penguins" />
+    <img src="/images/csci5607/penguins.jpg" alt="Original Penguins" />
   </div>
 </div>
 
 <h2>Quantize, brightness, contrast & saturation</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_quantize2.jpg" alt="Quantized Penguins" />
+    <img
+      src="/images/csci5607/penguins_quantize2.jpg"
+      alt="Quantized Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -quantize 2 -output penguins_quantize2.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_brighten.jpg" alt="Brightened Penguins" />
+    <img
+      src="/images/csci5607/penguins_brighten.jpg"
+      alt="Brightened Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -brightness 2.0 -output penguins_brighten.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_contrast.jpg" alt="Contrast Penguins" />
+    <img src="/images/csci5607/penguins_contrast.jpg" alt="Contrast Penguins" />
     <div class="command">
       ./image -input penguins.jpg -contrast 2.0 -output penguins_contrast.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_saturation.jpg" alt="Saturation Penguins" />
+    <img
+      src="/images/csci5607/penguins_saturation.jpg"
+      alt="Saturation Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -saturation 2.5 -output
       penguins_saturation.jpg
@@ -65,7 +74,7 @@
 <h2>Crop</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_crop.jpg" alt="Cropped Penguins" />
+    <img src="/images/csci5607/penguins_crop.jpg" alt="Cropped Penguins" />
     <div class="command">
       ./image -input penguins.jpg -crop 450 100 450 350 -output
       penguins_crop.jpg
@@ -76,7 +85,10 @@
 <h2>Color channel extraction</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_extract_red.jpg" alt="Red Channel Penguins" />
+    <img
+      src="/images/csci5607/penguins_extract_red.jpg"
+      alt="Red Channel Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -extractChannel 0 -output
       penguins_extract_red.jpg
@@ -84,7 +96,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_extract_green.jpg"
+      src="/images/csci5607/penguins_extract_green.jpg"
       alt="Green Channel Penguins"
     />
     <div class="command">
@@ -93,7 +105,10 @@
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_extract_blue.jpg" alt="Blue Channel Penguins" />
+    <img
+      src="/images/csci5607/penguins_extract_blue.jpg"
+      alt="Blue Channel Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -extractChannel 2 -output
       penguins_extract_blue.jpg
@@ -104,7 +119,10 @@
 <h2>Dithering (random, Floyd-Steinberg, ordered) & noise</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_randomdither.jpg" alt="Random Dither Penguins" />
+    <img
+      src="/images/csci5607/penguins_randomdither.jpg"
+      alt="Random Dither Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -randomDither 2 -output
       penguins_randomdither.jpg
@@ -112,7 +130,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_fsDither.jpg"
+      src="/images/csci5607/penguins_fsDither.jpg"
       alt="Floyd-Steinberg Dither Penguins"
     />
     <div class="command">
@@ -122,7 +140,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_odereddither.jpg"
+      src="/images/csci5607/penguins_odereddither.jpg"
       alt="Ordered Dither Penguins"
     />
     <div class="command">
@@ -131,7 +149,7 @@
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_noise.jpg" alt="Noise Penguins" />
+    <img src="/images/csci5607/penguins_noise.jpg" alt="Noise Penguins" />
     <div class="command">
       ./image -input penguins.jpg -noise 0.8 -output penguins_noise.jpg
     </div>
@@ -141,19 +159,22 @@
 <h2>Sharpen, blur & edge</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_sharpen.jpg" alt="Sharpened Penguins" />
+    <img src="/images/csci5607/penguins_sharpen.jpg" alt="Sharpened Penguins" />
     <div class="command">
       ./image -input penguins.jpg -sharpen 7 -output penguins_sharpen.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_blur.jpg" alt="Blurred Penguins" />
+    <img src="/images/csci5607/penguins_blur.jpg" alt="Blurred Penguins" />
     <div class="command">
       ./image -input penguins.jpg -blur 9 -output penguins_blur.jpg
     </div>
   </div>
   <div class="image-container">
-    <img src="/images/penguins_edge.jpg" alt="Edge Detection Penguins" />
+    <img
+      src="/images/csci5607/penguins_edge.jpg"
+      alt="Edge Detection Penguins"
+    />
     <div class="command">
       ./image -input penguins.jpg -edgeDetect -output penguins_edge.jpg
     </div>
@@ -163,7 +184,10 @@
 <h2>Rotation</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_rotate_point.jpg" alt="Rotate Point Sampling" />
+    <img
+      src="/images/csci5607/penguins_rotate_point.jpg"
+      alt="Rotate Point Sampling"
+    />
     <div class="command">
       ./image -input penguins.jpg -sampling 0 -rotate 120 -output
       penguins_rotate_point.jpg
@@ -171,7 +195,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_rotate_bilinear.jpg"
+      src="/images/csci5607/penguins_rotate_bilinear.jpg"
       alt="Rotate Bilinear Sampling"
     />
     <div class="command">
@@ -181,7 +205,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_rotate_gaussian.jpg"
+      src="/images/csci5607/penguins_rotate_gaussian.jpg"
       alt="Rotate Gaussian Sampling"
     />
     <div class="command">
@@ -194,7 +218,10 @@
 <h2>Scaling</h2>
 <div class="image-group">
   <div class="image-container">
-    <img src="/images/penguins_scale_point.jpg" alt="Scale Point Sampling" />
+    <img
+      src="/images/csci5607/penguins_scale_point.jpg"
+      alt="Scale Point Sampling"
+    />
     <div class="command">
       ./image -input penguins.jpg -sampling 0 -scale 0.25 0.25 -output
       penguins_scale_point.jpg
@@ -202,7 +229,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_scale_bilinear.jpg"
+      src="/images/csci5607/penguins_scale_bilinear.jpg"
       alt="Scale Bilinear Sampling"
     />
     <div class="command">
@@ -212,7 +239,7 @@
   </div>
   <div class="image-container">
     <img
-      src="/images/penguins_scale_gaussian.jpg"
+      src="/images/csci5607/penguins_scale_gaussian.jpg"
       alt="Scale Gaussian Sampling"
     />
     <div class="command">
