@@ -24,48 +24,52 @@
   không. Tôi đang nói về các mô hình với hàng chục tỷ tham số. Laptop của tôi có
   GPU AMD Radeon RX 6500M, khá mạnh, nhưng tất cả các mô hình ngôn ngữ lớn đều
   được huấn luyện và chạy với
-  <a href="https://developer.nvidia.com/cuda">nền tảng CUDA</a> của NVIDIA chỉ
-  tương thích với GPU NVIDIA. Sẽ mất nhiều công sức để tôi tìm ra cách chạy các
-  mô hình này với GPU AMD của mình. May mắn thay, có người khác đã tìm ra cách
-  cho tôi rồi.
+  <a target="_blank" href="https://developer.nvidia.com/cuda">nền tảng CUDA</a>
+  của NVIDIA chỉ tương thích với GPU NVIDIA. Sẽ mất nhiều công sức để tôi tìm ra
+  cách chạy các mô hình này với GPU AMD của mình. May mắn thay, có người khác đã
+  tìm ra cách cho tôi rồi.
 </p>
 
 <h3>Ollama: Phần mềm làm cho điều này khả thi</h3>
 
 <p>
-  Tôi muốn giới thiệu đến bạn <a href="https://ollama.com/">Ollama</a>, một phần
-  mềm mã nguồn mở được tạo ra bởi Jeffrey Morgan và Michael Chiang. Ollama giải
-  quyết nhiều thách thức thường làm cho các mô hình AI cục bộ khó sử dụng. Thay
-  vì phải đối phó với môi trường Python, cài đặt CUDA, tệp trọng số mô hình và
-  các cấu hình phức tạp, người dùng chỉ cần cài đặt Ollama và có thể bắt đầu
-  chạy các mô hình với các lệnh đơn giản như
+  Tôi muốn giới thiệu đến bạn
+  <a target="_blank" href="https://ollama.com/">Ollama</a>, một phần mềm mã
+  nguồn mở được tạo ra bởi Jeffrey Morgan và Michael Chiang. Ollama giải quyết
+  nhiều thách thức thường làm cho các mô hình AI cục bộ khó sử dụng. Thay vì
+  phải đối phó với môi trường Python, cài đặt CUDA, tệp trọng số mô hình và các
+  cấu hình phức tạp, người dùng chỉ cần cài đặt Ollama và có thể bắt đầu chạy
+  các mô hình với các lệnh đơn giản như
   <code>ollama run llama3</code> &nbsphoặc&nbsp <code>ollama run mistral</code>
 </p>
 <p>
   Ứng dụng tự động tải xuống mô hình, quản lý phân bổ bộ nhớ và tối ưu hóa hiệu
   suất cho phần cứng của bạn. Ollama cũng hỗ trợ GPU AMD bằng cách xây dựng hỗ
   trợ cho
-  <a href="https://www.amd.com/en/products/software/rocm.html">ROCm</a> (nền
-  tảng tính toán của AMD tương tự như CUDA của NVIDIA) trực tiếp vào ứng dụng
-  của họ, do đó nó có thể chạy các mô hình AI bằng GPU AMD thông qua các API gốc
-  của ROCm. Nó cũng được tối ưu hóa cao, cho phép người dùng chạy các mô hình
-  ngôn ngữ lớn mà không cần GPU mạnh nhất.
+  <a target="_blank" href="https://www.amd.com/en/products/software/rocm.html"
+    >ROCm</a
+  >
+  (nền tảng tính toán của AMD tương tự như CUDA của NVIDIA) trực tiếp vào ứng
+  dụng của họ, do đó nó có thể chạy các mô hình AI bằng GPU AMD thông qua các
+  API gốc của ROCm. Nó cũng được tối ưu hóa cao, cho phép người dùng chạy các mô
+  hình ngôn ngữ lớn mà không cần GPU mạnh nhất.
 </p>
 
 <p>
   Tôi đã cài đặt
-  <a href="https://flathub.org/en/apps/com.jeffser.Alpaca">Alpaca</a>, một ứng
-  dụng Flatpak hoạt động như một GUI cho Ollama. Nó cung cấp giao diện người
-  dùng để trò chuyện với các mô hình này thay vì phải tương tác với Ollama từ
-  dòng lệnh. Bạn cũng có thể tải xuống các mô hình ngôn ngữ lớn trọng số mở mà
-  bạn muốn trên Alpaca. Tôi đã tải xuống một vài mô hình với các kích thước khác
-  nhau để thử nghiệm chúng. Máy tính của tôi có thể xử lý các mô hình với 3 tỷ
-  tham số trở xuống như Gemma hoặc Llama 3 một cách dễ dàng. Tôi có thể mở cửa
-  sổ trò chuyện và vẫn làm những việc khác trên máy tính. Đối với các mô hình cỡ
-  trung bình như Mistral với 7 tỷ tham số, máy tính của tôi có thể xử lý nếu đó
-  là tiến trình duy nhất đang chạy. Hãy nghĩ về nó như việc chạy một trò chơi
-  điện tử rất nặng. Tôi đã mở một ứng dụng khác và Ollama đã bị nhân Linux tự
-  động hủy. Tôi thậm chí không thử chạy bất kỳ mô hình lớn hơn nào sau đó.
+  <a target="_blank" href="https://flathub.org/en/apps/com.jeffser.Alpaca"
+    >Alpaca</a
+  >, một ứng dụng Flatpak hoạt động như một GUI cho Ollama. Nó cung cấp giao
+  diện người dùng để trò chuyện với các mô hình này thay vì phải tương tác với
+  Ollama từ dòng lệnh. Bạn cũng có thể tải xuống các mô hình ngôn ngữ lớn trọng
+  số mở mà bạn muốn trên Alpaca. Tôi đã tải xuống một vài mô hình với các kích
+  thước khác nhau để thử nghiệm chúng. Máy tính của tôi có thể xử lý các mô hình
+  với 3 tỷ tham số trở xuống như Gemma hoặc Llama 3 một cách dễ dàng. Tôi có thể
+  mở cửa sổ trò chuyện và vẫn làm những việc khác trên máy tính. Đối với các mô
+  hình cỡ trung bình như Mistral với 7 tỷ tham số, máy tính của tôi có thể xử lý
+  nếu đó là tiến trình duy nhất đang chạy. Hãy nghĩ về nó như việc chạy một trò
+  chơi điện tử rất nặng. Tôi đã mở một ứng dụng khác và Ollama đã bị nhân Linux
+  tự động hủy. Tôi thậm chí không thử chạy bất kỳ mô hình lớn hơn nào sau đó.
 </p>
 <img src="/images/posts/alpaca2.png" />
 <img src="/images/posts/alpaca1.png" />
@@ -90,12 +94,12 @@
   tiến chạy cục bộ trên bàn làm việc của mình. Tôi cũng có thể làm cho nó có sẵn
   cho mọi người dùng chung mạng WiFi của tôi bằng cách biến máy tính đó thành
   một máy chủ cục bộ. Tôi đang để ý đến
-  <a href="https://frame.work/desktop">Framework Desktop</a>, một máy tính với
-  phần cứng được xây dựng để chạy các mô hình cục bộ, và tôi rất muốn mua một
-  chiếc khi tôi bắt đầu được hưởng mức lương Big Tech. Bạn biết tôi, tôi không
-  muốn dữ liệu của mình được lưu trữ trên máy chủ của họ, và tôi đánh giá cao
-  phần mềm mã nguồn mở nhiều hơn mã nguồn đóng. Điều này mở rộng đến AI, nơi các
-  mô hình trọng số mở có cùng tinh thần.
+  <a target="_blank" href="https://frame.work/desktop">Framework Desktop</a>,
+  một máy tính với phần cứng được xây dựng để chạy các mô hình cục bộ, và tôi
+  rất muốn mua một chiếc khi tôi bắt đầu được hưởng mức lương Big Tech. Bạn biết
+  tôi, tôi không muốn dữ liệu của mình được lưu trữ trên máy chủ của họ, và tôi
+  đánh giá cao phần mềm mã nguồn mở nhiều hơn mã nguồn đóng. Điều này mở rộng
+  đến AI, nơi các mô hình trọng số mở có cùng tinh thần.
 </p>
 
 <h3>Lời kết</h3>

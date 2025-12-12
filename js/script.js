@@ -88,15 +88,14 @@ function initDarkModeToggle() {
 
   const applySunStyle = () => {
     icon.style.filter =
-      "invert(65%) sepia(64%) hue-rotate(200deg) saturate(15) contrast(90%)";
-    icon.style.opacity = "0.9";
+      "brightness(0) saturate(100%) invert(75%) sepia(29%) saturate(531%) hue-rotate(348deg) brightness(87%) contrast(89%)";
     icon.style.transition = "filter 0.3s ease";
   };
 
-  const clearSunStyle = () => {
-    icon.style.filter = "";
-    icon.style.opacity = "";
-    icon.style.transition = "";
+  const applyMoonStyle = () => {
+    icon.style.filter =
+      "brightness(0) saturate(100%) invert(24%) sepia(26%) saturate(1394%) hue-rotate(352deg) brightness(94%) contrast(93%)";
+    icon.style.transition = "filter 0.3s ease";
   };
 
   const savedTheme = localStorage.getItem("theme");
@@ -106,7 +105,7 @@ function initDarkModeToggle() {
     applySunStyle();
   } else {
     icon.src = "/images/moon-svgrepo-com.svg";
-    clearSunStyle();
+    applyMoonStyle();
   }
 
   toggleBtn.addEventListener("click", () => {
@@ -118,7 +117,7 @@ function initDarkModeToggle() {
       applySunStyle();
     } else {
       icon.src = "/images/moon-svgrepo-com.svg";
-      clearSunStyle();
+      applyMoonStyle();
     }
   });
 }
