@@ -1,0 +1,142 @@
+<div class="post-header">
+  <h2>Building MineCRust: A Voxel Engine in Rust</h2>
+  <span>December 13th, 2025</span>
+</div>
+
+<h3>Introduction</h3>
+<p>
+  I've been working on MineCRust as the final project for my Computer Graphics
+  course. Attempting to code something like Minecraft has been something I've
+  always wanted to do, and I finally have the opportunity to do it. After a
+  month of efforts, I introduce you to MineCRust, a voxel sandbox engine written
+  in Rust. It's similar to Minecraft in concept, but I'm building everything
+  from the ground up, rather than using Unity or Unreal. This means I'm handling
+  window creation, OpenGL state management, and pretty much everything else
+  myself. Here's how the final result looks:
+</p>
+
+<video controls preload="metadata">
+  <source src="/videos/terrains.mp4#t=1.0" type="video/mp4" />
+</video>
+<video controls preload="metadata">
+  <source src="/videos/blocks.mp4#t=0.1" type="video/mp4" />
+</video>
+
+<h3>The tech stack</h3>
+<p>
+  I wanted full control over the hardware, so I'm using the
+  <code>gl</code> crate for raw OpenGL 3.3 bindings. It's unsafe code and more
+  tedious than using a wrapper, but it lets me manage GPU state exactly how I
+  want. GLFW handles windowing and input through the <code>glfw</code> crate,
+  and <code>cgmath</code> does all the vector/matrix math.
+</p>
+<p>
+  The most important decision was integrating <code>tokio</code> for async work.
+  Terrain generation is computationally heavy, so I offload chunk creation to
+  background workers. This keeps the main render thread smooth even when you're
+  moving around quickly.
+</p>
+<h3>Graphics pipeline</h3>
+<p>
+  The rendering uses custom GLSL shaders. The vertex shader takes position,
+  texture coordinates, normals, and color data, then applies MVP matrices to
+  transform everything into clip space. Pretty standard stuff. It passes normals
+  and lighting data to the fragment shader.
+</p>
+<p>
+  The fragment shader does the actual lighting calculations. There's a
+  directional light representing the sun, and I calculate how much light hits
+  each surface using the dot product of the normal and light direction. I also
+  add ambient light that changes with the time of day, so shadows don't go pitch
+  black.
+</p>
+<p>
+  Textures come from a global atlas. For vegetation like grass and leaves, I
+  apply color tints to grayscale textures. This means one texture can represent
+  different biomes just by changing the color multiplier. The shader also has an
+  alpha test to discard transparent pixels, which gives foliage that sharp voxel
+  look.
+</p>
+<h3>Mesh generation</h3>
+<p>
+  Drawing every block as a full cube would be insanely wasteful. Most faces are
+  hidden between blocks. My MeshBuilder does face culling by checking each
+  block's six neighbors. If a neighbor is solid, that face gets skipped. Only
+  faces exposed to air or transparent blocks like water actually get rendered.
+</p>
+<p>
+  The vertex format stores position, UVs, normals, and tint colors. I have a
+  TextureAtlas system that loads individual PNG files at runtime and stitches
+  them into one big texture. The mesh builder maps block faces to the right
+  spots in the atlas. There are also special geometry types for things like
+  flowers (two intersecting quads) and cacti (smaller than a full block).
+</p>
+
+<h3>Terrain generation</h3>
+<p>
+  The world generates procedurally using the <code>noise</code> crate. I layer
+  Fractal Brownian Motion over Perlin noise for the base terrain, then add a
+  second mountain noise pass that uses 3D density values. This allows for
+  overhangs and caves instead of just a heightmap.
+</p>
+<p>
+  I simulate the climate with separate noise maps for heat and humidity. These
+  values determine the biome (desert, forest, plains, tundra), which affects
+  both the block types and vegetation colors. I also run a simplified erosion
+  pass using ridge noise to carve rivers that connect to the water level.
+</p>
+<h3>Day-night cycle</h3>
+<p>
+  The sky system handles time progression using “Wicked Time” from Minetest,
+  which makes days longer than nights. Every frame, I interpolate the sky color
+  between different times of day (midnight blue, sunrise orange, noon blue,
+  etc).
+</p>
+<p>
+  The sun and moon are billboarded quads that rotate around the player. I draw
+  them multiple times at different sizes with varying transparency to fake a
+  glow effect. The sun's position updates the lighting uniforms, so shadows
+  rotate and change length throughout the day.
+</p>
+<h3>Input and controls</h3>
+<p>
+  Input handling is managed through <code>glfw</code>, processing keyboard and
+  mouse events in a centralized loop. I implemented a state machine to switch
+  between three main interaction modes:
+</p>
+<ul>
+  <li>Normal Mode: Standard exploration with no block interaction.</li>
+  <li>Insert Mode: Displays a placement preview and allows adding blocks.</li>
+  <li>Delete Mode: Highlights existing blocks for removal.</li>
+</ul>
+<p>
+  There's also a developer console triggered by <code>/</code>. It pauses the
+  game loop's input processing to capture text, allowing me to run commands like
+  <code>set_time</code> or <code>use</code> to change the active block type. The
+  console supports command history and auto-suggestion, making debugging much
+  easier.
+</p>
+<h3>Block interaction</h3>
+<p>
+  Placing and breaking blocks requires knowing exactly what the player is
+  looking at. I implemented a raycasting algorithm that steps a vector forward
+  from the camera's position. For breaking blocks, it checks for solid voxels
+  along the ray. For placing blocks, it tracks the last empty position before a
+  collision, ensuring new blocks are placed against existing faces.
+</p>
+<p>
+  Visual feedback is crucial here. In “Delete” mode, I render a solid wireframe
+  around the target block. In “Insert” mode, the system renders a dashed outline
+  where the new block will appear. When a modification happens, I calculate the
+  chunk coordinates, update the voxel data, and mark that chunk's mesh for
+  regeneration. If a block changes on a chunk border, I also trigger updates for
+  the neighboring chunks to ensure face culling remains accurate.
+</p>
+<h3>Wrapping up</h3>
+<p>
+  Building everything from scratch has been a lot of work, but it gives me exact
+  control over how the engine behaves. The custom texture system, multi-layer
+  noise generation, and async chunk loading all work together to keep the game
+  running smoothly. It's definitely more effort than using an existing engine,
+  but I'm happy with how it turned out.
+</p>

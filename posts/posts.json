@@ -1,6 +1,11 @@
 {
   "en": [
     {
+      "filename": "2025-12-13.html",
+      "date": "2025-12-13",
+      "title": "Building MineCRust: A Voxel Engine in Rust"
+    },
+    {
       "filename": "2025-11-30.html",
       "date": "2025-11-30",
       "title": "Local LLMs: Privacy and Open-Source AI with Ollama"
@@ -32,6 +37,11 @@
     }
   ],
   "vi": [
+    {
+      "filename": "2025-12-13.html",
+      "date": "2025-12-13",
+      "title": "Xây Dựng MineCRust: Một Trò Chơi Khối Vuông Viết bằng Rust"
+    },
     {
       "filename": "2025-11-30.html",
       "date": "2025-11-30",

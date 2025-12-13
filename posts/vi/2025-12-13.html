@@ -1,0 +1,151 @@
+<div class="post-header">
+  <h2>Xây Dựng MineCRust: Một Trò Chơi Khối Vuông Viết bằng Rust</h2>
+  <span>13 tháng 12, 2025</span>
+</div>
+
+<h3>Giới thiệu</h3>
+<p>
+  Tôi đã làm việc với MineCRust làm dự án cuối kỳ cho môn Đồ họa Máy tính. Việc
+  lập trình một thứ gì đó giống Minecraft là điều tôi luôn muốn làm, và cuối
+  cùng tôi cũng có cơ hội thực hiện nó. Sau một tháng nỗ lực, tôi xin giới thiệu
+  MineCRust, một công cụ hộp cát khối vuông được viết bằng Rust. Nó tương tự
+  Minecraft về mặt ý tưởng, nhưng tôi xây dựng mọi thứ từ đầu, thay vì sử dụng
+  Unity hay Unreal. Điều này có nghĩa là tôi phải tự xử lý việc tạo cửa sổ, quản
+  lý trạng thái OpenGL, và hầu hết mọi thứ khác. Đây là kết quả cuối cùng:
+</p>
+
+<video controls preload="metadata">
+  <source src="/videos/terrains.mp4#t=1.0" type="video/mp4" />
+</video>
+<video controls preload="metadata">
+  <source src="/videos/blocks.mp4#t=0.1" type="video/mp4" />
+</video>
+
+<h3>Công nghệ sử dụng</h3>
+<p>
+  Tôi muốn kiểm soát hoàn toàn phần cứng, nên tôi sử dụng thư viện
+  <code>gl</code> để gọi trực tiếp OpenGL 3.3. Đây là mã không an toàn và cồng
+  kềnh hơn so với việc dùng lớp bao bọc, nhưng nó cho phép tôi quản lý trạng
+  thái GPU chính xác như ý muốn. GLFW xử lý cửa sổ và đầu vào thông qua thư viện
+  <code>glfw</code>, còn <code>cgmath</code> đảm nhận toàn bộ các phép tính
+  vector và ma trận.
+</p>
+<p>
+  Quyết định quan trọng nhất là tích hợp <code>tokio</code> cho công việc bất
+  đồng bộ. Việc tạo địa hình tốn nhiều tài nguyên tính toán, nên tôi chuyển việc
+  tạo chunk (một phần chứa 16x128x16 khối lập phương) sang các luồng làm việc
+  chạy nền. Điều này giữ cho luồng kết xuất chính mượt mà ngay cả khi bạn di
+  chuyển nhanh.
+</p>
+
+<h3>Đường ống đồ họa</h3>
+<p>
+  Quá trình kết xuất sử dụng các bộ đổ bóng GLSL tùy chỉnh. Bộ đổ bóng đỉnh nhận
+  vị trí, tọa độ kết cấu, pháp tuyến và dữ liệu màu, sau đó áp dụng các ma trận
+  MVP để biến đổi mọi thứ sang không gian cắt. Nó truyền pháp tuyến và dữ liệu
+  ánh sáng cho bộ đổ bóng phân mảnh.
+</p>
+<p>
+  Bộ đổ bóng phân mảnh thực hiện các phép tính ánh sáng thực tế. Có một nguồn
+  sáng định hướng đại diện cho mặt trời, và tôi tính toán lượng ánh sáng chiếu
+  vào mỗi bề mặt bằng tích vô hướng của pháp tuyến và hướng ánh sáng. Tôi cũng
+  thêm ánh sáng môi trường thay đổi theo thời gian trong ngày, để bóng tối không
+  trở nên hoàn toàn đen.
+</p>
+<p>
+  Kết cấu đến từ một bản đồ tổng hợp toàn cục. Với thực vật như cỏ và lá cây,
+  tôi áp dụng màu nhuộm lên kết cấu xám. Điều này có nghĩa là một kết cấu có thể
+  đại diện cho nhiều quần xã sinh học khác nhau chỉ bằng cách thay đổi hệ số
+  màu. Bộ đổ bóng cũng có kiểm tra độ trong để loại bỏ các pixel trong suốt, tạo
+  cho lá cây vẻ ngoài khối vuông sắc nét đặc trưng.
+</p>
+
+<h3>Tạo lưới hình học</h3>
+<p>
+  Vẽ mọi khối như một hình lập phương hoàn chỉnh sẽ cực kỳ lãng phí. Hầu hết các
+  mặt đều bị che khuất giữa các khối. Trình xây dựng lưới của tôi thực hiện loại
+  bỏ mặt khuất bằng cách kiểm tra sáu khối láng giềng của mỗi khối. Nếu một khối
+  láng giềng là khối đặc, mặt đó sẽ bị bỏ qua. Chỉ những mặt tiếp xúc với không
+  khí hoặc khối trong suốt như nước mới thực sự được kết xuất.
+</p>
+<p>
+  Định dạng đỉnh lưu trữ vị trí, tọa độ UV, pháp tuyến và màu nhuộm. Tôi có một
+  hệ thống bản đồ kết cấu tổng hợp tải các tệp PNG riêng lẻ khi chạy và ghép
+  chúng thành một kết cấu lớn. Trình xây dựng lưới ánh xạ các mặt khối đến đúng
+  vị trí trong bản đồ tổng hợp. Cũng có các kiểu hình học đặc biệt cho những thứ
+  như hoa (hai hình tứ giác giao nhau) và xương rồng (nhỏ hơn một khối đầy đủ).
+</p>
+
+<h3>Tạo địa hình</h3>
+<p>
+  Thế giới được tạo theo thủ tục sử dụng thư viện <code>noise</code>. Tôi xếp
+  lớp Chuyển động Brown Phân dạng lên nhiễu Perlin cho địa hình cơ bản, sau đó
+  thêm một lượt nhiễu núi non thứ hai sử dụng các giá trị mật độ 3 chiều. Điều
+  này cho phép có các chunk nhô ra và hang động thay vì chỉ là một bản đồ độ
+  cao.
+</p>
+<p>
+  Tôi mô phỏng khí hậu với các bản đồ nhiễu riêng cho nhiệt độ và độ ẩm. Các giá
+  trị này xác định quần xã sinh học (sa mạc, rừng, đồng bằng, lãnh nguyên), ảnh
+  hưởng đến cả loại khối và màu sắc thực vật. Tôi cũng chạy một lượt xói mòn đơn
+  giản sử dụng nhiễu sống núi để tạo sông nối với mực nước.
+</p>
+
+<h3>Chu kỳ ngày-đêm</h3>
+<p>
+  Hệ thống bầu trời xử lý tiến trình thời gian sử dụng hệ thống "Wicked Time" từ
+  Minetest, làm cho ban ngày dài hơn ban đêm. Mỗi khung hình, tôi nội suy màu
+  bầu trời giữa các thời điểm khác nhau trong ngày (xanh nửa đêm, cam bình minh,
+  xanh giữa trưa, v.v.).
+</p>
+<p>
+  Mặt trời và mặt trăng là các hình tứ giác luôn quay về phía người chơi. Tôi vẽ
+  chúng nhiều lần với các kích thước khác nhau và độ trong suốt thay đổi để tạo
+  hiệu ứng phát sáng giả. Vị trí của mặt trời cập nhật các biến đồng nhất ánh
+  sáng, nên bóng tối xoay và thay đổi độ dài trong suốt cả ngày.
+</p>
+
+<h3>Đầu vào và điều khiển</h3>
+<p>
+  Xử lý đầu vào được quản lý thông qua <code>glfw</code>, xử lý các sự kiện bàn
+  phím và chuột trong một vòng lặp tập trung. Tôi đã triển khai một máy trạng
+  thái để chuyển đổi giữa ba chế độ tương tác chính:
+</p>
+<ul>
+  <li>Chế độ Thường: Khám phá tiêu chuẩn không có tương tác khối.</li>
+  <li>Chế độ Thêm: Hiển thị xem trước vị trí đặt và cho phép thêm khối.</li>
+  <li>Chế độ Xóa: Làm nổi bật các khối hiện có để xóa.</li>
+</ul>
+<p>
+  Cũng có một dòng lệnh dành cho nhà phát triển được kích hoạt bằng
+  <code>/</code>. Nó tạm dừng xử lý đầu vào của vòng lặp trò chơi để bắt văn
+  bản, cho phép tôi chạy các lệnh như <code>set_time</code> hoặc
+  <code>use</code> để thay đổi loại khối đang sử dụng. Dòng lệnh hỗ trợ lịch sử
+  lệnh và tự động gợi ý, giúp gỡ lỗi dễ dàng hơn nhiều.
+</p>
+
+<h3>Tương tác khối</h3>
+<p>
+  Đặt và phá khối yêu cầu biết chính xác người chơi đang nhìn vào đâu. Tôi đã
+  lập trình một thuật toán bắn tia bắn một vector tiến về phía trước từ vị trí
+  camera. Để phá khối, nó kiểm tra các khối vuông đặc dọc theo tia. Để đặt khối,
+  nó theo dõi vị trí trống cuối cùng trước khi va chạm, đảm bảo các khối mới
+  được đặt sát với các mặt hiện có.
+</p>
+<p>
+  Phản hồi trực quan rất quan trọng ở đây. Trong chế độ "Xóa", tôi kết xuất một
+  khung dây đặc xung quanh khối mục tiêu. Trong chế độ "Thêm", hệ thống kết xuất
+  một đường viền nét đứt nơi khối mới sẽ xuất hiện. Khi một thay đổi xảy ra, tôi
+  tính toán tọa độ chunk, cập nhật dữ liệu khối vuông và đánh dấu lưới của chunk
+  đó để tái tạo. Nếu một khối thay đổi ở biên giới chunk, tôi cũng kích hoạt cập
+  nhật cho các chunk láng giềng để đảm bảo loại bỏ mặt khuất vẫn chính xác.
+</p>
+
+<h3>Kết luận</h3>
+<p>
+  Xây dựng mọi thứ từ đầu đã tốn rất nhiều công sức, nhưng nó cho tôi quyền kiểm
+  soát chính xác cách công cụ hoạt động. Hệ thống kết cấu tùy chỉnh, tạo nhiễu
+  đa lớp và tải chunk bất đồng bộ đều phối hợp với nhau để giữ cho trò chơi chạy
+  mượt mà. Chắc chắn đây là công việc nhiều hơn so với việc sử dụng một công cụ
+  có sẵn, nhưng tôi hài lòng với kết quả.
+</p>
