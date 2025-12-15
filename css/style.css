@@ -785,6 +785,13 @@ a:hover {
   mjx-container[jax="CHTML"][display="true"] > svg {
     transform: scale(0.9);
   }
+
+  code,
+  pre,
+  code[class*="language-"],
+  pre[class*="language-"] {
+    font-size: 0.9em !important;
+  }
 }
 
 body.dark-mode {

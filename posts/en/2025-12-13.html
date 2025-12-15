@@ -66,16 +66,17 @@
 <h3>Mesh generation</h3>
 <p>
   Drawing every block as a full cube would be insanely wasteful. Most faces are
-  hidden between blocks. My MeshBuilder does face culling by checking each
-  block's six neighbors. If a neighbor is solid, that face gets skipped. Only
-  faces exposed to air or transparent blocks like water actually get rendered.
+  hidden between blocks. My <code>MeshBuilder</code> does face culling by
+  checking each block's six neighbors. If a neighbor is solid, that face gets
+  skipped. Only faces exposed to air or transparent blocks like water actually
+  get rendered.
 </p>
 <p>
   The vertex format stores position, UVs, normals, and tint colors. I have a
-  TextureAtlas system that loads individual PNG files at runtime and stitches
-  them into one big texture. The mesh builder maps block faces to the right
-  spots in the atlas. There are also special geometry types for things like
-  flowers (two intersecting quads) and cacti (smaller than a full block).
+  <code>TextureAtlas</code> system that loads individual PNG files at runtime
+  and stitches them into one big texture. The mesh builder maps block faces to
+  the right spots in the atlas. There are also special geometry types for things
+  like flowers (two intersecting quads) and cacti (smaller than a full block).
 </p>
 
 <h3>Terrain generation</h3>

@@ -8,10 +8,10 @@
   Tôi đã làm việc với MineCRust làm dự án cuối kỳ cho môn Đồ họa Máy tính. Việc
   lập trình một thứ gì đó giống Minecraft là điều tôi luôn muốn làm, và cuối
   cùng tôi cũng có cơ hội thực hiện nó. Sau một tháng nỗ lực, tôi xin giới thiệu
-  MineCRust, một công cụ hộp cát khối vuông được viết bằng Rust. Nó tương tự
-  Minecraft về mặt ý tưởng, nhưng tôi xây dựng mọi thứ từ đầu, thay vì sử dụng
-  Unity hay Unreal. Điều này có nghĩa là tôi phải tự xử lý việc tạo cửa sổ, quản
-  lý trạng thái OpenGL, và hầu hết mọi thứ khác. Đây là kết quả cuối cùng:
+  MineCRust, một trò chơi khối vuông được viết bằng Rust. Nó tương tự Minecraft
+  về mặt ý tưởng, nhưng tôi xây dựng mọi thứ từ đầu, thay vì sử dụng Unity hay
+  Unreal. Điều này có nghĩa là tôi phải tự xử lý việc tạo cửa sổ, quản lý trạng
+  thái OpenGL, và hầu hết mọi thứ khác. Đây là kết quả cuối cùng:
 </p>
 
 <video controls preload="metadata">
@@ -46,40 +46,42 @@
 
 <h3>Đường ống đồ họa</h3>
 <p>
-  Quá trình kết xuất sử dụng các bộ đổ bóng GLSL tùy chỉnh. Bộ đổ bóng đỉnh nhận
+  Quá trình kết xuất sử dụng các bộ shader GLSL tùy chỉnh. Bộ vertex shader nhận
   vị trí, tọa độ kết cấu, pháp tuyến và dữ liệu màu, sau đó áp dụng các ma trận
   MVP để biến đổi mọi thứ sang không gian cắt. Nó truyền pháp tuyến và dữ liệu
-  ánh sáng cho bộ đổ bóng phân mảnh.
+  ánh sáng cho bộ fragment shader.
 </p>
 <p>
-  Bộ đổ bóng phân mảnh thực hiện các phép tính ánh sáng thực tế. Có một nguồn
-  sáng định hướng đại diện cho mặt trời, và tôi tính toán lượng ánh sáng chiếu
-  vào mỗi bề mặt bằng tích vô hướng của pháp tuyến và hướng ánh sáng. Tôi cũng
-  thêm ánh sáng môi trường thay đổi theo thời gian trong ngày, để bóng tối không
-  trở nên hoàn toàn đen.
+  Bộ fragment shader thực hiện các phép tính ánh sáng thực tế. Có một nguồn sáng
+  định hướng đại diện cho mặt trời, và tôi tính toán lượng ánh sáng chiếu vào
+  mỗi bề mặt bằng tích vô hướng của pháp tuyến và hướng ánh sáng. Tôi cũng thêm
+  ánh sáng môi trường thay đổi theo thời gian trong ngày, để bóng tối không trở
+  nên hoàn toàn đen.
 </p>
 <p>
   Kết cấu đến từ một bản đồ tổng hợp toàn cục. Với thực vật như cỏ và lá cây,
   tôi áp dụng màu nhuộm lên kết cấu xám. Điều này có nghĩa là một kết cấu có thể
   đại diện cho nhiều quần xã sinh học khác nhau chỉ bằng cách thay đổi hệ số
-  màu. Bộ đổ bóng cũng có kiểm tra độ trong để loại bỏ các pixel trong suốt, tạo
+  màu. Bộ shader cũng có kiểm tra độ trong để loại bỏ các pixel trong suốt, tạo
   cho lá cây vẻ ngoài khối vuông sắc nét đặc trưng.
 </p>
 
 <h3>Tạo lưới hình học</h3>
 <p>
   Vẽ mọi khối như một hình lập phương hoàn chỉnh sẽ cực kỳ lãng phí. Hầu hết các
-  mặt đều bị che khuất giữa các khối. Trình xây dựng lưới của tôi thực hiện loại
-  bỏ mặt khuất bằng cách kiểm tra sáu khối láng giềng của mỗi khối. Nếu một khối
-  láng giềng là khối đặc, mặt đó sẽ bị bỏ qua. Chỉ những mặt tiếp xúc với không
-  khí hoặc khối trong suốt như nước mới thực sự được kết xuất.
+  mặt đều bị che khuất giữa các khối. Trình xây dựng lưới
+  <code>MeshBuilder</code> của tôi thực hiện loại bỏ mặt khuất bằng cách kiểm
+  tra sáu khối láng giềng của mỗi khối. Nếu một khối láng giềng là khối đặc, mặt
+  đó sẽ bị bỏ qua. Chỉ những mặt tiếp xúc với không khí hoặc khối trong suốt như
+  nước mới thực sự được kết xuất.
 </p>
 <p>
   Định dạng đỉnh lưu trữ vị trí, tọa độ UV, pháp tuyến và màu nhuộm. Tôi có một
-  hệ thống bản đồ kết cấu tổng hợp tải các tệp PNG riêng lẻ khi chạy và ghép
-  chúng thành một kết cấu lớn. Trình xây dựng lưới ánh xạ các mặt khối đến đúng
-  vị trí trong bản đồ tổng hợp. Cũng có các kiểu hình học đặc biệt cho những thứ
-  như hoa (hai hình tứ giác giao nhau) và xương rồng (nhỏ hơn một khối đầy đủ).
+  hệ thống bản đồ kết cấu <code>TextureAtlas</code> tổng hợp tải các tệp PNG
+  riêng lẻ khi chạy và ghép chúng thành một kết cấu lớn. Trình xây dựng lưới ánh
+  xạ các mặt khối đến đúng vị trí trong bản đồ tổng hợp. Cũng có các kiểu hình
+  học đặc biệt cho những thứ như hoa (hai hình tứ giác giao nhau) và xương rồng
+  (nhỏ hơn một khối đầy đủ).
 </p>
 
 <h3>Tạo địa hình</h3>
@@ -114,8 +116,8 @@
 <h3>Đầu vào và điều khiển</h3>
 <p>
   Xử lý đầu vào được quản lý thông qua <code>glfw</code>, xử lý các sự kiện bàn
-  phím và chuột trong một vòng lặp tập trung. Tôi đã triển khai một máy trạng
-  thái để chuyển đổi giữa ba chế độ tương tác chính:
+  phím và chuột trong một vòng lặp tập trung. Tôi đã lập trình một bộ máy trạng
+  thái (state machine) để chuyển đổi giữa ba chế độ tương tác chính:
 </p>
 <ul>
   <li>Chế độ Thường: Khám phá tiêu chuẩn không có tương tác khối.</li>
