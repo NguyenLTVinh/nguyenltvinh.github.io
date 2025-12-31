@@ -1,6 +1,11 @@
 {
   "en": [
     {
+      "filename": "2025-12-30.html",
+      "date": "2025-12-30",
+      "title": "Niri Tiling Windows Manager: Efficient and Beautiful"
+    },
+    {
       "filename": "2025-12-13.html",
       "date": "2025-12-13",
       "title": "Building MineCRust: A Voxel Engine in Rust"
@@ -37,6 +42,11 @@
     }
   ],
   "vi": [
+    {
+      "filename": "2025-12-30.html",
+      "date": "2025-12-30",
+      "title": "Trình Quản Lý Cửa Sổ Xếp Gạch Niri: Hiệu Quả Và Đẹp Mắt"
+    },
     {
       "filename": "2025-12-13.html",
       "date": "2025-12-13",

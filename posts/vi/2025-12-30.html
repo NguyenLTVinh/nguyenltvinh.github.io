@@ -1,0 +1,135 @@
+<div class="post-header">
+  <h2>Trình Quản Lý Cửa Sổ Xếp Gạch Niri: Hiệu Quả Và Đẹp Mắt</h2>
+  <span>Ngày 30 tháng 12, 2025</span>
+</div>
+<h3>Thử nghiệm với trình quản lý cửa sổ xếp gạch</h3>
+<p>
+  Gần đây tôi đã thử nghiệm với trình quản lý cửa sổ xếp gạch. Sau một năm sử
+  dụng
+  <a href="https://kde.org/plasma-desktop/" target="_blank">KDE Plasma</a> với
+  các phím tắt xếp gạch, tôi quyết định chuyển hẳn sang. Tôi đã chọn
+  <a href="https://github.com/YaLTeR/niri" target="_blank">Niri</a>, một trình
+  quản lý cửa sổ xếp gạch có thể cuộn (mặc dù về mặt kỹ thuật là một bộ tổng hợp
+  <a href="https://wayland.freedesktop.org/" target="_blank">Wayland</a>, nhưng
+  đó là chi tiết kỹ thuật). Vậy, trình quản lý cửa sổ là gì, hay Niri là gì, và
+  tại sao tôi quyết định chuyển toàn bộ quy trình làm việc sang một môi trường
+  mới? Đọc tiếp để tìm hiểu thêm!
+</p>
+
+<h3>Giới thiệu môi trường màn hình nền Niri của tôi</h3>
+<p>
+  Trước khi đi vào phần kỹ thuật chi tiết, tôi đã làm một video để giới thiệu
+  môi trường màn hình nền của mình. Thưởng thức video nhé! :D
+</p>
+<video controls preload="metadata">
+  <source
+    src="https://media.githubusercontent.com/media/nguyenltvinh/nguyenltvinh.github.io/main/videos/niri1080.mp4"
+    type="video/mp4"
+  />
+</video>
+
+<h3>Vậy, trình quản lý cửa sổ xếp gạch là gì?</h3>
+<p>
+  Nếu bạn đã từng dùng máy tính, bạn sẽ quen với cách các cửa sổ thông thường
+  hoạt động: chúng nổi lơ lửng trên màn hình, chồng lên nhau như những tờ giấy
+  rải rác trên bàn làm việc. Bạn nhấp và kéo chúng, tự tay đổi kích thước, và
+  đôi khi phải mất thời gian tìm cái cửa sổ bị vùi lấp dưới mọi thứ khác. Quản
+  lý cửa sổ xếp gạch thực hiện cách tiếp cận hoàn toàn khác. Thay vì để các cửa
+  sổ chồng lên nhau, nó tự động sắp xếp chúng như những viên gạch trên sàn nhà,
+  mỗi cái vừa khít bên cạnh nhau mà không lãng phí không gian và không chồng
+  lấp.
+</p>
+<p>
+  Hãy nghĩ về sự khác biệt giữa một bàn làm việc lộn xộn với giấy tờ khắp nơi so
+  với một hệ thống lưu trữ được tổ chức tốt nơi mọi thứ đều có chỗ. Khi bạn mở
+  một cửa sổ mới trong thiết lập xếp gạch, nó không đơn giản xuất hiện ở đâu đó
+  tùy tiện. Thay vào đó, nó được đặt tự động ở vị trí hợp lý, và tất cả các cửa
+  sổ khác của bạn sẽ điều chỉnh để nhường chỗ. Toàn bộ hệ thống được thiết kế để
+  điều khiển chủ yếu bằng phím tắt thay vì nhấp và kéo thả bằng chuột. Mặc dù
+  điều này có vẻ phức tạp lúc đầu, việc học cách sử dụng máy tính hoàn toàn bằng
+  bàn phím có thể tối đa hóa hiệu quả bằng cách giảm thiểu thời gian bạn phải sử
+  dụng chuột. Quản lý cửa sổ xếp gạch đặc biệt phổ biến với các lập trình viên
+  muốn tối đa hóa không gian màn hình và giảm thiểu thời gian dành cho việc sắp
+  xếp vị trí cửa sổ.
+</p>
+
+<h3>Niri là gì?</h3>
+<p>
+  Niri là một sản phẩm tương đối mới trong thế giới trình quản lý cửa sổ xếp
+  gạch, và nó mang đến một bước ngoặt mới mẻ cho khái niệm này. Thay vì tổ chức
+  các cửa sổ của bạn trong một lưới cố định hoặc chia màn hình thành các phần
+  tĩnh, Niri sắp xếp mọi thứ dọc theo một dải ngang vô hạn. Hãy tưởng tượng các
+  cửa sổ của bạn được trải ra như một cuộn phim kéo dài vô tận sang trái và
+  phải. Bạn cuộn mượt mà qua bức tranh cửa sổ này thay vì nhảy giữa các không
+  gian làm việc hoặc màn hình riêng biệt. Điều làm cho Niri đặc biệt thú vị là
+  nó được xây dựng đặc biệt cho các hệ thống Linux hiện đại sử dụng một thứ gọi
+  là Wayland, một công nghệ đồ họa mới hơn cho phép hiệu suất và bảo mật tốt
+  hơn. Trải nghiệm cảm giác mượt mà và năng động, với các cửa sổ trượt vào vị
+  trí khi bạn cuộn qua không gian làm việc của mình. Nó được viết bằng Rust, một
+  ngôn ngữ lập trình nổi tiếng với tốc độ nhanh và độ tin cậy cao.
+</p>
+
+<h3>Tại sao tôi quyết định chuyển đổi?</h3>
+<p>
+  Là một lập trình viên và người dành nhiều thời gian giữ tay trên bàn phím, có
+  một môi trường màn hình nền mà tôi có thể điều hướng bằng phím bấm thì hiệu
+  quả hơn một chút so với việc phải kéo và thả bằng chuột. Tôi đã đưa ra một số
+  quyết định để phát triển như một lập trình viên, và làm quen với cách điều
+  hướng máy tính này là một phần của nó. Tính năng cuộn cũng giảm độ phức tạp.
+  Tôi có thể mở nhiều cửa sổ lệnh và chuyển đổi giữa chúng một cách hiệu quả với
+  các chức năng không gian làm việc ảo và tổng quan không gian làm việc của
+  Niri. Khả năng tùy chỉnh cũng là một điểm mạnh khác của Niri. Bằng cách chỉnh
+  sửa tệp cấu hình của nó, tôi có thể chỉnh sửa các phím tắt theo sở thích cá
+  nhân. Tôi cũng đã tùy chỉnh giao diện màn hình nền với sự trợ giúp của
+  <a href="https://github.com/AvengeMedia/DankMaterialShell" target="_blank"
+    >Dank Material Shell.</a
+  >
+  Sau một số tinh chỉnh, tôi đã tạo ra một môi trường màn hình nền hiệu quả, đẹp
+  mắt và mang tính cá nhân.
+</p>
+<h3>Thiết lập cho nhu cầu cá nhân của tôi</h3>
+<p>
+  Như đã đề cập, tôi đã thay đổi một số phím tắt cho các thao tác nhất định như
+  phóng to và toàn màn hình một cửa sổ. Tôi cũng đã đưa ra một số lựa chọn về
+  giao diện, chẳng hạn như ẩn thanh trên cùng của tất cả các cửa sổ để có giao
+  diện sạch hơn. Tôi cũng đã thiết lập fcitx5, một phần mềm bàn phím ảo cho phép
+  tôi gõ tiếng Việt. Nếu bạn quan tâm đến tệp cấu hình của tôi, tôi đã đính kèm
+  liên kết
+  <a href="/assets/config.kdl">tại đây!</a>
+</p>
+<h3>Chuyển đổi có đáng không?</h3>
+<p>
+  Chỉ riêng về cảm giác? Hoàn toàn đáng. Dank Material Shell trông đẹp hơn nhiều
+  so với KDE Plasma theo ý kiến của tôi. Về mặt hiệu quả, tôi nghĩ tôi đang làm
+  việc nhanh hơn khoảng 5%. Đó không phải là nhiều, nhưng xét rằng tôi vẫn đang
+  làm quen với các phím tắt của Niri, tôi có thể nhanh hơn rất nhiều khi càng
+  dành nhiều thời gian làm việc với nó.
+</p>
+<h3>Bạn muốn tự mình thử Niri?</h3>
+<p>
+  Một chi tiết cần lưu ý là Niri chỉ khả dụng cho các bản phân phối Linux sử
+  dụng giao thức hiển thị Wayland. May mắn thay, nó sẽ chạy trên hầu hết các bản
+  phân phối hiện đại. Tôi đang chạy nó trên Fedora Linux như một phiên đồ họa
+  riêng biệt với KDE Plasma. Đó cũng là điều hay ho khác: Bạn không cần phải gỡ
+  cài đặt KDE Plasma hay GNOME để thử Niri. Nếu cuối cùng nó không phù hợp với
+  bạn, bạn luôn có thể chuyển lại.
+</p>
+<p>
+  Nếu bạn đã sử dụng Linux và muốn thử Niri, bạn có thể làm theo hướng dẫn trên
+  <a
+    href="https://variety4me.github.io/niri_docs/Getting-Started/"
+    target="_blank"
+  >
+    trang tài liệu của họ.</a
+  >
+</p>
+<h3>Lời kết</h3>
+<p>
+  Đây là bài đăng cuối cùng của tôi trong năm. Tôi đã hoàn thành bằng Thạc sĩ,
+  và sẽ sớm bắt đầu làm việc. Đó là cả một hành trình, và nhìn lại, đứa trẻ từng
+  thề trung thành với Windows và Microsoft đã thực sự thay đổi rất nhiều. Tôi đã
+  hai năm sử dụng Linux làm hệ điều hành chính, và tôi không nghĩ mình sẽ bao
+  giờ ngừng. Đối với tôi, máy tính là một sở thích, và còn gì tuyệt vời hơn một
+  hệ điều hành cho phép tự do và kiểm soát không giới hạn? Chúc mừng năm mới,
+  mọi người!
+</p>

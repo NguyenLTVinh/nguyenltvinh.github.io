@@ -1,0 +1,134 @@
+<div class="post-header">
+  <h2>Niri Tiling Windows Manager: Efficient and Beautiful</h2>
+  <span>December 30th, 2025</span>
+</div>
+<h3>Experimenting with tiling windows manager</h3>
+<p>
+  I have recently experimented with tiling windows manager. After a year of
+  using
+  <a href="https://kde.org/plasma-desktop/" target="_blank">KDE Plasma</a> with
+  tiling shortcuts, I have decided to go all in. I settled on
+  <a href="https://github.com/YaLTeR/niri" target="_blank">Niri</a>, a
+  scrollable tiling windows manager (though technically a
+  <a href="https://wayland.freedesktop.org/" target="_blank">Wayland</a>
+  compositor, but that is a technical detail). So, what is a windows manager, or
+  Niri, and why did I decide to switch my whole workflow to a new environment?
+  Continue reading to learn more!
+</p>
+
+<h3>Showcasing my Niri desktop environment</h3>
+<p>
+  Before we go into the technical and nitty-gritty stuff, I have put together a
+  video to showcase my desktop environment. Enjoy the video! :D
+</p>
+<video controls preload="metadata">
+  <source
+    src="https://media.githubusercontent.com/media/nguyenltvinh/nguyenltvinh.github.io/main/videos/niri1080.mp4"
+    type="video/mp4"
+  />
+</video>
+
+<h3>So, what is a tiling windows manager anyways?</h3>
+<p>
+  If you've ever used a computer, you're familiar with the usual way windows
+  work: they float around on your screen, overlapping each other like papers
+  scattered on a desk. You click and drag them, resize them manually, and
+  sometimes spend time hunting for that one window that got buried under
+  everything else. A tiling window manager takes a completely different
+  approach. Instead of letting windows pile on top of each other, it
+  automatically arranges them like tiles on a floor, each one fitting neatly
+  next to the others with no wasted space and no overlap.
+</p>
+<p>
+  Think of it like the difference between a messy desk with papers everywhere
+  versus a well-organized filing system where everything has its place. When you
+  open a new window in a tiling setup, it doesn't just plop down wherever.
+  Instead, it gets automatically placed in a logical spot, and all your other
+  windows adjust to make room. The whole system is designed to be controlled
+  primarily with keyboard shortcuts rather than clicking and dragging with your
+  mouse. While this seems complicated at first, learning how to use the computer
+  with exclusively the keyboard can maximize efficiency by minimizing the amount
+  of time you have to use your mouse. Tiling windows managers are especially
+  popular with programmers who want to maximize their screen space and minimize
+  the time spent fiddling with window positions.
+</p>
+
+<h3>What is Niri?</h3>
+<p>
+  Niri is a relatively new entry in the world of tiling window managers, and it
+  brings a fresh twist to the concept. Instead of organizing your windows in a
+  fixed grid or splitting your screen into static sections, Niri arranges
+  everything along an infinite horizontal strip. Imagine your windows laid out
+  like a filmstrip that extends endlessly to the left and right. You scroll
+  smoothly through this landscape of windows rather than jumping between
+  separate workspaces or screens. What makes Niri particularly interesting is
+  that it's built specifically for modern Linux systems using something called
+  Wayland, which is a newer graphics technology that enables better performance
+  and security. The experience feels fluid and dynamic, with windows gliding
+  into place as you scroll through your workspace. It's written in Rust, a
+  programming language known for being fast and reliable.
+</p>
+
+<h3>Why did I make the switch?</h3>
+<p>
+  As a programmer and someone who spends a lot of time keeping my hands on the
+  keyboard, having a desktop environment where I can navigate with keystrokes is
+  slightly more efficient than having to drag and drop with the mouse. I have
+  made some decisions to grow as a programmer, and getting used to this way of
+  navigating a computer is part of it. The scrolling features also reduce the
+  complexity. I can spawn a lot of terminals and switch between them efficiently
+  with Niri's virtual desktops and workspaces overview functionalities.
+  Customizability is another selling point of Niri too. By editing its config
+  file, I could edit the hotkey bindings to my personal preferences. I have also
+  customized how the desktop looks with the help of
+  <a href="https://github.com/AvengeMedia/DankMaterialShell" target="_blank"
+    >Dank Material Shell.</a
+  >
+  After some tweaks, I have created a desktop environment that is efficient,
+  beautiful, and personal.
+</p>
+<h3>Setting it up for my personal needs</h3>
+<p>
+  As mentioned, I changed some key bindings for certain actions such as
+  maximizing and full-screening a window. I have also made certain appearance
+  choices, such as hiding all windows' top bars for a cleaner look. I have also
+  set up fcitx5, a virtual keyboard software that allows me to type in
+  Vietnamese. If you are interested in my config file, I have linked it
+  <a href="/assets/config.kdl">here!</a>
+</p>
+<h3>Was it worth it?</h3>
+<p>
+  For the vibes alone? Totally. Dank Material Shell looks a lot better than KDE
+  Plasma in my opinion. In terms of efficiency, I think I'm doing my work about
+  5% faster. That's not a lot, but considering that I'm still getting used to
+  Niri's keybindings, I could get a lot faster with it the more time I spend
+  working on it.
+</p>
+<h3>Want to try out Niri yourself?</h3>
+<p>
+  One detail to note is that Niri is only available for Linux distributions that
+  use the Wayland display server. Fortunately, it should run on most modern
+  distributions. I am running it on Fedora Linux as a separate graphic session
+  from KDE Plasma. That's the other neat thing too: You don't have to uninstall
+  KDE Plasma or GNOME to try out Niri. If it ends up not working for you, you
+  can always switch back.
+</p>
+<p>
+  If you already are using Linux and want to give Niri a try, you can follow the
+  instructions on their
+  <a
+    href="https://variety4me.github.io/niri_docs/Getting-Started/"
+    target="_blank"
+  >
+    documentation page.</a
+  >
+</p>
+<h3>Final words</h3>
+<p>
+  This is my last post of the year. I have finished my Master's degree, and will
+  soon start work. It has been quite a journey, and looking back, that kid who
+  used to swear by Windows and Microsoft has truly changed a lot. I'm two years
+  strong using Linux as my main operating system, and I don't think I will ever
+  stop. For me, computers is a hobby, and what is better than an operating
+  system that allows unrestricted freedom and control? Happy new year, all!
+</p>
