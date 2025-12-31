@@ -2,7 +2,7 @@ function loadPosts(lang) {
   fetch("/posts/posts.json")
     .then((response) => response.json())
     .then((data) => {
-      let posts = data[lang] || [];
+      let posts = data.posts || [];
       let container = document.getElementById("blog-list");
       if (!container) {
         console.error("Blog-list container not found when loading posts.");
@@ -20,7 +20,7 @@ function loadPosts(lang) {
             const titleElement = doc.querySelector(".post-header h2");
             const titleText = titleElement
               ? titleElement.textContent.trim()
-              : post.title;
+              : post.title[lang];
 
             let postHeader = doc.querySelector(".post-header");
             let excerptElement = null;

@@ -1,86 +1,68 @@
 {
-  "en": [
+  "posts": [
     {
       "filename": "2025-12-30.html",
       "date": "2025-12-30",
-      "title": "Niri Tiling Windows Manager: Efficient and Beautiful"
+      "title": {
+        "en": "Niri Tiling Windows Manager: Efficient and Beautiful",
+        "vi": "Trình Quản Lý Cửa Sổ Xếp Gạch Niri: Hiệu Quả Và Đẹp Mắt"
+      }
     },
     {
       "filename": "2025-12-13.html",
       "date": "2025-12-13",
-      "title": "Building MineCRust: A Voxel Engine in Rust"
+      "title": {
+        "en": "Building MineCRust: A Voxel Engine in Rust",
+        "vi": "Xây Dựng MineCRust: Một Trò Chơi Khối Vuông Viết bằng Rust"
+      }
     },
     {
       "filename": "2025-11-30.html",
       "date": "2025-11-30",
-      "title": "Local LLMs: Privacy and Open-Source AI with Ollama"
+      "title": {
+        "en": "Local LLMs: Privacy and Open-Source AI with Ollama",
+        "vi": "LLM Cục Bộ: Riêng Tư Và AI Mã Nguồn Mở Với Ollama"
+      }
     },
     {
       "filename": "2025-11-26.html",
       "date": "2025-11-26",
-      "title": "Why I Use Linux (And Why You Might Want To)"
+      "title": {
+        "en": "Why I Use Linux (And Why You Might Want To)",
+        "vi": "Tại Sao Tôi Dùng Linux (Và Tại Sao Bạn Cũng Nên Thử)"
+      }
     },
     {
       "filename": "2025-08-08.html",
       "date": "2025-08-08",
-      "title": "Internship at AWS DSQL: My Experience"
+      "title": {
+        "en": "Internship at AWS DSQL: My Experience",
+        "vi": "Thực Tập Tại AWS DSQL: Trải Nghiệm Của Tôi"
+      }
     },
     {
       "filename": "2025-07-31.html",
       "date": "2025-07-31",
-      "title": "GrapheneOS: Digital Privacy Meets Security"
+      "title": {
+        "en": "GrapheneOS: Digital Privacy Meets Security",
+        "vi": "GrapheneOS: Riêng Tư Số Kết Hợp Bảo Mật"
+      }
     },
     {
       "filename": "2025-07-25.html",
       "date": "2025-07-25",
-      "title": "Paper Review: Your Brain on ChatGPT"
+      "title": {
+        "en": "Paper Review: Your Brain on ChatGPT",
+        "vi": "Phân Tích Bài Báo: Bộ Não Của Bạn Khi Dùng ChatGPT"
+      }
     },
     {
       "filename": "2025-07-13.html",
       "date": "2025-07-13",
-      "title": "Relearning Systems Programming Through Rust"
-    }
-  ],
-  "vi": [
-    {
-      "filename": "2025-12-30.html",
-      "date": "2025-12-30",
-      "title": "Trình Quản Lý Cửa Sổ Xếp Gạch Niri: Hiệu Quả Và Đẹp Mắt"
-    },
-    {
-      "filename": "2025-12-13.html",
-      "date": "2025-12-13",
-      "title": "Xây Dựng MineCRust: Một Trò Chơi Khối Vuông Viết bằng Rust"
-    },
-    {
-      "filename": "2025-11-30.html",
-      "date": "2025-11-30",
-      "title": "LLM Cục Bộ: Riêng Tư Và AI Mã Nguồn Mở Với Ollama"
-    },
-    {
-      "filename": "2025-11-26.html",
-      "date": "2025-11-26",
-      "title": "Tại Sao Tôi Dùng Linux (Và Tại Sao Bạn Cũng Nên Thử)"
-    },
-    {
-      "filename": "2025-08-08.html",
-      "date": "2025-08-08",
-      "title": "Thực Tập Tại AWS DSQL: Trải Nghiệm Của Tôi"
-    },
-    {
-      "filename": "2025-07-31.html",
-      "date": "2025-07-31",
-      "title": "GrapheneOS: Riêng Tư Số Kết Hợp Bảo Mật"
-    },
-    {
-      "filename": "2025-07-25.html",
-      "date": "2025-07-25",
-      "title": "Phân Tích Bài Báo: Bộ Não Của Bạn Khi Dùng ChatGPT"
-    },
-    {
-      "filename": "2025-07-13.html",
-      "date": "2025-07-13",
-      "title": "Học Lại Lập Trình Hệ Thống Qua Rust"
+      "title": {
+        "en": "Relearning Systems Programming Through Rust",
+        "vi": "Học Lại Lập Trình Hệ Thống Qua Rust"
+      }
     }
   ]
 }
