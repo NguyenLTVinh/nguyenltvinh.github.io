@@ -124,11 +124,7 @@ main {
   height: 500px;
 }
 
-main img {
-  max-width: 100%;
-  margin-bottom: 0.75rem;
-}
-
+main img,
 main video {
   max-width: 100%;
   margin-bottom: 0.75rem;
@@ -179,42 +175,53 @@ footer a:hover .icon {
   min-height: 100vh;
 }
 
-/* SKILLS */
-#skills {
+/* CARD STYLES - Combined for skills, projects, and posts */
+#skills,
+.project,
+.post {
   position: relative;
+  background: #ffffff;
+  border: 2px solid #c9b896;
+  margin-bottom: 1.25rem;
+  padding: 1.75rem;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+#skills {
   max-width: 75%;
   margin: 2rem auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  background: #ffffff;
-  backdrop-filter: none;
-  border: 2px solid #c9b896;
-  overflow: hidden;
-
-  transition: transform 0.3s ease;
 }
 
-#skills:hover {
+#skills:hover,
+.project:hover,
+.post:hover {
   transform: translateY(-5px);
   box-shadow: none;
 }
 
+/* Corner accent lines - Combined */
 #skills::before,
-#skills::after {
+#skills::after,
+.project::before,
+.project::after,
+.post::before,
+.post::after {
   content: "";
   position: absolute;
-  width: 42px;
-  height: 42px;
   border: 2px solid #8b6f47;
   opacity: 0.4;
   transition: none;
   pointer-events: none;
 }
 
-#skills::before {
+#skills::before,
+.project::before,
+.post::before {
   top: 0.75rem;
   left: 0.75rem;
   border-right: none;
@@ -222,7 +229,9 @@ footer a:hover .icon {
   border-top-left-radius: 0;
 }
 
-#skills::after {
+#skills::after,
+.project::after,
+.post::after {
   bottom: 0.75rem;
   right: 0.75rem;
   border-left: none;
@@ -230,9 +239,20 @@ footer a:hover .icon {
   border-bottom-right-radius: 0;
 }
 
-#skills:hover::before,
-#skills:hover::after {
-  opacity: 0.4;
+/* Skills corner size */
+#skills::before,
+#skills::after {
+  width: 42px;
+  height: 42px;
+}
+
+/* Project and post corner size */
+.project::before,
+.project::after,
+.post::before,
+.post::after {
+  width: 36px;
+  height: 36px;
 }
 
 #skills h3 {
@@ -252,76 +272,31 @@ footer a:hover .icon {
   text-align: center;
 }
 
-/*PROJECTS*/
-#projects {
+/* PROJECTS */
+#projects,
+#blog {
   max-width: 100%;
   margin: 3rem auto;
 }
 
-#projects h2 {
+#projects h2,
+#blog h2 {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-/* Project cards */
-.project {
-  position: relative;
-  background-color: #ffffff;
-  border: 2px solid #c9b896;
-  box-shadow: none;
-  margin-bottom: 1.25rem;
-  padding: 1.75rem;
-  transition: transform 0.3s ease;
-  overflow: hidden;
-}
-
-.project:hover {
-  transform: translateY(-5px);
-  box-shadow: none;
-}
-
-/* Corner accent lines */
-.project::before,
-.project::after {
-  content: "";
-  position: absolute;
-  width: 36px;
-  height: 36px;
-  border: 2px solid #8b6f47;
-  opacity: 0.4;
-  transition: none;
-}
-
-.project::before {
-  top: 0.75rem;
-  left: 0.75rem;
-  border-right: none;
-  border-bottom: none;
-  border-top-left-radius: 0;
-}
-
-.project::after {
-  bottom: 0.75rem;
-  right: 0.75rem;
-  border-left: none;
-  border-top: none;
-  border-bottom-right-radius: 0;
-}
-
-.project:hover::before,
-.project:hover::after {
-  opacity: 0.4;
-}
-
-/* Headings & text */
-.project h3 {
+/* Project and post text */
+.project h3,
+.post h3 {
   margin-bottom: 1rem;
   color: #3d2f1f;
   font-family: "Lora", "Crimson Pro", serif;
   font-weight: 600;
 }
 
-.project p {
+.project p,
+.post p,
+.post > div:last-child {
   margin-bottom: 1rem;
   line-height: 1.5;
 }
@@ -337,7 +312,8 @@ footer a:hover .icon {
 }
 
 /* Links */
-.project a {
+.project a,
+.read-more {
   color: #8b6f47;
   font-weight: 600;
   text-decoration: underline;
@@ -345,9 +321,34 @@ footer a:hover .icon {
   transition: none;
 }
 
-.project a:hover {
+.project a:hover,
+.read-more:hover {
   color: #5a4830;
   text-decoration: underline;
+}
+
+.post h3 a {
+  color: #8b6f47;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 0.75rem;
+  transition: none;
+}
+
+.post h3 a:hover {
+  color: #5a4830;
+  text-decoration: underline;
+}
+
+.post > div:first-child {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.post-excerpt {
+  margin-bottom: 1rem;
 }
 
 /* EXPERIENCE */
@@ -626,17 +627,14 @@ a:hover {
 .book p {
   width: 160px;
   overflow: hidden;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
 }
 
 .book img:hover {
   transform: translateY(-5px);
   box-shadow: none;
-}
-
-.book p {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  line-height: 1.3;
 }
 
 @media (min-width: 1024px) {
@@ -653,11 +651,7 @@ a:hover {
     box-sizing: border-box;
   }
 
-  main {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
+  main,
   .map-container {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -673,7 +667,9 @@ a:hover {
   }
 
   .project::before,
-  .project::after {
+  .project::after,
+  .post::before,
+  .post::after {
     width: 28px;
     height: 28px;
   }
@@ -794,18 +790,22 @@ a:hover {
   }
 }
 
+/* DARK MODE */
 body.dark-mode {
   color: #e5d5c0;
   background: #1a1612;
 }
 
-body.dark-mode header {
+body.dark-mode header,
+body.dark-mode footer {
   background: #2b2218;
+}
+
+body.dark-mode header {
   border-bottom: 2px solid #4a3d2f;
 }
 
 body.dark-mode footer {
-  background: #2b2218;
   color: #d9c8b0;
   border-top: 2px solid #4a3d2f;
 }
@@ -822,14 +822,17 @@ body.dark-mode .btn:hover {
 }
 
 body.dark-mode #skills,
-body.dark-mode .project {
+body.dark-mode .project,
+body.dark-mode .post {
   background: #2b2218;
   border-color: #6b5942;
   box-shadow: none;
 }
 
 body.dark-mode h2,
-body.dark-mode h3 {
+body.dark-mode h3,
+body.dark-mode .job-title,
+body.dark-mode .degree {
   color: #e5d5c0;
 }
 
@@ -858,7 +861,8 @@ body.dark-mode .hello-gif {
     contrast(92%);
 }
 
-body.dark-mode #burger {
+body.dark-mode #burger,
+body.dark-mode .nav-menu li a:hover {
   color: #e5d5c0;
 }
 
@@ -869,11 +873,6 @@ body.dark-mode .nav-menu {
 
 body.dark-mode .nav-menu li a:hover {
   color: #d4a574;
-}
-
-body.dark-mode .job-title,
-body.dark-mode .degree {
-  color: #e5d5c0;
 }
 
 body.dark-mode .company,
@@ -892,15 +891,10 @@ body.dark-mode .details li {
 }
 
 body.dark-mode pre,
-body.dark-mode code {
-  background-color: #1a1612;
-  color: #e5d5c0;
-}
-
+body.dark-mode code,
 body.dark-mode p code,
 body.dark-mode li code,
-body.dark-mode span code,
-body.dark-mode code {
+body.dark-mode span code {
   background-color: #1a1612 !important;
   color: #e5d5c0 !important;
 }

@@ -68,11 +68,19 @@ function loadPosts(lang) {
 
           const excerptDiv = document.createElement("div");
           excerptDiv.textContent = post.excerpt;
+          excerptDiv.className = "post-excerpt";
+
+          const readMoreLink = document.createElement("a");
+          readMoreLink.href = `/posts/post.html?post=${post.filename}`;
+          readMoreLink.textContent =
+            lang === "vi" ? "Đọc thêm..." : "Read more...";
+          readMoreLink.className = "read-more";
 
           titleHeading.appendChild(titleLink);
           postDiv.appendChild(dateDiv);
           postDiv.appendChild(titleHeading);
           postDiv.appendChild(excerptDiv);
+          postDiv.appendChild(readMoreLink);
 
           container.appendChild(postDiv);
         });
