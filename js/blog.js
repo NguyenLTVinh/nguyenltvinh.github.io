@@ -1,5 +1,5 @@
 function loadPosts(lang) {
-  fetch("/posts/posts.json")
+  fetch("/data/posts.json")
     .then((response) => response.json())
     .then((data) => {
       let posts = data.posts || [];

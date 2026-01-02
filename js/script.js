@@ -67,6 +67,8 @@ function setLang(lang) {
         if (window.Prism) Prism.highlightAll();
         if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         if (page === "blog" && typeof loadPosts === "function") loadPosts(lang);
+        if (page === "projects" && typeof loadProjects === "function")
+          loadProjects(lang);
       });
   }
 }

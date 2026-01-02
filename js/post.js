@@ -36,7 +36,7 @@ function loadPostContent(filename, lang) {
 }
 
 function setPageTitle(filename, lang) {
-  fetch("/posts/posts.json")
+  fetch("/data/posts.json")
     .then((res) => res.json())
     .then((data) => {
       const posts = data[lang] || [];
