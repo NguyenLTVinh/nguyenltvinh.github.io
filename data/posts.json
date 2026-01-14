@@ -1,6 +1,14 @@
 {
   "posts": [
     {
+      "filename": "2026-01-15.html",
+      "date": "2026-01-15",
+      "title": {
+        "en": "Self-hosting My Personal Cloud",
+        "vi": "Tự Dựng \"Đám Mây\" Cá Nhân"
+      }
+    },
+    {
       "filename": "2025-12-30.html",
       "date": "2025-12-30",
       "title": {

@@ -1,0 +1,250 @@
+<div class="post-header">
+  <h2>Self-hosting My Personal Cloud</h2>
+  <span>January 15th, 2026</span>
+</div>
+
+<h3>Demystifying "The Cloud"</h3>
+<p>
+  You've probably heard buzzwords like "the cloud" or "cloud computing" thrown
+  around constantly in tech circles. It sounds mystical and high-tech, like your
+  data is floating around in some ethereal digital space. But here's the
+  reality: the cloud is just someone else's server that they rent out to you.
+  When you use AWS, Google Cloud, or Azure, your data sits on physical servers
+  in their warehouses. There's nothing magical about it.
+</p>
+
+<p>
+  Working at AWS taught me this firsthand. Behind all the fancy dashboards and
+  marketing speak, it's ultimately just Linux servers. Once you SSH into an EC2
+  instance or set up your own server, the mystique completely evaporates. It's
+  just a server with an IP address.
+</p>
+
+<p>
+  A server is really just a computer that serves data or services to other
+  computers. That's it. Your gaming PC could be a server. Your old laptop
+  gathering dust could be a server. The main differences are that servers
+  typically run 24/7, they're configured to handle requests from other devices,
+  and they run server-oriented software. There's no special server magic. If you
+  can install Linux on a machine and configure it to respond to network
+  requests, congratulations! You have a server.
+</p>
+
+<h3>My $200 homelab</h3>
+<p>
+  After my time at AWS and diving into self-hosting as a hobby, I decided to
+  build my own personal "cloud" using hardware I already had lying around. I
+  already own an old mini PC with an Intel N100 processor that costed me about
+  $200. It's not a beefy machine at all. Just 4 cores, 16GB of RAM, running
+  Fedora Linux. But you know what? It handles everything I throw at it.
+</p>
+
+<p>
+  On this single machine, I'm running
+  <a href="https://jellyfin.org/" target="_blank">Jellyfin</a> as my personal
+  media server for my movie and TV collection. No monthly subscription fees,
+  complete control over my library, and I can access it from anywhere. I also
+  host a
+  <a href="https://www.minecraft.net/en-us/download/server" target="_blank"
+    >Minecraft server</a
+  >
+  for me and about 10 friends. It runs surprisingly well on the N100, proving
+  that you don't need enterprise-grade hardware for most hobby projects.
+</p>
+<img src="/images/posts/jellyfin.png" />
+<img src="/images/posts/minecraft-server.png" />
+
+<p>
+  For networking, I use tunneling services like
+  <a href="https://playit.gg" target="_blank">Playit</a> and
+  <a href="https://tailscale.com/" target="_blank">Tailscale</a> to share my
+  game server with friends and to access my own IoT devices no matter where I am
+  physically. It's like having my own VPN and remote access solution. Using
+  <a href="https://nginx.org/en/" target="_blank">nginx</a> and
+  <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>, I host
+  <a href="https://nguyenltvinh.dev" target="_blank">my own website</a>. This
+  combo gives me free DDoS protection, SSL certificates, and complete control
+  over my content. I'm also running my own
+  <a href="https://www.mysql.com/" target="_blank">MySQL</a> database server,
+  which lets me prototype applications without paying for managed database
+  services or dealing with connection limits.
+</p>
+
+<p>
+  All of this runs simultaneously on that little $200 box, and I'm only using
+  about 5-6GB of RAM. The power consumption is minimal too. The N100 only draws
+  about 10-15 watts, which translates to maybe $2-3 per month in electricity
+  costs.
+</p>
+
+<h3>How it all stays running</h3>
+<p>
+  Here's something important about servers: they need to keep running even when
+  things go wrong. If your server reboots because of a power outage or system
+  update, you want all your services to come back up automatically without you
+  having to manually start everything. This is where something called a daemon
+  and a service manager come into play.
+</p>
+
+<p>
+  A daemon is just a program that runs in the background continuously, waiting
+  to do work. Your web server is a daemon, your database is a daemon, your
+  Minecraft server runs as a daemon. They sit there listening for requests
+  without needing constant human interaction.
+</p>
+
+<p>
+  On modern Linux systems, these daemons are managed by something called
+  <a href="https://systemd.io/" target="_blank">systemd</a>. Think of systemd as
+  the supervisor of all your background services. It's responsible for starting
+  services when the system boots up, restarting them if they crash, and managing
+  dependencies between services.
+</p>
+
+<p>
+  When I set up each service on my server, I create what's called a systemd
+  service file. This is just a simple text configuration file that tells systemd
+  how to run the program. Once these service files are in place and enabled,
+  systemd takes care of everything. When my server boots up, systemd
+  automatically starts nginx, MySQL, my Minecraft server, and everything else in
+  the correct order. If something crashes, systemd can be configured to
+  automatically restart it.
+</p>
+
+<p>
+  This is how servers stay reliable. Cloud providers use the same concepts. AWS
+  doesn't have someone manually starting services after a reboot; they use
+  automation and service managers just like I do. The difference is that I'm
+  doing it on my own hardware with my own configuration.
+</p>
+
+<h3>Why self-host?</h3>
+<p>
+  The cost savings alone make it worthwhile. Cloud providers would charge me
+  $30-50 or more per month for equivalent services. My setup cost $200 once,
+  uses about $2-3 per month in electricity, and requires no monthly
+  subscriptions. It paid for itself in under six months, and now it's
+  essentially free computing that I fully control.
+</p>
+
+<p>
+  But beyond the money, there's the learning aspect. You actually understand
+  what's happening under the hood. You learn networking, Linux administration,
+  troubleshooting, security basics. These are skills that are way more valuable
+  than just clicking "deploy" on a managed service where everything's abstracted
+  away. When something breaks, you learn to read logs, identify the problem, and
+  fix it.
+</p>
+
+<p>
+  Then there's the control. Your data stays on your hardware in your home. No
+  vendor lock-in, no sudden price increases, no terms of service changes that
+  force you to accept new conditions or lose access to your stuff. You decide
+  what runs, how it runs, and who has access to it.
+</p>
+
+<p>
+  And the biggest plus? It's actually fun. There's something deeply satisfying
+  about building and maintaining your own infrastructure. When something breaks
+  at 2am, yeah, that's on you to fix. But you also gain the knowledge of how to
+  prevent it next time. You're not just a consumer of technology; you're
+  actively engaging with how it works at a fundamental level.
+</p>
+
+<h3>What more can a server do?</h3>
+<p>
+  My little N100 setup handles everything I need right now, but if I had beefier
+  hardware, the possibilities expand dramatically. One of the coolest things you
+  can self-host with more powerful hardware is your own large language model.
+  Projects like <a href="https://ollama.com/" target="_blank">Ollama</a> make it
+  surprisingly easy to run models like Llama or Mistral on your own hardware.
+  Instead of sending your data to OpenAI or Anthropic, you could have your own
+  private AI assistant running locally, completely under your control. With a
+  proper GPU, you could set up your own machine learning workstation. Training
+  models, running stable diffusion for AI image generation, or doing video
+  encoding would all become viable.
+</p>
+
+<p>
+  The point is that once you understand the basics of self-hosting, you realize
+  that almost any service you pay for monthly could potentially run on your own
+  hardware. Whether it's worth the effort depends on your interests, technical
+  skill, and how much you value privacy and control versus convenience. But the
+  option is there, and that's empowering.
+</p>
+
+<h3>Getting started</h3>
+<p>
+  The barrier to entry is lower than you think. If you have an old computer
+  sitting unused, you already have the hardware. Seriously, almost anything
+  works. An old laptop, desktop, mini PC, whatever. As long as it can run Linux,
+  you're good to go.
+</p>
+
+<p>
+  You'll need to pick a Linux distribution to install. I use Fedora, but Ubuntu
+  Server, Debian, or any distro you're comfortable with works fine. For remote
+  access from outside your home network via SSH, you'll want to look into
+  solutions like Tailscale, Cloudflare Tunnels, or setting up a simple VPN.
+  Tailscale in particular has made this incredibly easy.
+</p>
+
+<p>
+  The most important ingredient is curiosity and patience. The first time you
+  set things up, you'll hit roadblocks. Configuration files won't work, services
+  won't start, error messages will be cryptic. That's part of the learning
+  process. Google error messages, read documentation, join online communities,
+  you'll figure it out. Every problem you solve teaches you something new.
+</p>
+
+<p>
+  You don't need to be a sysadmin or have a computer science degree. I learned
+  most of this by just trying things, breaking them, and fixing them. The skills
+  you build are practical and immediately useful. If I have intrigued you to
+  start self-hosting at this point, take a look at
+  <a href="https://linuxblog.io/linux-server-setup/" target="_blank"
+    >this guide</a
+  >
+  to get rolling! If you are interested in setting up the same services I use,
+  refer to the links below to set them up:
+</p>
+
+<ul>
+  <li><a href="https://jellyfin.org/docs/" target="_blank">Jellyfin</a></li>
+  <li>
+    <a href="https://www.minecraft.net/en-us/download/server" target="_blank"
+      >Minecraft Server</a
+    >
+  </li>
+  <li><a href="https://playit.gg/support" target="_blank">Playit</a></li>
+  <li>
+    <a href="https://tailscale.com/kb/start" target="_blank">Tailscale</a>
+  </li>
+  <li><a href="https://nginx.org/en/docs/" target="_blank">nginx</a></li>
+  <li>
+    <a
+      href="https://developers.cloudflare.com/fundamentals/get-started/"
+      target="_blank"
+      >Cloudflare</a
+    >
+  </li>
+  <li><a href="https://dev.mysql.com/doc/" target="_blank">MySQL</a></li>
+</ul>
+
+<h3>Final thoughts</h3>
+<p>
+  Don't get me wrong, cloud services aren't inherently bad. For businesses that
+  need global scale, automatic redundancy, or don't have technical staff, paying
+  for AWS or Azure makes perfect sense. But for personal projects, learning, and
+  hobbyist use? An old computer running Linux beats monthly bills and vendor
+  lock-in every time.
+</p>
+
+<p>
+  Self-hosting shifted my perspective on technology. Instead of just consuming
+  services and paying monthly fees, I now understand how these systems actually
+  work. That $200 N100 box taught me more about infrastructure than any tutorial
+  or certification program could. The "cloud" isn't magic, and servers aren't
+  mysterious. They're just computers doing computer things. And with a little
+  bit of curiosity and an old machine you're not using, you can build your own.
+</p>

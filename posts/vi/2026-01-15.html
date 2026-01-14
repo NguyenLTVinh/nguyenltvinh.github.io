@@ -1,0 +1,240 @@
+<div class="post-header">
+  <h2>Tự Dựng "Đám Mây" Cá Nhân</h2>
+  <span>Ngày 15 tháng 1, 2026</span>
+</div>
+
+<h3>Sự thật về "Đám Mây"</h3>
+<p>
+  Chắc hẳn bạn đã nghe thuật ngữ "đám mây" hay "điện toán đám mây" được nhắc đến
+  nhiều trong giới công nghệ. Nghe có vẻ huyền bí và cao siêu, như thể dữ liệu
+  của bạn đang bay lơ lửng ở đâu đó trong không gian số. Nhưng sự thật thì: đám
+  mây chỉ là máy chủ của người ta cho bạn thuê thôi. Khi dùng AWS, Google Cloud,
+  hay Azure, dữ liệu của bạn nằm trên các máy chủ vật lý trong kho của họ. Không
+  có gì huyền diệu cả.
+</p>
+
+<p>
+  Làm việc tại AWS giúp tôi thấy rõ điều này. Đằng sau những bảng điều khiển đẹp
+  mắt và tiếp thị, cuối cùng thì cũng chỉ là các máy chủ Linux. Chỉ cần SSH vào
+  một máy ảo EC2 hay tự dựng máy chủ, mọi vẻ huyền bí tan biến ngay. Nó chỉ là
+  một máy chủ có địa chỉ IP.
+</p>
+
+<p>
+  Máy chủ về bản chất chỉ là một máy tính phục vụ dữ liệu hoặc dịch vụ cho máy
+  khác. Máy tính chơi game của bạn có thể làm máy chủ. Laptop cũ đang phủ bụi
+  cũng vậy. Điểm khác biệt chính là máy chủ chạy 24/7, được cấu hình để xử lý
+  yêu cầu từ thiết bị khác, và chạy phần mềm định hướng máy chủ. Không có điều
+  gì kỳ diệu. Chỉ cần cài Linux lên một máy và cấu hình nó trả lời các yêu cầu
+  mạng, vậy là bạn đã có máy chủ rồi.
+</p>
+
+<h3>Máy chủ tại nhà giá $200 của tôi</h3>
+<p>
+  Sau thời gian ở AWS và nghịch tự chạy máy chủ như một sở thích, tôi quyết định
+  dựng "đám mây" cá nhân bằng đồ có sẵn. Tôi có sẵn một chiếc máy tính nhỏ gọn
+  cũ chip Intel N100 giá tầm $200. Không mạnh tí nào. Chỉ 4 nhân, 16GB RAM, chạy
+  Fedora Linux. Mặc dù vậy, nó xử lý ngon lành mọi thứ tôi ném vào.
+</p>
+
+<p>
+  Trên chiếc máy duy nhất này, tôi chạy
+  <a href="https://jellyfin.org/" target="_blank">Jellyfin</a> làm máy chủ xem
+  phim cho bộ sưu tập phim của mình. Không tốn phí thuê bao hàng tháng, toàn
+  quyền với thư viện, và truy cập được từ mọi nơi. Tôi còn chạy một
+  <a href="https://www.minecraft.net/en-us/download/server" target="_blank"
+    >máy chủ Minecraft</a
+  >
+  cho tôi với khoảng 10 người bạn. Chạy khá tốt trên N100, chứng tỏ không cần
+  phần cứng xịn xò gì cho mấy dự án giải trí.
+</p>
+<img src="/images/posts/jellyfin.png" />
+<img src="/images/posts/minecraft-server.png" />
+
+<p>
+  Về việc kết nối qua mạng, tôi dùng các dịch vụ tạo đường hầm (tunneling) như
+  <a href="https://playit.gg" target="_blank">Playit</a> và
+  <a href="https://tailscale.com/" target="_blank">Tailscale</a> để chia sẻ máy
+  chủ game với bạn bè và truy cập các thiết bị IoT từ bất cứ đâu. Như có mạng
+  riêng ảo để truy cập từ xa vậy. Dùng
+  <a href="https://nginx.org/en/" target="_blank">nginx</a> và
+  <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>, tôi tự
+  chạy <a href="https://nguyenltvinh.dev" target="_blank">trang web cá nhân</a>.
+  Combo này cho tôi bảo vệ DDoS miễn phí, chứng chỉ SSL, và toàn quyền với nội
+  dung. Tôi cũng chạy máy chủ cơ sở dữ liệu
+  <a href="https://www.mysql.com/" target="_blank">MySQL</a> riêng, giúp phát
+  triển ứng dụng thử nghiệm mà không tốn tiền thuê dịch vụ quản lý cơ sở dữ liệu
+  hay lo giới hạn kết nối.
+</p>
+
+<p>
+  Tất cả chạy cùng lúc trên chiếc hộp $200 đó, và tôi chỉ sử dụng khoảng 5-6GB
+  RAM. Điện cũng ít. N100 chỉ tốn 10-15 watt, tức khoảng $2-3 tiền điện mỗi
+  tháng.
+</p>
+
+<h3>Cách để mọi thứ cứ chạy</h3>
+<p>
+  Điểm quan trọng của máy chủ: phải chạy liên tục kể cả khi có sự cố. Nếu máy
+  khởi động lại do mất điện hay cập nhật hệ thống, bạn muốn các dịch vụ tự lên
+  lại mà không cần phải tự tay khởi động từng cái. Lúc này daemon (tiến trình
+  chạy nền) và trình quản lý dịch vụ phát huy tác dụng.
+</p>
+
+<p>
+  Daemon là chương trình chạy liên tục trong nền, chờ để làm việc. Máy chủ web
+  là daemon, cơ sở dữ liệu là daemon, máy chủ Minecraft cũng là daemon. Chúng
+  ngồi đó lắng nghe yêu cầu mà không cần người ngồi canh.
+</p>
+
+<p>
+  Trên Linux hiện đại, các daemon này do
+  <a href="https://systemd.io/" target="_blank">systemd</a> quản lý. Hãy nghĩ
+  systemd như trình giám sát tất cả dịch vụ chạy nền. Nó chịu trách nhiệm khởi
+  động dịch vụ khi máy khởi động, khởi động lại nếu chúng gặp sự cố, và quản lý
+  phụ thuộc giữa các dịch vụ.
+</p>
+
+<p>
+  Khi thiết lập từng dịch vụ trên máy chủ, tôi tạo tệp dịch vụ systemd. Chúng
+  chỉ là tệp cấu hình văn bản đơn giản cho systemd biết cách chạy chương trình.
+  Khi các tệp này đã đặt đúng chỗ và kích hoạt, systemd lo hết. Khi máy chủ khởi
+  động, systemd tự động khởi động nginx, MySQL, máy chủ Minecraft, và mọi thứ
+  khác theo đúng thứ tự. Nếu cái gì gặp sự cố, systemd có thể cấu hình để tự
+  khởi động lại.
+</p>
+
+<p>
+  Đây là cách máy chủ duy trì độ tin cậy. Các nhà cung cấp đám mây cũng dùng cơ
+  chế tương tự. AWS không có ai ngồi tay khởi động dịch vụ sau khi khởi động
+  lại; họ dùng tự động hóa và trình quản lý dịch vụ giống tôi. Khác chỗ tôi làm
+  trên phần cứng riêng với cấu hình riêng.
+</p>
+
+<h3>Tại sao tự chạy máy chủ?</h3>
+<p>
+  Tiết kiệm tiền thôi đã đáng rồi. Các nhà cung cấp đám mây sẽ tính tôi $30-50
+  hoặc hơn mỗi tháng cho dịch vụ tương đương. Thiết lập của tôi tốn $200 một
+  lần, xài khoảng $2-3 tiền điện mỗi tháng, và không tốn phí thuê bao. Hoàn vốn
+  trong chưa đầy sáu tháng, giờ thì về cơ bản là điện toán đám mây miễn phí mà
+  tôi toàn quyền kiểm soát.
+</p>
+
+<p>
+  Nhưng ngoài tiết kiệm tiền, còn có việc học. Bạn thực sự hiểu chuyện gì đang
+  xảy ra bên trong. Bạn học về mạng, quản trị Linux, khắc phục sự cố, bảo mật cơ
+  bản. Đây là kỹ năng giá trị hơn nhiều so với chỉ bấm "triển khai" trên dịch vụ
+  được quản lý nơi mọi thứ được trừu tượng hóa hết. Khi gặp lỗi, bạn học đọc
+  nhật ký, tìm vấn đề, và sửa.
+</p>
+
+<p>
+  Rồi còn quyền kiểm soát. Dữ liệu ở phần cứng của bạn trong nhà bạn. Không bị
+  phụ thuộc nhà cung cấp, không tăng giá bất ngờ, không thay đổi điều khoản dịch
+  vụ buộc bạn chấp nhận hoặc mất quyền truy cập đồ của mình. Bạn quyết định cái
+  gì chạy, chạy thế nào, và ai được truy cập.
+</p>
+
+<p>
+  Và điểm cộng lớn nhất? Nó vui. Có gì đó rất thỏa mãn khi tự dựng và duy trì cơ
+  sở hạ tầng. Khi gặp lỗi lúc 2 giờ sáng, ừ thì bạn phải tự sửa. Nhưng bạn cũng
+  học được cách tránh lần sau. Bạn không chỉ là người tiêu dùng công nghệ; bạn
+  đang thực sự tương tác với cách nó hoạt động ở cấp độ cơ bản.
+</p>
+
+<h3>Máy chủ còn làm được gì nữa?</h3>
+<p>
+  Máy chủ N100 nhỏ của tôi đáp ứng đủ nhu cầu hiện tại, nhưng nếu có phần cứng
+  khỏe hơn, khả năng sẽ mở rộng đáng kể. Một trong những thứ hay nhất có thể
+  chạy trên máy chủ với phần cứng mạnh hơn là mô hình ngôn ngữ lớn riêng. Các dự
+  án như
+  <a href="https://ollama.com/" target="_blank">Ollama</a> giúp chạy các mô hình
+  như Llama hay Mistral trên phần cứng riêng một cách dễ dàng đến bất ngờ. Thay
+  vì gửi dữ liệu cho OpenAI hay Anthropic, bạn có thể có trợ lý AI riêng chạy
+  cục bộ, hoàn toàn dưới quyền. Với GPU đàng hoàng, bạn có thể thiết lập trạm
+  làm việc học máy riêng. Huấn luyện mô hình, chạy stable diffusion tạo ảnh AI,
+  hay mã hóa video đều khả thi.
+</p>
+
+<p>
+  Điểm mấu chốt là khi hiểu cơ bản về tự chạy máy chủ, bạn nhận ra hầu như dịch
+  vụ nào trả tiền hàng tháng cũng có thể chạy trên phần cứng riêng. Có đáng công
+  hay không tùy sở thích, kỹ năng kỹ thuật, và bạn coi trọng quyền riêng tư và
+  kiểm soát hơn tiện lợi đến mức nào. Nhưng bạn có lựa chọn ở đó, và điều đó
+  trao quyền cho bạn.
+</p>
+
+<h3>Bắt đầu thế nào</h3>
+<p>
+  Rào cản thấp hơn bạn nghĩ. Nếu có máy tính cũ không dùng, bạn đã có phần cứng.
+  Thật sự, gần như cái gì cũng được. Laptop cũ, máy tính để bàn, máy tính nhỏ
+  gọn, gì cũng được. Miễn chạy được Linux là ổn.
+</p>
+
+<p>
+  Bạn cần chọn bản phân phối Linux để cài. Tôi dùng Fedora, nhưng Ubuntu Server,
+  Debian, hay bản phân phối nào bạn quen cũng được. Để truy cập từ xa từ ngoài
+  mạng nhà qua SSH, bạn nên xem các giải pháp như Tailscale, Cloudflare Tunnels,
+  hay thiết lập mạng riêng ảo đơn giản. Tailscale đặc biệt đã làm chuyện này cực
+  dễ.
+</p>
+
+<p>
+  Thành phần quan trọng nhất là sự tò mò và kiên nhẫn. Lần đầu thiết lập, bạn sẽ
+  vấp. Tệp cấu hình không chạy, dịch vụ không khởi động, thông báo lỗi mơ hồ. Đó
+  là một phần của quá trình học. Tra lỗi trên Google, đọc tài liệu, tham gia
+  cộng đồng trên mạng, bạn sẽ tìm ra. Mỗi vấn đề giải quyết được dạy bạn điều
+  mới.
+</p>
+
+<p>
+  Không cần phải là quản trị viên hệ thống hay có bằng khoa học máy tính. Tôi
+  học hầu hết bằng cách thử, làm hỏng, rồi sửa. Kỹ năng xây dựng được thực tế và
+  hữu ích ngay. Nếu tôi đã thuyết phục bạn muốn bắt đầu tự chạy máy chủ, xem
+  <a href="https://linuxblog.io/linux-server-setup/" target="_blank"
+    >hướng dẫn này</a
+  >
+  để bắt đầu! Nếu bạn quan tâm đến việc thiết lập các dịch vụ tương tự mà tôi
+  dùng, tham khảo các liên kết bên dưới:
+</p>
+
+<ul>
+  <li><a href="https://jellyfin.org/docs/" target="_blank">Jellyfin</a></li>
+  <li>
+    <a href="https://www.minecraft.net/en-us/download/server" target="_blank"
+      >Máy chủ Minecraft</a
+    >
+  </li>
+  <li><a href="https://playit.gg/support" target="_blank">Playit</a></li>
+  <li>
+    <a href="https://tailscale.com/kb/start" target="_blank">Tailscale</a>
+  </li>
+  <li><a href="https://nginx.org/en/docs/" target="_blank">nginx</a></li>
+  <li>
+    <a
+      href="https://developers.cloudflare.com/fundamentals/get-started/"
+      target="_blank"
+      >Cloudflare</a
+    >
+  </li>
+  <li><a href="https://dev.mysql.com/doc/" target="_blank">MySQL</a></li>
+</ul>
+
+<h3>Suy nghĩ cuối cùng</h3>
+<p>
+  Đừng hiểu lầm, các dịch vụ đám mây không tệ. Với doanh nghiệp cần quy mô toàn
+  cầu, dự phòng tự động, hoặc không có nhân viên kỹ thuật, trả tiền cho AWS hay
+  Azure hoàn toàn hợp lý. Nhưng với dự án cá nhân, học tập, và giải trí? Một
+  chiếc máy tính cũ chạy Linux đánh bại hóa đơn hàng tháng và phụ thuộc nhà cung
+  cấp mọi lúc.
+</p>
+
+<p>
+  Tự chạy máy chủ đã thay đổi quan điểm của tôi về công nghệ. Thay vì chỉ tiêu
+  thụ các dịch vụ và trả phí hàng tháng, giờ đây tôi hiểu cách các hệ thống này
+  thực sự hoạt động. Chiếc hộp N100 $200 đó đã dạy tôi nhiều hơn về cơ sở hạ
+  tầng so với bất kỳ hướng dẫn hay chương trình chứng chỉ nào. "Đám mây" không
+  phải là ma thuật, và máy chủ không bí ẩn. Chúng chỉ là máy tính làm những việc
+  tính toán. Và với một chút tò mò và một chiếc máy cũ bạn không dùng, bạn có
+  thể xây dựng đám mây của riêng mình.
+</p>
