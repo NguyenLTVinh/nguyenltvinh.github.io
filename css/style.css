@@ -50,7 +50,7 @@ ul {
 /* BUTTONS */
 .btn {
   display: inline-block;
-  padding: 0.75rem 1.25rem;
+  padding: 0.5rem 1.25rem;
   margin: 0;
   border: 2px solid #8b6f47;
   border-radius: 2px;
@@ -176,7 +176,7 @@ footer a:hover .icon {
 }
 
 /* CARD STYLES - Combined for skills, projects, and posts */
-#skills,
+.skills,
 .project,
 .post {
   position: relative;
@@ -188,7 +188,7 @@ footer a:hover .icon {
   overflow: hidden;
 }
 
-#skills {
+.skills {
   max-width: 75%;
   margin: 2rem auto;
   padding: 2rem;
@@ -197,7 +197,7 @@ footer a:hover .icon {
   align-items: center;
 }
 
-#skills:hover,
+.skills:hover,
 .project:hover,
 .post:hover {
   transform: translateY(-5px);
@@ -205,8 +205,8 @@ footer a:hover .icon {
 }
 
 /* Corner accent lines - Combined */
-#skills::before,
-#skills::after,
+.skills::before,
+.skills::after,
 .project::before,
 .project::after,
 .post::before,
@@ -219,7 +219,7 @@ footer a:hover .icon {
   pointer-events: none;
 }
 
-#skills::before,
+.skills::before,
 .project::before,
 .post::before {
   top: 0.75rem;
@@ -229,7 +229,7 @@ footer a:hover .icon {
   border-top-left-radius: 0;
 }
 
-#skills::after,
+.skills::after,
 .project::after,
 .post::after {
   bottom: 0.75rem;
@@ -240,8 +240,8 @@ footer a:hover .icon {
 }
 
 /* Skills corner size */
-#skills::before,
-#skills::after {
+.skills::before,
+.skills::after {
   width: 42px;
   height: 42px;
 }
@@ -255,19 +255,19 @@ footer a:hover .icon {
   height: 36px;
 }
 
-#skills h3 {
+.skills h3 {
   font-family: "Lora", serif;
   margin-bottom: 1rem;
   text-align: center;
 }
 
-#skills ul {
+.skills ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-#skills li {
+.skills li {
   margin-bottom: 0.75rem;
   text-align: center;
 }
@@ -370,6 +370,12 @@ footer a:hover .icon {
   flex: 1;
 }
 
+.experience-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .job-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -396,21 +402,6 @@ footer a:hover .icon {
   font-size: 1rem;
 }
 
-/* EDUCATION */
-#education {
-  margin-top: 1rem;
-}
-
-.degree {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #3d2f1f;
-}
-
-.institution {
-  font-size: 1rem;
-  color: #5a4830;
-}
 
 /* CODE STYLING */
 .code-keyword {
@@ -680,7 +671,7 @@ a:hover {
     margin-bottom: 0.5rem;
   }
 
-  #skills {
+  .skills {
     max-width: 100%;
   }
 
@@ -821,7 +812,7 @@ body.dark-mode .btn:hover {
   box-shadow: none;
 }
 
-body.dark-mode #skills,
+body.dark-mode .skills,
 body.dark-mode .project,
 body.dark-mode .post {
   background: #2b2218;

@@ -484,7 +484,7 @@ float intersectCone(Point3D &rayOrigin, Dir3D &rayDir, Cone &cone,
 
 <h3>Đa luồng với OpenMP</h3>
 <p>
-  Ray tracer song song hóa vòng lặp render pixel sử dụng OpenMP. Mỗi luồng độc
+  Ray tracer song song hóa vòng lặp kết xuất pixel sử dụng OpenMP. Mỗi luồng độc
   lập truy vết tia cho các pixel khác nhau, và chỉ thị
   <code>collapse(2)</code> kết hợp các vòng lặp lồng nhau để phân phối công việc
   tốt hơn:
@@ -520,8 +520,8 @@ for (int i = 0; i < img_width; i++) {
 </p>
 
 <p>
-  Bảng sau đây cho thấy hiệu năng render cho cảnh <code>eevee.txt</code> với số
-  lượng luồng khác nhau. Cảnh chứa 1 hình cầu và 2 nguồn sáng với phản xạ và
+  Bảng sau đây cho thấy hiệu năng kết xuất cho cảnh <code>eevee.txt</code> với
+  số lượng luồng khác nhau. Cảnh chứa 1 hình cầu và 2 nguồn sáng với phản xạ và
   khúc xạ được bật.
 </p>
 
@@ -529,7 +529,7 @@ for (int i = 0; i < img_width; i++) {
   <thead>
     <tr>
       <th>Số luồng</th>
-      <th>Thời gian Render (ms)</th>
+      <th>Thời gian kết xuất (ms)</th>
       <th>Tăng tốc</th>
     </tr>
   </thead>
