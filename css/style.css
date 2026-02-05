@@ -356,7 +356,7 @@ footer a:hover .icon {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .company-logo {
@@ -372,8 +372,10 @@ footer a:hover .icon {
 
 .experience-title {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .job-title {
@@ -401,7 +403,6 @@ footer a:hover .icon {
   margin-bottom: 0.5rem;
   font-size: 1rem;
 }
-
 
 /* CODE STYLING */
 .code-keyword {
