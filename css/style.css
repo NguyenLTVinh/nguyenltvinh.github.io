@@ -188,20 +188,10 @@ footer a:hover .icon {
   overflow: hidden;
 }
 
-.skills {
-  max-width: 75%;
-  margin: 2rem auto;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .skills:hover,
 .project:hover,
 .post:hover {
   transform: translateY(-5px);
-  box-shadow: none;
 }
 
 /* Corner accent lines - Combined */
@@ -402,6 +392,22 @@ footer a:hover .icon {
 .details li {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+}
+
+.diplomas {
+  display: inline;
+}
+
+.diplomas img {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid #c9b896;
+  transition: transform 0.3s ease;
+  margin: 0.5rem 0 0 0;
+}
+
+.diplomas img:hover {
+  transform: translateY(-5px);
 }
 
 /* CODE STYLING */
