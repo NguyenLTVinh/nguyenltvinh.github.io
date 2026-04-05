@@ -1,0 +1,253 @@
+<div class="post-header">
+  <h2>Máy Chủ Thứ Ba Của Tôi: Tất Tay Vào Container</h2>
+  <span>Ngày 5 tháng 4 năm 2026</span>
+</div>
+
+<h3>Lần thứ ba là chuẩn</h3>
+<p>
+  Mỗi người tự lưu trữ đều có một câu chuyện về cách họ bắt đầu. Với tôi, mọi
+  thứ bắt đầu từ một chiếc máy tính $80 mà ai đó đã vứt bỏ. Tôi nhặt nó từ đống
+  rác thải điện tử, cài Linux, và bằng cách nào đó đã chạy được Minecraft và một
+  máy chủ MySQL. Nó hoạt động! Đại loại là vậy. Khi đó tôi chẳng hiểu mình đang
+  làm gì, và thành thật mà nói, đó là một nửa thú vui.
+</p>
+
+<p>
+  Lần thử thứ hai là cái mà tôi đã viết
+  <a href="/posts/post.html?post=2026-01-15.html">trước đây</a>. Một chiếc máy
+  tính nhỏ Intel N100 giá $200, nơi tôi học được mình nên làm gì. Tôi tìm hiểu
+  systemd, thiết lập một máy chủ đảo ngược (reverse proxy) đúng cách, và duy trì
+  một danh sách dịch vụ ngày càng dài trên 16GB RAM. Con chip nhỏ bé đó đã hoạt
+  động vượt xa sức mong đợi. Nhưng theo thời gian, tôi liên tục gặp phải một sự
+  cản trở tương tự: mỗi dịch vụ được cài đặt trực tiếp trên máy chủ, chúng ràng
+  buộc vào nhau, tranh chấp các gói phụ thuộc (dependencies). Cập nhật một thứ
+  có nguy cơ làm hỏng thứ khác. Nó mong manh theo những cách chỉ trở nên rõ ràng
+  vào những thời điểm tồi tệ nhất.
+</p>
+
+<p>
+  Vì vậy, tôi đã làm điều mà bất kỳ người có lý nào cũng sẽ làm. Tôi đã mua một
+  chiếc máy tính khủng hơn nhiều.
+</p>
+
+<h3>Cỗ máy mới</h3>
+<img src="/images/posts/framework-desktop.jpg" />
+<p>
+  Xin giới thiệu
+  <a href="https://frame.work/desktop" target="_blank">Framework Desktop</a>,
+  trang bị bộ vi xử lý AMD Ryzen AI Max 300 series, 128GB RAM, và ổ SSD 8TB. So
+  với 16GB RAM và ổ 512GB trước đây, điều này cảm giác thật phi lý. Đây là một
+  máy trạm thực thụ, không phải một chiếc máy tính mini cỡ cùi bắp. Toàn bộ
+  triết lý của Framework là khả năng sửa chữa và nâng cấp, điều này hoàn toàn
+  phù hợp với tinh thần tự lưu trữ: bạn sở hữu phần cứng, bạn kiểm soát nó, và
+  bạn có thể tự sửa chữa thay vì vứt nó đi khi thứ gì đó hỏng hóc.
+</p>
+
+<p>
+  Ryzen AI Max cũng tình cờ có một GPU tích hợp cực mạnh. Chạy các mô hình ngôn
+  ngữ lớn cục bộ với tốc độ cao và xử lý chuyển mã video trong Jellyfin mà không
+  tốn sức giờ đây đều khả thi. Khoảng trống về phần cứng cuối cùng cũng đã có.
+  Nhưng cái chính được nâng cấp không phải là các thông số kỹ thuật, mà là quyết
+  định làm mọi thứ một cách khác trong lần này.
+</p>
+
+<h3>Rốt cuộc container là gì?</h3>
+<img src="/images/posts/container-ship.jpg" />
+<p>
+  Trên máy chủ thứ hai của tôi, mọi dịch vụ tôi chạy đều được cài đặt trực tiếp
+  vào hệ thống máy chủ. Tất cả chúng sống trong <code>/usr/</code> hoặc
+  <code>/etc/</code>, chia sẻ cùng một thư viện, cùng một hệ thống tệp tin, cùng
+  chung số phận nếu có sự cố. Điều này hoạt động ổn cho đến khi nó không còn ổn
+  nữa. Phần mềm A cần Python 3.9, Phần mềm B cần Python 3.12, và đột nhiên bạn
+  gặp phải vấn đề lớn giữa các gói phụ thuộc.
+</p>
+
+<p>
+  Container giải quyết vấn đề này bằng cách bọc mỗi ứng dụng trong một hộp biệt
+  lập riêng của nó. Hãy nghĩ về nó như các container vận chuyển trên tàu chở
+  hàng: con tàu không quan tâm bên trong mỗi container có gì, và nội dung của
+  container này không thể tràn sang container khác. Mỗi dịch vụ mang theo chính
+  xác những gì nó cần để chạy: thư viện riêng, cấu hình riêng, một phần nhỏ của
+  hệ thống tệp tin riêng. Không có thứ gì khác trên máy chủ có thể can thiệp vào
+  nó.
+</p>
+
+<p>
+  Công cụ container phổ biến nhất là Docker, nhưng tôi đã chọn
+  <a href="https://podman.io/" target="_blank">Podman</a>. Hai công cụ này gần
+  như giống hệt nhau từ góc độ sử dụng, nhưng Podman có một triết lý mà tôi thấy
+  hấp dẫn hơn: nó không có tiến trình nền (daemon). Docker chạy một tiến trình
+  nền liên tục với đặc quyền quản trị (root) để quản lý tất cả các container của
+  bạn. Podman thì không. Mỗi container chỉ đơn thuần là một tiến trình, và quan
+  trọng hơn, bạn có thể chạy chúng hoàn toàn như một người dùng thông thường mà
+  không cần bất kỳ sự tham gia nào của quyền quản trị.
+</p>
+
+<h3>Chạy mọi thứ trong không gian người dùng</h3>
+<p>
+  Điểm cuối cùng đó xứng đáng có một đoặn văn riêng vì nó là quyết định về kiến
+  trúc mà tôi thấy hài lòng nhất. Ngoại trừ các dịch vụ cấp hệ thống, mọi
+  container duy nhất trên máy này đều chạy trong cái gọi là "không gian người
+  dùng" (user space), nghĩa là Podman khởi động chúng với tư cách là tài khoản
+  người dùng thông thường của tôi, không phải là root.
+</p>
+
+<p>
+  Tại sao điều này lại quan trọng? Chủ yếu là về bảo mật. Nếu một container bị
+  xâm phạm, phạm vi ảnh hưởng bị giới hạn trong những gì tài khoản người dùng
+  của tôi có thể làm. Không có con đường nào để chiếm quyền kiểm soát toàn bộ
+  máy thông qua một lỗ hổng, ví dụ, trong một plugin Nextcloud được cấu hình
+  kém. Trên máy chủ trước đây của tôi, hầu hết các dịch vụ chạy với đặc quyền
+  nâng cao vì đó chỉ là cách mọi thứ được cài đặt. Nó hoạt động, nhưng đó là một
+  cách thiết lập lười biếng.
+</p>
+
+<p>
+  Podman trong không gian người dùng cũng tích hợp sạch sẽ với systemd thông qua
+  <a
+    href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html"
+    target="_blank"
+    >quadlet</a
+  >, một cách định nghĩa các container dưới dạng các tệp
+  <code>.container</code> đơn giản mà systemd hiểu một cách tự nhiên. Thay vì
+  một tệp <code>docker-compose.yml</code> khổng lồ, mỗi dịch vụ nhận được một
+  tệp khai báo nhỏ, mô tả ảnh chứa (image) nào để chạy, cổng nào để lộ ra và ổ
+  đĩa ảo nào để gắn kết. Systemd sẽ lo phần còn lại: khởi động container khi máy
+  khởi động, khởi động lại chúng khi gặp lỗi, quản lý thứ tự khởi động. Đó là sự
+  kết hợp tốt nhất của cả hai thế giới: sự cô lập của container với độ tin cậy
+  của systemd.
+</p>
+<h3>Những gì đang chạy trên nó</h3>
+
+<p>
+  Danh sách dịch vụ đã phát triển đáng kể kể từ thời N100 của tôi. Về mặt phim
+  truyền hình giải trí,
+  <a href="https://jellyfin.org/" target="_blank">Jellyfin</a> xử lý thư viện
+  phim và TV của tôi, với
+  <a href="https://sonarr.tv/" target="_blank">Sonarr</a>,
+  <a href="https://radarr.video/" target="_blank">Radarr</a>,
+  <a href="https://www.bazarr.media/" target="_blank">Bazarr</a>, và
+  <a href="https://prowlarr.com/" target="_blank">Prowlarr</a> tạo thành đường
+  ống tự động hóa thông thường xung quanh nó.
+  <a href="https://www.qbittorrent.org/" target="_blank">qBittorrent</a> chạy
+  đằng sau
+  <a href="https://github.com/qdm12/gluetun" target="_blank">Gluetun</a> để tất
+  cả lưu lượng truy cập của nó đi qua mạng VPN, một chi tiết nhỏ nhưng quan
+  trọng khi bạn quan tâm đến những gì rời khỏi mạng của mình.
+</p>
+<img src="/images/posts/jellyfinv2.png" />
+
+<p>
+  Đối với các dịch vụ đám mây cá nhân,
+  <a href="https://nextcloud.com/" target="_blank">Nextcloud</a> thay thế Google
+  Drive, <a href="https://immich.app/" target="_blank">Immich</a> thay thế
+  Google Photos, và
+  <a href="https://git.nguyenltvinh.dev/explore/repos" target="_blank">Gitea</a>
+  là GitHub riêng của tôi. Tất cả đều được hỗ trợ bởi một cơ sở dữ liệu
+  <a href="https://www.postgresql.org/" target="_blank">Postgres</a> dùng chung
+  và một phiên bản <a href="https://redis.io/" target="_blank">Redis</a> dùng
+  chung. Những thứ này từng có cảm giác như những dịch vụ đầy tham vọng để tự
+  lưu trữ; bây giờ chúng chỉ là các mục trong một tệp container tự khởi động.
+</p>
+<img src="/images/posts/immich.png" />
+
+<p>
+  Dịch vụ mới khiến tôi hào hứng nhất là bộ trí tuệ nhân tạo cục bộ.
+  <a href="https://ollama.com/" target="_blank">Ollama</a> chạy các mô hình ngôn
+  ngữ lớn kích thước đầy đủ sử dụng GPU tích hợp, và
+  <a href="https://openwebui.com/" target="_blank">Open WebUI</a> nằm phía trước
+  nó như một giao diện trò chuyện. Tôi đã viết về mong muốn làm điều này khi còn
+  dùng máy chủ N100, khi nó không hề khả thi. Với 128GB bộ nhớ thống nhất và một
+  GPU phù hợp, các mô hình lớn chạy đủ nhanh để sử dụng. Dữ liệu của tôi không
+  bao giờ chạm đến máy chủ của OpenAI. Đối với người tự lưu trữ có tính cảnh
+  giác, đây là giấc mơ.
+</p>
+<img src="/images/posts/openwebui.png" />
+<p>
+  Mạng được xử lý bởi
+  <a href="https://nginxproxymanager.com/" target="_blank"
+    >Nginx Proxy Manager</a
+  >
+  như một máy chủ đảo ngược, các đường hầm
+  <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a> để lộ các
+  dịch vụ ra internet mà không cần mở cổng, và
+  <a href="https://adguard.com/en/adguard-home/overview.html" target="_blank"
+    >AdGuard Home</a
+  >
+  để chặn quảng cáo trên toàn mạng.
+  <a href="https://tailscale.com/" target="_blank">Tailscale</a> và
+  <a href="https://cockpit-project.org/" target="_blank">Cockpit</a> là hai dịch
+  vụ duy nhất chạy trực tiếp trên máy chủ thay vì trong container: Tailscale vì
+  nó là mạng VPN cần quyền truy cập mạng sâu, và Cockpit vì nó là một bảng điều
+  khiển để quản lý chính chiếc máy chủ đó. Mọi thứ khác đều chạy trong
+  container.
+</p>
+<img src="/images/posts/adguard.png" />
+<h3>Điều tôi học được từ việc làm điều này ba lần</h3>
+<p>
+  Lần đầu tiên tôi chỉ làm theo các hướng dẫn và cầu mong điều tốt đẹp nhất. Lần
+  thứ hai tôi hiểu mình đang xây dựng cái gì nhưng đã chấp nhận rất nhiều món nợ
+  kỹ thuật. Lần này tôi dừng lại và tự hỏi: nếu phải xây dựng lại mọi thứ từ
+  đầu, tôi sẽ làm thế nào? Câu trả lời là container, và tôi đã xây dựng lại cho
+  phù hợp.
+</p>
+
+<p>
+  Lợi ích thực tế lớn nhất là khả năng tái tạo. Toàn bộ máy chủ của tôi được
+  định nghĩa trong các tệp <code>.container</code> nằm trong một thư mục. Nếu
+  máy này chết vào ngày mai, tôi có thể khôi phục mọi thứ trên phần cứng mới
+  trong vòng chưa đầy một giờ. Đó không phải là điều tôi có thể nói về thiết lập
+  N100, nơi cấu hình nằm trong một mớ hỗn độn các tệp trong <code>/etc</code> và
+  bộ nhớ thể chế trong đầu tôi.
+</p>
+
+<p>
+  Cũng có một điều gì đó để nói về sức ép hình thành thói quen tốt của
+  container. Bởi vì mỗi dịch vụ được cô lập, bạn suy nghĩ kỹ hơn về việc ổ đĩa
+  ảo nào cần được lưu trữ, cổng nào cần được lộ ra, và mỗi dịch vụ cần gì để làm
+  công việc của nó. Gắn một thứ gì đó vào máy chủ thì dễ. Container hóa nó một
+  cách đúng đắn khiến bạn hiểu nó.
+</p>
+
+<h3>Phần cứng của tôi có quá đà không?</h3>
+<p>
+  Chắc chắn là có. Một chiếc Ryzen AI Max với 128GB RAM không phải là một khoản
+  mua hợp lý để chạy một máy chủ Minecraft và một ít phương tiện truyền thông.
+  Chiếc N100 đã xử lý mọi thứ tôi cần. Nhưng việc tự lưu trữ chưa bao giờ là về
+  giải pháp tối thiểu khả thi. Nó là về việc học hỏi, thử nghiệm và xây dựng một
+  thứ gì đó hoàn toàn là của riêng bạn.
+</p>
+
+<p>
+  Framework Desktop cũng tình cờ là máy trạm hàng ngày của tôi, vì vậy "máy chủ"
+  đang làm nhiệm vụ kép. Máy chủ và máy tính làm việc là cùng một cỗ máy, điều
+  này có cảm giác hỗn loạn một cách phù hợp và bằng cách nào đó rất đúng với
+  phong cách của tôi khi tiếp cận sở thích này.
+</p>
+
+<p>
+  Nếu bạn mới bắt đầu, xin đừng coi đây là lời khuyên để chi tiền vào phần cứng.
+  Chiếc PC bỏ đi có giá $80 đã dạy tôi nhiều hơn tôi mong đợi. Chiếc N100 giá
+  $200 là quá đủ cho nhu cầu sử dụng thực tế. Việc nâng cấp lên máy này chỉ có ý
+  nghĩa bởi vì tôi đã học được những gì mình cần. Hãy bắt đầu nhỏ. Phá vỡ mọi
+  thứ. Sửa chúng. Sau đó quyết định xem bạn có muốn nhiều hơn nữa hay không.
+</p>
+
+<h3>Điều gì tiếp theo</h3>
+<p>
+  Thành thật mà nói, bộ công cụ này lần đầu tiên có cảm giác đã hoàn chỉnh.
+  Không phải kiểu "tôi hết ý tưởng", mà là kiểu "tôi không chạy các dịch vụ mình
+  không thường xuyên dùng". Khía cạnh trí tuệ nhân tạo có rất nhiều dư địa để
+  phát triển, và tôi muốn thử nghiệm với các đường ống RAG trên tài liệu của
+  chính mình. Vẫn còn rất nhiều thứ để khám phá ở khía cạnh đó.
+</p>
+
+<p>
+  Ngẫm lại thì chiếc máy này đã khiến tôi lười biếng hơn theo một cách tốt. Mọi
+  thứ cứ hoạt động. Cập nhật diễn ra trong một lần kéo và khởi động lại. Sao lưu
+  dễ dàng vì tôi biết chính xác những gì cần được lưu trữ. Hạ tầng mờ nhạt dần
+  vào nền tảng, điều này có nghĩa là có nhiều thời gian hơn để sử dụng các dịch
+  vụ tôi đã thiết lập thay vì bảo trì chúng. Đó là mục tiêu. Không phải để xây
+  dựng một hệ thống phức tạp, mà là xây dựng một hệ thống đủ phức tạp đến mức
+  bạn ngừng nghĩ về nó.
+</p>

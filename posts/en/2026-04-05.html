@@ -1,0 +1,246 @@
+<div class="post-header">
+  <h2>My Third Server: Going All-In on Containers</h2>
+  <span>April 5th, 2026</span>
+</div>
+
+<h3>Third time's the charm</h3>
+<p>
+  Every self-hoster has a story about how they got started. Mine begins with an
+  $80 computer someone threw away. I pulled it out of a pile of e-waste, slapped
+  Linux on it, and somehow got Minecraft and a MySQL server running. It worked!
+  Sort of. I had no idea what I was doing, and honestly that was half the fun.
+</p>
+
+<p>
+  My second attempt was the one I wrote about
+  <a href="/posts/post.html?post=2026-01-15.html">previously</a>. A $200 Intel
+  N100 mini PC where I actually learned what I was doing. I figured out systemd,
+  got a dedicated reverse proxy running, and kept a growing list of services
+  humming along on 16GB of RAM. That little box punched way above its weight.
+  But over time I kept running into the same friction: every service was
+  installed directly on the host, tangled together, fighting over dependencies.
+  Updating one thing risked breaking another. It was fragile in ways that only
+  became obvious at the worst possible moments.
+</p>
+
+<p>
+  So I did what any reasonable person would do. I bought a much bigger computer.
+</p>
+
+<h3>The new machine</h3>
+<img src="/images/posts/framework-desktop.jpg" />
+<p>
+  Meet the
+  <a href="https://frame.work/desktop" target="_blank">Framework Desktop</a>,
+  packing an AMD Ryzen AI Max 300 series processor, 128GB of RAM, and an 8TB
+  SSD. Coming from 16GB and a 512GB drive, this feels absurd. It's a real
+  workstation, not a toaster-sized mini PC. Framework's whole pitch is
+  repairability and upgradability, which aligns perfectly with the self-hosting
+  ethos: you own the hardware, you control it, and you can fix it yourself
+  rather than throwing it away when something breaks.
+</p>
+
+<p>
+  The Ryzen AI Max also happens to have a capable integrated GPU. Running local
+  LLMs at full speed and handling video transcoding in Jellyfin without breaking
+  a sweat are now both legitimately viable. The hardware headroom is finally
+  there. But the real upgrade wasn't the specs. It was the decision to do
+  everything differently this time.
+</p>
+
+<h3>What are containers, anyway?</h3>
+<img src="/images/posts/container-ship.jpg" />
+<p>
+  On my second server, every service I ran was installed directly onto the host
+  system. All of them lived in
+  <code>/usr/</code> or <code>/etc/</code>, sharing the same libraries, the same
+  filesystem, the same fate if something went wrong. This works fine until it
+  doesn't. Software A needs Python 3.9, Software B needs Python 3.12, and
+  suddenly you're in dependency hell.
+</p>
+
+<p>
+  Containers solve this by wrapping each application in its own isolated box.
+  Think of it like shipping containers on a cargo ship: the ship doesn't care
+  what's inside each container, and the contents of one container can't spill
+  into another. Each service brings exactly what it needs to run: its own
+  libraries, its own configuration, its own little slice of the filesystem.
+  Nothing else on the host can interfere with it.
+</p>
+
+<p>
+  The most popular container tool is Docker, but I went with
+  <a href="https://podman.io/" target="_blank">Podman</a>. The two are nearly
+  identical from a usage standpoint, but Podman has a philosophy I find more
+  appealing: it's daemonless. Docker runs a persistent background daemon with
+  root privileges that manages all your containers. Podman doesn't. Each
+  container is simply a process, and importantly, you can run them entirely as a
+  regular user with no root involvement at all.
+</p>
+
+<h3>Running everything in user space</h3>
+<p>
+  That last point deserves its own section because it's the architectural
+  decision I'm most happy about. With one exception for system-level services,
+  every single container on this machine runs in what's called "user space,"
+  meaning Podman starts them as my regular user account, not as root.
+</p>
+
+<p>
+  Why does this matter? Security, mostly. If a container is ever compromised,
+  the blast radius is limited to what my user account can do. There's no path to
+  owning the whole machine through an exploit in, say, a poorly configured
+  Nextcloud plugin. On my previous server, most services ran with elevated
+  privileges because that's how things were installed. It worked, but it was
+  laziness masquerading as a setup.
+</p>
+
+<p>
+  Podman in user space also integrates cleanly with systemd through
+  <a
+    href="https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html"
+    target="_blank"
+    >quadlet</a
+  >, a way of defining containers as simple <code>.container</code> files that
+  systemd understands natively. Instead of a giant
+  <code>docker-compose.yml</code>, each service gets a small declarative file
+  that describes what image to run, what ports to expose, and what volumes to
+  mount. Systemd takes it from there: starting containers on boot, restarting
+  them on failure, managing startup order. It's the best of both worlds: the
+  isolation of containers with the reliability of systemd.
+</p>
+
+<h3>What's running on it</h3>
+
+<p>
+  The service list has grown considerably since my N100 days. On the media side,
+  <a href="https://jellyfin.org/" target="_blank">Jellyfin</a> handles my movie
+  and TV library, with <a href="https://sonarr.tv/" target="_blank">Sonarr</a>,
+  <a href="https://radarr.video/" target="_blank">Radarr</a>,
+  <a href="https://www.bazarr.media/" target="_blank">Bazarr</a>, and
+  <a href="https://prowlarr.com/" target="_blank">Prowlarr</a> forming the usual
+  automated pipeline around it.
+  <a href="https://www.qbittorrent.org/" target="_blank">qBittorrent</a>
+  runs behind
+  <a href="https://github.com/qdm12/gluetun" target="_blank">Gluetun</a>
+  so all its traffic goes through a VPN, a small detail that matters a lot when
+  you care about what leaves your network.
+</p>
+<img src="/images/posts/jellyfinv2.png" />
+
+<p>
+  For personal cloud stuff,
+  <a href="https://nextcloud.com/" target="_blank">Nextcloud</a> replaces Google
+  Drive, <a href="https://immich.app/" target="_blank">Immich</a> replaces
+  Google Photos, and
+  <a href="https://git.nguyenltvinh.dev/explore/repos" target="_blank">Gitea</a>
+  is my private GitHub. All of them backed by a shared
+  <a href="https://www.postgresql.org/" target="_blank">Postgres</a> database
+  and <a href="https://redis.io/" target="_blank">Redis</a> instance. These used
+  to feel like ambitious services to self-host; now they're merely entries in a
+  container file that start themselves.
+</p>
+<img src="/images/posts/immich.png" />
+
+<p>
+  The addition I'm most excited about is the local AI stack.
+  <a href="https://ollama.com/" target="_blank">Ollama</a> runs full-size
+  language models using the integrated GPU, and
+  <a href="https://openwebui.com/" target="_blank">Open WebUI</a> sits in front
+  of it as the chat interface. I wrote about wanting to do this on the N100,
+  where it wasn't really feasible. With 128GB of unified memory and a proper
+  GPU, large models run fast enough to practically use. My data never touches
+  OpenAI's servers. For the paranoid self-hoster, this is the dream.
+</p>
+<img src="/images/posts/openwebui.png" />
+
+<p>
+  Networking is handled by
+  <a href="https://nginxproxymanager.com/" target="_blank"
+    >Nginx Proxy Manager</a
+  >
+  as the reverse proxy,
+  <a href="https://www.cloudflare.com/" target="_blank">Cloudflare</a>
+  tunnels for exposing services to the internet without opening ports, and
+  <a href="https://adguard.com/en/adguard-home/overview.html" target="_blank"
+    >AdGuard Home</a
+  >
+  for network-wide DNS ad blocking.
+  <a href="https://tailscale.com/" target="_blank">Tailscale</a> and
+  <a href="https://cockpit-project.org/" target="_blank">Cockpit</a> are the
+  only two things that run directly on the host rather than in containers:
+  Tailscale because it's a VPN that needs deep network access, and Cockpit
+  because it's a web dashboard for administering the machine itself. Everything
+  else: containerized.
+</p>
+<img src="/images/posts/adguard.png" />
+
+<h3>What I actually learned from doing this three times</h3>
+<p>
+  The first time around I was simply following tutorials and hoping for the
+  best. The second time I understood what I was building but made peace with a
+  lot of technical debt. This time I stopped and asked: if I had to rebuild
+  everything from scratch, how would I do it? The answer was containers, and I
+  rebuilt accordingly.
+</p>
+
+<p>
+  The biggest practical win is reproducibility. My entire server is defined in
+  <code>.container</code> files sitting in a directory. If this machine dies
+  tomorrow, I can restore everything on new hardware in under an hour. That's
+  not something I could have said about the N100 setup, where the real
+  configuration lived in a tangle of files across <code>/etc</code> and
+  institutional memory in my own head.
+</p>
+
+<p>
+  There's also something to be said for the forcing function of containers when
+  it comes to good habits. Because each service is isolated, you think harder
+  about what volumes actually need to be persisted, what ports genuinely need to
+  be exposed, and what each service specifically needs to do its job. Slapping
+  something onto a host machine is easy. Containerizing it correctly makes you
+  understand it.
+</p>
+
+<h3>Is this overkill?</h3>
+<p>
+  Definitely. A Ryzen AI Max with 128GB of RAM is not a reasonable purchase for
+  hosting a Minecraft server and some media. The N100 comfortably handled
+  everything I needed. But self-hosting has never fundamentally been about the
+  minimum viable solution. It's about learning, experimenting, and building
+  something that's entirely yours.
+</p>
+
+<p>
+  The Framework Desktop also happens to be my daily driver workstation, so the
+  "server" is pulling double duty. The homelab and the work machine are the same
+  box, which feels appropriately chaotic and somehow very on-brand for how I
+  approach this hobby.
+</p>
+
+<p>
+  If you're only getting started, please do not take this as a recommendation to
+  spend money on hardware. The $80 thrown-away PC taught me more than I
+  expected. The $200 N100 was more than enough for real use. The upgrade to this
+  machine only made sense because I'd already learned what I concretely needed.
+  Start small. Break things. Fix them. Then decide if you want more.
+</p>
+
+<h3>What's next</h3>
+<p>
+  Honestly, the stack feels complete for the first time. Not "I ran out of
+  ideas" complete, but "I'm not running services I don't meaningfully use"
+  complete. The AI side has a lot of room to grow, and I'd like to experiment
+  with RAG pipelines over my own documents. There's plenty left to explore on
+  that front.
+</p>
+
+<p>
+  If anything, this machine has made me lazier in the best way. Things work.
+  Updates happen in a single pull and restart. Backups are predictable because I
+  know exactly what needs to be persisted. The infrastructure fades into the
+  background, which means more time for actively using the services I've set up
+  rather than maintaining them. That's the goal, ultimately. Not to build a
+  complicated system, but to build one complicated enough that you stop thinking
+  about it.
+</p>
