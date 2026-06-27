@@ -7,36 +7,36 @@
   I started writing Rust in production because I had to. The opportunity came
   from the Aurora DSQL project at AWS that demanded low-level performance and
   hard safety guarantees. The language had already been chosen. At the time, I
-  didn't have much experience with Rust. I have read that it promised memory
-  safety without a garbage collector and seemed to be trending among systems
-  engineers. I expected to wrestle with it, as a lot of programming habits that
-  I have from coding in C will have to be unlearned. What actually happened was
-  that I ended up preferring it to every other language I'd used before.
+  didn't have much experience with Rust. I had read that it promised memory
+  safety without a garbage collector and it seemed to be trending among systems
+  engineers. I expected to wrestle with it, as a lot of programming habits from
+  C would have to be unlearned. What happened was that I ended up preferring it
+  to every other language I'd used before.
 </p>
 <p>
-  Rust didn't just solve many memory safety pitfalls in C and C++. It made me
-  think more clearly about ownership, lifetimes, and the shape of my code. It
-  was strict, but fair. And the tradeoffs it enforces led to fewer bugs, more
-  confidence in correctness, and better long-term maintainability.
+  Rust solved many memory safety pitfalls in C and C++, and made me think more
+  clearly about ownership, lifetimes, and the shape of my code. It was strict,
+  but fair. The tradeoffs it enforces led to fewer bugs, more confidence in
+  correctness, and better long-term maintainability.
 </p>
 
 <h3>Compiled vs interpreted languages</h3>
 <p>
   Most people outside of software don't think much about how programming
-  languages get turned into something the computer can actually run. There are
-  two broad categories: interpreted and compiled. Interpreted languages like
-  Python and JavaScript are read line by line by an interpreter at runtime. That
-  makes them easy to prototype and debug, but it also makes them slower. In
-  contrast, compiled languages like C, C++, Go, and Rust are translated ahead of
-  time into machine code. The result is a binary, an executable file made of
-  instructions the processor understands directly.
+  languages get turned into something the computer can run. There are two broad
+  categories: interpreted and compiled. Interpreted languages like Python and
+  JavaScript are read line by line by an interpreter at runtime. That makes them
+  easy to prototype and debug, but also slower. Compiled languages like C, C++,
+  Go, and Rust are translated ahead of time into machine code. The result is a
+  binary, an executable file made of instructions the processor understands
+  directly.
 </p>
 <p>
   A compiled binary is portable in the sense that it no longer depends on the
   source code or any interpreter. It's fast, predictable, and efficient, which
   is why compiled languages are still preferred for systems-level work. What
-  separates Rust from other compiled languages is not performance but safety.
-  The compiler performs a set of checks during the build process that eliminate
+  separates Rust from other compiled languages is performance and safety. The
+  compiler performs a set of checks during the build process that eliminate
   entire classes of runtime errors. That checking process is sometimes
   frustrating during development, but the result is a binary you can trust.
 </p>
@@ -62,7 +62,7 @@ printf("%s\n", message);     // ❌ use-after-free bug</code></pre>
   Maybe it crashes. Maybe it leaks sensitive data. Maybe it runs just fine and
   silently corrupts. There is a whole class of memory bugs similar to this one:
   buffer overflow, double free, memory leak, etc. These bugs are notoriously
-  difficult to detect and reproduce. And they're the source of a significant
+  difficult to detect and reproduce, and they're the source of a significant
   portion of security vulnerabilities in the wild.
 </p>
 
@@ -173,9 +173,9 @@ fn main() {
   a small thing.
 </p>
 <p>
-  For me, Rust didn't just solve technical problems, but it also changed how I
-  think about writing code. It made things that used to be difficult feel solid
-  and predictable. It's the first language I've used that feels both powerful
-  and principled. I didn't expect to enjoy it. But I do.
+  For me, Rust didn't just solve technical problems. It changed how I think
+  about writing code. It made things that used to be difficult feel solid and
+  predictable. It's the first language I've used that feels both powerful and
+  principled. I didn't expect to enjoy it. But I do.
 </p>
 <p>And I'm not the only one.</p>

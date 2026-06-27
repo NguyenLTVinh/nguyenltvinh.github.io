@@ -5,8 +5,8 @@
   Minecraft clone. The main goals are to get a chunk-based rendering system
   working that doesn't render faces you can't see, generate infinite terrain
   using noise functions, let players place and remove blocks, add a day-night
-  cycle with lighting that actually changes, and build a command system so you
-  can control aspects of the game, similar to the one in they have in Minecraft.
+  cycle with lighting that changes, and build a command system so you can
+  control aspects of the game, similar to the one in they have in Minecraft.
   This project covers mostly the graphics concepts we used for Project 4: 3D
   rendering, textures, mesh generation, lighting with OpenGL.
 </p>
@@ -28,10 +28,9 @@
 </p>
 <h3>Biggest concerns/unknowns</h3>
 <p>
-  1. Infinite Terrain Loading: I haven't actually implemented the chunk
-  loading/unloading system yet. I'm not sure how to prioritize which chunks to
-  generate and how to do it without causing stuttering when new terrain loads
-  in.
+  1. Infinite Terrain Loading: I haven't implemented the chunk loading/unloading
+  system yet. I'm not sure how to prioritize which chunks to generate and how to
+  do it without causing stuttering when new terrain loads in.
 </p>
 <p>
   2. Antialiasing: There are a lot of aliasing on textures that appear further

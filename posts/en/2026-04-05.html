@@ -14,23 +14,24 @@
 <p>
   My second attempt was the one I wrote about
   <a href="/posts/post.html?post=2026-01-15.html">previously</a>. A $200 Intel
-  N100 mini PC where I actually learned what I was doing. I figured out systemd,
-  got a dedicated reverse proxy running, and kept a growing list of services
-  humming along on 16GB of RAM. That little box punched way above its weight.
-  But over time I kept running into the same friction: every service was
-  installed directly on the host, tangled together, fighting over dependencies.
-  Updating one thing risked breaking another. It was fragile in ways that only
-  became obvious at the worst possible moments.
+  N100 mini PC where I learned what I was doing. I figured out systemd, got a
+  dedicated reverse proxy running, and kept a growing list of services humming
+  along on 16GB of RAM. That little box punched way above its weight. But over
+  time I kept running into the same friction: every service was installed
+  directly on the host, tangled together, fighting over dependencies. Updating
+  one thing risked breaking another. It was fragile in ways that only became
+  obvious at the worst possible moments.
 </p>
 
 <p>
-  So I did what any reasonable person would do. I bought a much bigger computer.
+  So I did what any reasonable person would do. I bought a much beefier
+  computer.
 </p>
 
 <h3>The new machine</h3>
 <img src="/images/posts/framework-desktop.jpg" />
 <p>
-  Meet the
+  beefier Meet the
   <a href="https://frame.work/desktop" target="_blank">Framework Desktop</a>,
   packing an AMD Ryzen AI Max 300 series processor, 128GB of RAM, and an 8TB
   SSD. Coming from 16GB and a 512GB drive, this feels absurd. It's a real
@@ -175,7 +176,7 @@
 </p>
 <img src="/images/posts/adguard.png" />
 
-<h3>What I actually learned from doing this three times</h3>
+<h3>What I learned from doing this three times</h3>
 <p>
   The first time around I was simply following tutorials and hoping for the
   best. The second time I understood what I was building but made peace with a
@@ -196,8 +197,8 @@
 <p>
   There's also something to be said for the forcing function of containers when
   it comes to good habits. Because each service is isolated, you think harder
-  about what volumes actually need to be persisted, what ports genuinely need to
-  be exposed, and what each service specifically needs to do its job. Slapping
+  about what volumes need to be persisted, what ports genuinely need to be
+  exposed, and what each service specifically needs to do its job. Slapping
   something onto a host machine is easy. Containerizing it correctly makes you
   understand it.
 </p>
