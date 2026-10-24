@@ -410,6 +410,73 @@ footer a:hover .icon {
   transform: translateY(-5px);
 }
 
+/* TECH SPECS CARDS */
+.tech-specs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tech-spec-card {
+  background: #fbf9f4;
+  border: 1px solid #d4c4a8;
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(61, 47, 31, 0.05);
+}
+
+.tech-spec-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(61, 47, 31, 0.1);
+  border-color: #8b6f47;
+}
+
+.tech-spec-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px dashed #d4c4a8;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tech-icon {
+  font-size: 1.8rem;
+  margin-right: 0.75rem;
+}
+
+.tech-spec-header h3 {
+  margin: 0;
+  font-family: "Lora", "Crimson Pro", serif;
+  color: #3d2f1f;
+  font-size: 1.25rem;
+}
+
+.tech-spec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tech-spec-list li {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  color: #2a2419;
+}
+
+.spec-label {
+  font-weight: 600;
+  color: #5a4830;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
 /* CODE STYLING */
 .code-keyword {
   color: #8b6f47;
@@ -450,13 +517,13 @@ pre[class*="language-"] {
 }
 
 .profile-photo {
-  flex-basis: 33%;
-  max-width: 33%;
+  flex-basis: 20%;
+  max-width: 20%;
   height: auto;
   object-fit: cover;
-  margin: 3.9em auto;
+  margin: 3.9em auto 1rem auto;
   box-shadow: none;
-  border: 3px solid #8b6f47;
+  border: none;
 }
 
 .bio-content {
@@ -697,8 +764,9 @@ a:hover {
   }
 
   .profile-photo {
-    order: -1;
+    order: 1;
     max-width: 100%;
+    margin-top: 1.5rem;
   }
 
   .bio-content {
@@ -821,10 +889,27 @@ body.dark-mode .btn:hover {
 
 body.dark-mode .skills,
 body.dark-mode .project,
-body.dark-mode .post {
+body.dark-mode .post,
+body.dark-mode .tech-spec-card {
   background: #2b2218;
   border-color: #6b5942;
   box-shadow: none;
+}
+
+body.dark-mode .tech-spec-header {
+  border-bottom: 2px dashed #4a3d2f;
+}
+
+body.dark-mode .tech-spec-header h3 {
+  color: #e5d5c0;
+}
+
+body.dark-mode .tech-spec-list li {
+  color: #d9c8b0;
+}
+
+body.dark-mode .spec-label {
+  color: #c9b896;
 }
 
 body.dark-mode h2,
