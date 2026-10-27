@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Lora:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Patrick+Hand&display=swap");
 
 body {
   font-family:
@@ -107,21 +108,6 @@ main {
   margin: 0 auto;
   text-align: left;
   display: block;
-}
-
-.map-container {
-  flex-grow: 1;
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  margin-bottom: 1.5rem;
-  text-align: left;
-  display: block;
-}
-
-#map {
-  width: 100%;
-  height: 500px;
 }
 
 main img,
@@ -716,8 +702,7 @@ a:hover {
     box-sizing: border-box;
   }
 
-  main,
-  .map-container {
+  main {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
@@ -786,22 +771,25 @@ a:hover {
   #burger {
     grid-area: burger;
     justify-self: start;
-    display: block;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    line-height: 1;
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.75rem;
     cursor: pointer;
-    padding-right: 3rem;
     color: #3d2f1f;
   }
 
   .site-name {
     grid-area: site-name;
     justify-self: center;
-  }
-
-  .nav-left {
-    display: block;
+    margin-left: 1.25rem;
   }
 
   .nav-menu {
@@ -836,12 +824,28 @@ a:hover {
     padding: 0.25rem 0;
   }
 
-  #translate-btn {
-    grid-column: 2;
-    grid-row: 1;
-    place-self: center end;
-    padding: 0.5rem 0.75rem;
+  .nav-actions {
     grid-area: translate;
+    justify-self: end;
+    align-self: center;
+    gap: 0.25rem;
+  }
+
+  .nav-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+
+  .nav-actions button .icon {
+    width: 20px;
+    height: 20px;
+    transform: none;
   }
 
   mjx-container[jax="CHTML"][display="true"] > svg {
@@ -959,10 +963,6 @@ body.dark-mode .nav-menu li a:hover {
 }
 
 body.dark-mode .company,
-body.dark-mode .institution {
-  color: #c9b896;
-}
-
 body.dark-mode .date,
 body.dark-mode .post-header span {
   color: #b39a7a;
@@ -1020,4 +1020,949 @@ body.dark-mode .token.type {
 
 body.dark-mode .token.punctuation {
   color: #b39a7a;
+}
+
+/* ===== SCRAPBOOK HOME (index page only) ===== */
+body.scrapbook-home,
+body.scrapbook-about,
+body.scrapbook-misc,
+body.scrapbook-projects,
+body.scrapbook-blog,
+body.scrapbook-experience,
+body.scrapbook-page {
+  background-color: #f5f1e8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%238b6f47' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.22'%3E%3Crect x='4' y='5' width='18' height='12' rx='1.5'/%3E%3Cpath d='M13 17v4M9 21h8'/%3E%3Cpath d='M36 8l4 4-4 4'/%3E%3Cpath d='M43 17h6'/%3E%3Crect x='8' y='40' width='12' height='12' rx='1'/%3E%3Crect x='11' y='43' width='6' height='6'/%3E%3Cpath d='M12 37v3M18 37v3M12 52v-3M18 52v-3M5 46h3M20 46h3'/%3E%3Cellipse cx='50' cy='48' rx='6.5' ry='4'/%3E%3Cpath d='M47 44v-3M53 44v-3'/%3E%3Ccircle cx='47' cy='40' r='1'/%3E%3Ccircle cx='53' cy='40' r='1'/%3E%3Cpath d='M44 47c-3-1-5-3-5-5s2-2 3 0M56 47c3-1 5-3 5-5s-2-2-3 0'/%3E%3Cpath d='M45 51l-2 3M48 52v3M52 52v3M55 51l2 3'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 64px 64px;
+}
+
+/* The page as a paper sheet */
+body.scrapbook-home main,
+body.scrapbook-about main,
+body.scrapbook-misc main,
+body.scrapbook-projects main,
+body.scrapbook-blog main,
+body.scrapbook-experience main,
+body.scrapbook-page main {
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  padding: 2.5rem 2.25rem 2rem;
+  background: #fffdf7;
+  border: 1px solid #d4c4a8;
+  box-shadow: 0 6px 14px rgba(61, 47, 31, 0.15);
+}
+
+/* Tape strips on the top corners */
+body.scrapbook-home main::before,
+body.scrapbook-home main::after,
+body.scrapbook-about main::before,
+body.scrapbook-misc main::before,
+body.scrapbook-projects main::before,
+body.scrapbook-blog main::before,
+body.scrapbook-experience main::before,
+body.scrapbook-page main::before,
+body.scrapbook-about main::after,
+body.scrapbook-misc main::after,
+body.scrapbook-projects main::after,
+body.scrapbook-blog main::after,
+body.scrapbook-experience main::after,
+body.scrapbook-page main::after {
+  content: "";
+  position: absolute;
+  top: -0.75rem;
+  width: 88px;
+  height: 24px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(235, 230, 218, 0.9) 0 6px,
+    rgba(222, 212, 190, 0.9) 6px 12px
+  );
+  box-shadow: 0 1px 2px rgba(61, 47, 31, 0.15);
+  pointer-events: none;
+}
+
+body.scrapbook-home main::before,
+body.scrapbook-about main::before,
+body.scrapbook-misc main::before,
+body.scrapbook-projects main::before,
+body.scrapbook-blog main::before,
+body.scrapbook-experience main::before,
+body.scrapbook-page main::before {
+  left: calc(1.25rem - 2em);
+  transform: rotate(-7deg);
+}
+
+body.scrapbook-home main::after,
+body.scrapbook-about main::after,
+body.scrapbook-misc main::after,
+body.scrapbook-projects main::after,
+body.scrapbook-blog main::after,
+body.scrapbook-experience main::after,
+body.scrapbook-page main::after {
+  right: calc(1.25rem - 2em);
+  transform: rotate(6deg);
+}
+
+/* Sticker on the hello heading */
+body.scrapbook-home main > h2:first-of-type {
+  position: relative;
+}
+
+body.scrapbook-home main > h2:first-of-type::after {
+  content: "";
+  position: absolute;
+  top: -0.6rem;
+  right: -0.5rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #fffdf7 0 30%,
+    #e8dfc8 31% 100%
+  );
+  border: 3px dashed #8b6f47;
+  box-shadow: 0 2px 4px rgba(61, 47, 31, 0.2);
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+/* Cut-out heading words */
+body.scrapbook-home .cut,
+body.scrapbook-about .cut,
+body.scrapbook-misc .cut,
+body.scrapbook-projects .cut,
+body.scrapbook-blog .cut,
+body.scrapbook-experience .cut {
+  display: inline-block;
+  padding: 0.05em 0.35em 0.1em;
+  margin: 0.15rem 0.2rem 0.15rem 0;
+  color: #3d2f1f;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 1px 2px 3px rgba(61, 47, 31, 0.2);
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+}
+
+body.scrapbook-home .cut-1,
+body.scrapbook-about .cut-1,
+body.scrapbook-misc .cut-1,
+body.scrapbook-projects .cut-1,
+body.scrapbook-blog .cut-1,
+body.scrapbook-experience .cut-1 {
+  font-family: "Baloo 2", "Crimson Pro", serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  background: #ffffff;
+  transform: rotate(-2deg);
+}
+
+body.scrapbook-home .cut-2,
+body.scrapbook-about .cut-2,
+body.scrapbook-misc .cut-2,
+body.scrapbook-projects .cut-2,
+body.scrapbook-blog .cut-2,
+body.scrapbook-experience .cut-2 {
+  font-family: "Lora", serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  font-weight: 600;
+  background: #ebe6da;
+  transform: rotate(1.5deg);
+}
+
+body.scrapbook-home .cut-3,
+body.scrapbook-about .cut-3,
+body.scrapbook-misc .cut-3,
+body.scrapbook-projects .cut-3,
+body.scrapbook-blog .cut-3,
+body.scrapbook-experience .cut-3 {
+  font-family: "Patrick Hand", cursive;
+  font-size: 2rem;
+  font-weight: 400;
+  background: #e8dfc8;
+  border-color: #8b6f47;
+  transform: rotate(-1deg);
+}
+
+/* Pinned contact note (icons keep their existing sizes) */
+body.scrapbook-home .contacts {
+  position: relative;
+  width: fit-content;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem 1rem 1.25rem;
+  background: #fbf9f4;
+  border: 1px solid #d4c4a8;
+  box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.15);
+  transform: rotate(-0.8deg);
+}
+
+body.scrapbook-home .contacts::before {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d9a07a, #a0522d 60%, #6b3418);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (width <=768px) {
+  body.scrapbook-home main,
+  body.scrapbook-about main,
+  body.scrapbook-misc main,
+  body.scrapbook-projects main,
+  body.scrapbook-blog main,
+  body.scrapbook-experience main,
+  body.scrapbook-page main {
+    margin-top: 1.5rem;
+    width: auto;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+    padding: 1.75rem 1.25rem 1.5rem;
+  }
+
+  body.scrapbook-home .cut-1,
+  body.scrapbook-about .cut-1,
+  body.scrapbook-misc .cut-1,
+  body.scrapbook-projects .cut-1,
+  body.scrapbook-blog .cut-1,
+  body.scrapbook-experience .cut-1 {
+    font-size: 1.55rem;
+  }
+
+  body.scrapbook-home .cut-2,
+  body.scrapbook-about .cut-2,
+  body.scrapbook-misc .cut-2,
+  body.scrapbook-projects .cut-2,
+  body.scrapbook-blog .cut-2,
+  body.scrapbook-experience .cut-2 {
+    font-size: 1.35rem;
+  }
+
+  body.scrapbook-home .cut-3,
+  body.scrapbook-about .cut-3,
+  body.scrapbook-misc .cut-3,
+  body.scrapbook-projects .cut-3,
+  body.scrapbook-blog .cut-3,
+  body.scrapbook-experience .cut-3 {
+    font-size: 1.65rem;
+  }
+}
+
+/* Dark mode for the scrapbook home */
+body.dark-mode.scrapbook-home,
+body.dark-mode.scrapbook-about,
+body.dark-mode.scrapbook-misc,
+body.dark-mode.scrapbook-projects,
+body.dark-mode.scrapbook-blog,
+body.dark-mode.scrapbook-experience,
+body.dark-mode.scrapbook-page {
+  background-color: #1a1612;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%238b7355' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.25'%3E%3Crect x='4' y='5' width='18' height='12' rx='1.5'/%3E%3Cpath d='M13 17v4M9 21h8'/%3E%3Cpath d='M36 8l4 4-4 4'/%3E%3Cpath d='M43 17h6'/%3E%3Crect x='8' y='40' width='12' height='12' rx='1'/%3E%3Crect x='11' y='43' width='6' height='6'/%3E%3Cpath d='M12 37v3M18 37v3M12 52v-3M18 52v-3M5 46h3M20 46h3'/%3E%3Cellipse cx='50' cy='48' rx='6.5' ry='4'/%3E%3Cpath d='M47 44v-3M53 44v-3'/%3E%3Ccircle cx='47' cy='40' r='1'/%3E%3Ccircle cx='53' cy='40' r='1'/%3E%3Cpath d='M44 47c-3-1-5-3-5-5s2-2 3 0M56 47c3-1 5-3 5-5s-2-2-3 0'/%3E%3Cpath d='M45 51l-2 3M48 52v3M52 52v3M55 51l2 3'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 64px 64px;
+}
+
+body.dark-mode.scrapbook-home main,
+body.dark-mode.scrapbook-about main,
+body.dark-mode.scrapbook-misc main,
+body.dark-mode.scrapbook-projects main,
+body.dark-mode.scrapbook-blog main,
+body.dark-mode.scrapbook-experience main,
+body.dark-mode.scrapbook-page main {
+  background: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.scrapbook-home main::before,
+body.dark-mode.scrapbook-home main::after,
+body.dark-mode.scrapbook-about main::before,
+body.dark-mode.scrapbook-misc main::before,
+body.dark-mode.scrapbook-projects main::before,
+body.dark-mode.scrapbook-blog main::before,
+body.dark-mode.scrapbook-experience main::before,
+body.dark-mode.scrapbook-about main::after,
+body.dark-mode.scrapbook-misc main::after,
+body.dark-mode.scrapbook-projects main::after,
+body.dark-mode.scrapbook-blog main::after,
+body.dark-mode.scrapbook-experience main::after,
+body.dark-mode.scrapbook-page main::after {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(74, 61, 47, 0.9) 0 6px,
+    rgba(61, 49, 38, 0.9) 6px 12px
+  );
+}
+
+body.dark-mode.scrapbook-home main > h2:first-of-type::after {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #3d3126 0 30%,
+    #2b2218 31% 100%
+  );
+  border-color: #8b7355;
+}
+
+body.dark-mode.scrapbook-home .cut,
+body.dark-mode.scrapbook-about .cut,
+body.dark-mode.scrapbook-misc .cut,
+body.dark-mode.scrapbook-projects .cut,
+body.dark-mode.scrapbook-blog .cut,
+body.dark-mode.scrapbook-experience .cut {
+  color: #e5d5c0;
+  background: #2b2218;
+  border-color: #6b5942;
+}
+
+body.dark-mode.scrapbook-home .cut-1,
+body.dark-mode.scrapbook-about .cut-1,
+body.dark-mode.scrapbook-misc .cut-1,
+body.dark-mode.scrapbook-projects .cut-1,
+body.dark-mode.scrapbook-blog .cut-1,
+body.dark-mode.scrapbook-experience .cut-1 {
+  background: #332a1f;
+}
+
+body.dark-mode.scrapbook-home .cut-2,
+body.dark-mode.scrapbook-about .cut-2,
+body.dark-mode.scrapbook-misc .cut-2,
+body.dark-mode.scrapbook-projects .cut-2,
+body.dark-mode.scrapbook-blog .cut-2,
+body.dark-mode.scrapbook-experience .cut-2 {
+  background: #2f261c;
+}
+
+body.dark-mode.scrapbook-home .cut-3,
+body.dark-mode.scrapbook-about .cut-3,
+body.dark-mode.scrapbook-misc .cut-3,
+body.dark-mode.scrapbook-projects .cut-3,
+body.dark-mode.scrapbook-blog .cut-3,
+body.dark-mode.scrapbook-experience .cut-3 {
+  background: #3d3126;
+  border-color: #8b7355;
+}
+
+body.dark-mode.scrapbook-home .contacts {
+  background: #2b2218;
+  border-color: #4a3d2f;
+}
+
+/* ===== SCRAPBOOK ABOUT (about page only) ===== */
+/* Tech spec cards as taped index cards, each tilted slightly */
+body.scrapbook-about .tech-spec-card {
+  position: relative;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.15);
+  transform-origin: 50% 0;
+  transform: rotate(-0.4deg);
+}
+
+body.scrapbook-about .tech-spec-card:nth-child(5n + 1) {
+  transform: rotate(-0.6deg);
+}
+
+body.scrapbook-about .tech-spec-card:nth-child(5n + 2) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-about .tech-spec-card:nth-child(5n + 3) {
+  transform: rotate(0.5deg);
+}
+
+body.scrapbook-about .tech-spec-card:nth-child(5n + 4) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-about .tech-spec-card:nth-child(5n) {
+  transform: rotate(-0.3deg);
+}
+
+body.scrapbook-about .tech-spec-card:hover {
+  transform: rotate(0deg);
+  box-shadow: 3px 6px 10px rgba(61, 47, 31, 0.2);
+}
+
+/* Pin at the top center; the card swings from this point */
+body.scrapbook-about .tech-spec-card::before {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d9a07a, #a0522d 60%, #6b3418);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Profile photo: tilted like the cards, straight on hover (no size change) */
+body.scrapbook-about .profile-photo {
+  outline: 8px solid #fffdf7;
+  box-shadow: 3px 4px 8px rgba(61, 47, 31, 0.25);
+  transform: rotate(2deg);
+  transition: transform 0.3s ease;
+}
+
+body.scrapbook-about .profile-photo:hover {
+  transform: rotate(0deg);
+}
+
+/* Dark mode for the scrapbook about page */
+body.dark-mode.scrapbook-about .tech-spec-card {
+  background: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.scrapbook-about .profile-photo {
+  outline-color: #2b2218;
+  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== SCRAPBOOK PROJECTS + BLOG (card pages) ===== */
+/* Cards become index cards pinned at the top center, swinging from the pin */
+body.scrapbook-projects .project,
+body.scrapbook-blog .post {
+  overflow: visible;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.15);
+  transform-origin: 50% 0;
+  transform: rotate(-0.4deg);
+}
+
+body.scrapbook-projects .project:nth-child(5n + 1),
+body.scrapbook-blog .post:nth-child(5n + 1) {
+  transform: rotate(-0.6deg);
+}
+
+body.scrapbook-projects .project:nth-child(5n + 2),
+body.scrapbook-blog .post:nth-child(5n + 2) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-projects .project:nth-child(5n + 3),
+body.scrapbook-blog .post:nth-child(5n + 3) {
+  transform: rotate(0.5deg);
+}
+
+body.scrapbook-projects .project:nth-child(5n + 4),
+body.scrapbook-blog .post:nth-child(5n + 4) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-projects .project:nth-child(5n),
+body.scrapbook-blog .post:nth-child(5n) {
+  transform: rotate(-0.3deg);
+}
+
+body.scrapbook-projects .project:hover,
+body.scrapbook-blog .post:hover {
+  transform: rotate(0deg);
+  box-shadow: 3px 6px 10px rgba(61, 47, 31, 0.2);
+}
+
+/* Remove the old corner accent; the pin replaces it */
+body.scrapbook-projects .project::after,
+body.scrapbook-blog .post::after {
+  content: none;
+}
+
+body.scrapbook-projects .project::before,
+body.scrapbook-blog .post::before {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border: none;
+  border-radius: 50%;
+  opacity: 1;
+  transform: none;
+  background: radial-gradient(circle at 35% 35%, #d9a07a, #a0522d 60%, #6b3418);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Dark mode for the cards */
+body.dark-mode.scrapbook-projects .project,
+body.dark-mode.scrapbook-blog .post {
+  background: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== SCRAPBOOK EXPERIENCE (experience page only) ===== */
+/* Section headings: cut-out words on the first line, the button on its own line below */
+body.scrapbook-experience .experience-title {
+  display: block;
+}
+
+body.scrapbook-experience .experience-title .btn {
+  display: table;
+  margin-top: 0.5rem;
+}
+
+/* Experience entries and the skills block as pinned index cards */
+body.scrapbook-experience .experience,
+body.scrapbook-experience .skills {
+  position: relative;
+  overflow: visible;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.15);
+  transform-origin: 50% 0;
+  transform: rotate(-0.4deg);
+  transition: transform 0.3s ease;
+}
+
+body.scrapbook-experience .experience:nth-of-type(5n + 1) {
+  transform: rotate(-0.6deg);
+}
+
+body.scrapbook-experience .experience:nth-of-type(5n + 2) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-experience .experience:nth-of-type(5n + 3) {
+  transform: rotate(0.5deg);
+}
+
+body.scrapbook-experience .experience:nth-of-type(5n + 4) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-experience .experience:nth-of-type(5n) {
+  transform: rotate(-0.3deg);
+}
+
+body.scrapbook-experience .experience:hover,
+body.scrapbook-experience .skills:hover {
+  transform: rotate(0deg);
+  box-shadow: 3px 6px 10px rgba(61, 47, 31, 0.2);
+}
+
+/* Pin at the top center, shared by the cards */
+body.scrapbook-experience .experience::before,
+body.scrapbook-experience .skills::before {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border: none;
+  border-radius: 50%;
+  opacity: 1;
+  transform: none;
+  background: radial-gradient(circle at 35% 35%, #d9a07a, #a0522d 60%, #6b3418);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+body.scrapbook-experience .skills::after {
+  content: none;
+}
+
+/* Diploma scans: straight, with tape on the top corners (sizes unchanged) */
+body.scrapbook-experience .diplomas a {
+  position: relative;
+  display: inline-block;
+}
+
+body.scrapbook-experience .diplomas img {
+  outline: 6px solid #fffdf7;
+  box-shadow: 3px 4px 8px rgba(61, 47, 31, 0.25);
+  transform: none;
+}
+
+body.scrapbook-experience .diplomas img:hover {
+  transform: none;
+}
+
+body.scrapbook-experience .diplomas a::before,
+body.scrapbook-experience .diplomas a::after {
+  content: "";
+  position: absolute;
+  top: 0.6rem;
+  width: 60px;
+  height: 20px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(235, 230, 218, 0.9) 0 6px,
+    rgba(222, 212, 190, 0.9) 6px 12px
+  );
+  box-shadow: 0 1px 2px rgba(61, 47, 31, 0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body.scrapbook-experience .diplomas a::before {
+  left: -1.4rem;
+  transform: rotate(-30deg);
+}
+
+body.scrapbook-experience .diplomas a::after {
+  right: -1.4rem;
+  transform: rotate(30deg);
+}
+
+/* Dark mode for the experience page */
+body.dark-mode.scrapbook-experience .experience,
+body.dark-mode.scrapbook-experience .skills {
+  background: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.scrapbook-experience .diplomas img {
+  outline-color: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode.scrapbook-experience .diplomas a::before,
+body.dark-mode.scrapbook-experience .diplomas a::after {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(74, 61, 47, 0.9) 0 6px,
+    rgba(61, 49, 38, 0.9) 6px 12px
+  );
+}
+
+/* ===== SCRAPBOOK MISC (miscellaneous page only) ===== */
+/* Each section becomes a pinned index card that swings from the pin */
+body.scrapbook-misc section {
+  position: relative;
+  overflow: visible;
+  padding: 1.5rem 1.5rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.15);
+  transform-origin: 50% 0;
+  transform: rotate(-0.4deg);
+  transition: transform 0.3s ease;
+}
+
+body.scrapbook-misc section:nth-of-type(5n + 1) {
+  transform: rotate(-0.6deg);
+}
+
+body.scrapbook-misc section:nth-of-type(5n + 2) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-misc section:nth-of-type(5n + 3) {
+  transform: rotate(0.5deg);
+}
+
+body.scrapbook-misc section:nth-of-type(5n + 4) {
+  transform: rotate(0deg);
+}
+
+body.scrapbook-misc section:nth-of-type(5n) {
+  transform: rotate(-0.3deg);
+}
+
+body.scrapbook-misc section:hover {
+  transform: rotate(0deg);
+  box-shadow: 3px 6px 10px rgba(61, 47, 31, 0.2);
+}
+
+body.scrapbook-misc section::before {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #d9a07a, #a0522d 60%, #6b3418);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Smaller cut-out words for the section titles inside cards */
+body.scrapbook-misc section h3 .cut {
+  font-size: 1.3rem;
+}
+
+/* Dark mode for the miscellaneous cards */
+body.dark-mode.scrapbook-misc section {
+  background: #2b2218;
+  border-color: #4a3d2f;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* Video and book sections stay straight (no tilt, no hover rotation) */
+body.scrapbook-misc #favorite-video,
+body.scrapbook-misc #books {
+  transform: none;
+}
+
+body.scrapbook-misc #favorite-video:hover,
+body.scrapbook-misc #books:hover {
+  transform: none;
+}
+
+/* Desktop: four book covers per row (covers keep their 160px size) */
+@media screen and (min-width: 769px) {
+  body.scrapbook-misc .book-grid {
+    grid-template-columns: repeat(4, 160px);
+    gap: 0.75rem;
+    justify-content: center;
+  }
+}
+
+/* Hover straightens every card, placed last so it beats the tilt cycle */
+body.scrapbook-about .tech-spec-card:hover,
+body.scrapbook-projects .project:hover,
+body.scrapbook-blog .post:hover,
+body.scrapbook-experience .experience:hover,
+body.scrapbook-experience .skills:hover,
+body.scrapbook-misc section:hover {
+  transform: rotate(0deg);
+}
+
+/* Contact note on the home page straightens on hover, like the cards */
+body.scrapbook-home .contacts {
+  transition: transform 0.3s ease;
+}
+
+body.scrapbook-home .contacts:hover {
+  transform: rotate(0deg);
+}
+
+/* Résumé / CV / Transcript buttons as stamped paper tags */
+body.scrapbook-experience .experience-title .btn {
+  position: relative;
+  display: table;
+  margin-top: 0.6rem;
+  padding: 0.4rem 1rem;
+  font-family: "Patrick Hand", cursive;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: #3d2f1f;
+  background: #fffdf7;
+  border: 2px dashed #8b6f47;
+  border-radius: 4px 10px 6px 12px;
+  box-shadow: 2px 3px 4px rgba(61, 47, 31, 0.2);
+  transform: rotate(1.2deg);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+body.scrapbook-experience .experience-title .btn:hover {
+  transform: rotate(0deg) translateY(-2px);
+  background: #ebe6da;
+  color: #3d2f1f;
+  text-decoration: none;
+  box-shadow: 3px 5px 8px rgba(61, 47, 31, 0.25);
+}
+
+body.dark-mode.scrapbook-experience .experience-title .btn {
+  color: #e5d5c0;
+  background: #2b2218;
+  border-color: #8b7355;
+  box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode.scrapbook-experience .experience-title .btn:hover {
+  background: #3d3126;
+  color: #e5d5c0;
+}
+
+/* ===== SCRAPBOOK HEADER + FOOTER (pages with a scrapbook-* body class) ===== */
+body[class*="scrapbook-"] header {
+  position: relative;
+  padding: 0.9rem 0;
+  background: #f0eadb;
+  border-bottom: 2px dashed #c9b896;
+  box-shadow: 0 3px 6px rgba(61, 47, 31, 0.12);
+}
+
+/* Site name as a cut-out tag */
+body[class*="scrapbook-"] .site-name {
+  display: inline-block;
+  padding: 0.35rem 0.7rem 0.4rem;
+  font-family: "Baloo 2", "Crimson Pro", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: #3d2f1f;
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  box-shadow: 1px 2px 3px rgba(61, 47, 31, 0.2);
+  transition: transform 0.2s ease;
+  white-space: nowrap;
+}
+
+body[class*="scrapbook-"] .site-name:hover {
+  color: #3d2f1f;
+  text-decoration: none;
+}
+
+/* Nav links as small paper labels, alternating tilt */
+body[class*="scrapbook-"] .nav-menu {
+  gap: 0.6rem;
+}
+
+body[class*="scrapbook-"] .nav-menu a {
+  display: inline-block;
+  padding: 0.25rem 0.6rem 0.3rem;
+  font-family: "Patrick Hand", cursive;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: #3d2f1f;
+  background: #fffdf7;
+  border: 1px dashed #c9b896;
+  border-radius: 3px;
+  box-shadow: 1px 2px 2px rgba(61, 47, 31, 0.15);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+body[class*="scrapbook-"] .nav-menu li:nth-child(odd) a {
+  transform: rotate(-1.2deg);
+}
+
+body[class*="scrapbook-"] .nav-menu li:nth-child(even) a {
+  transform: rotate(1deg);
+}
+
+body[class*="scrapbook-"] .nav-menu a:hover {
+  color: #3d2f1f;
+  background: #ebe6da;
+  text-decoration: none;
+  transform: rotate(0deg);
+}
+
+/* Theme and language buttons as round stickers */
+body[class*="scrapbook-"] .nav-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  background: #fffdf7;
+  border: 1px dashed #8b6f47;
+  border-radius: 50%;
+  box-shadow: 1px 2px 3px rgba(61, 47, 31, 0.2);
+  transition: transform 0.2s ease;
+}
+
+body[class*="scrapbook-"] .nav-actions button:hover {
+  transform: rotate(12deg);
+}
+
+/* Burger as a paper tag (mobile) */
+body[class*="scrapbook-"] #burger {
+  background: #fffdf7;
+  border: 1px solid #c9b896;
+  border-radius: 3px;
+  box-shadow: 1px 2px 3px rgba(61, 47, 31, 0.2);
+  transform: rotate(-2deg);
+}
+
+/* Footer as a taped paper strip */
+body[class*="scrapbook-"] footer {
+  position: relative;
+  font-family: "Patrick Hand", cursive;
+  font-size: 1.2rem;
+  background: #f0eadb;
+  border-top: 2px dashed #c9b896;
+  box-shadow: 0 -3px 6px rgba(61, 47, 31, 0.12);
+}
+
+/* Mobile dropdown as a paper card */
+@media screen and (width <=768px) {
+  body[class*="scrapbook-"] .nav-menu {
+    background: #fffdf7;
+    border: 1px dashed #c9b896;
+    box-shadow: 2px 3px 5px rgba(61, 47, 31, 0.2);
+  }
+
+  body[class*="scrapbook-"] .nav-menu li a {
+    display: block;
+    transform: none;
+  }
+}
+
+/* Dark mode for the header, footer, and their paper pieces */
+body.dark-mode[class*="scrapbook-"] header,
+body.dark-mode[class*="scrapbook-"] footer {
+  background: #2b2218;
+  border-color: #4a3d2f;
+}
+
+body.dark-mode[class*="scrapbook-"] .site-name {
+  color: #e5d5c0;
+  background: #332a1f;
+  border-color: #6b5942;
+}
+
+body.dark-mode[class*="scrapbook-"] .nav-menu a {
+  color: #e5d5c0;
+  background: #2b2218;
+  border-color: #6b5942;
+}
+
+body.dark-mode[class*="scrapbook-"] .nav-menu a:hover {
+  color: #d4a574;
+  background: #3d3126;
+}
+
+body.dark-mode[class*="scrapbook-"] .nav-actions button,
+body.dark-mode[class*="scrapbook-"] #burger {
+  color: #e5d5c0;
+  background: #2b2218;
+  border-color: #8b7355;
+}
+
+@media screen and (width <=768px) {
+  body.dark-mode[class*="scrapbook-"] .nav-menu {
+    background: #2b2218;
+    border-color: #4a3d2f;
+  }
+}
+
+/* Desktop header alignment: the translate and theme buttons always end at the content's right edge; nav links sit centered in the middle */
+@media screen and (min-width: 769px) {
+  body[class*="scrapbook-"] .nav-container {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  body[class*="scrapbook-"] .nav-menu {
+    justify-self: center;
+    justify-content: center;
+    padding-left: 1rem;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  body[class*="scrapbook-"] .nav-actions {
+    justify-self: end;
+  }
 }
